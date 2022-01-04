@@ -6,3 +6,50 @@ anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 1366.0
+margin_bottom = 768.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+margin_right = 102.0
+margin_bottom = 768.0
+
+[node name="TitleLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+margin_right = 102.0
+margin_bottom = 14.0
+text = "Alcaramba!"
+
+[node name="NewGameLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+margin_top = 18.0
+margin_right = 102.0
+margin_bottom = 32.0
+text = "New Game"
+
+[node name="OptionsLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+margin_top = 36.0
+margin_right = 102.0
+margin_bottom = 50.0
+text = "Options"
+
+[node name="QuitLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+margin_top = 54.0
+margin_right = 102.0
+margin_bottom = 68.0
+text = "Quit to Desktop"
+
+[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer"]
+margin_left = 106.0
+margin_right = 1366.0
+margin_bottom = 768.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="NewRichTextLabel" type="RichTextLabel" parent="HBoxContainer/CenterContainer"]
+margin_left = 630.0
+margin_top = 384.0
+margin_right = 630.0
+margin_bottom = 384.0
+bbcode_enabled = true
+bbcode_text = "adasda[b]Bold[/b]"
+text = "adasdaBold"
