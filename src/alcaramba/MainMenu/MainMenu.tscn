@@ -1,55 +1,75 @@
-[gd_scene format=2]
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://assets/fonts/XoloniumFont.tres" type="DynamicFont" id=1]
 
 [node name="MarginContainer" type="MarginContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+custom_constants/margin_right = 120
+custom_constants/margin_top = 80
+custom_constants/margin_left = 120
+custom_constants/margin_bottom = 80
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_right = 1366.0
-margin_bottom = 768.0
+margin_left = 120.0
+margin_top = 80.0
+margin_right = 1246.0
+margin_bottom = 688.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
-margin_right = 102.0
-margin_bottom = 768.0
+margin_right = 375.0
+margin_bottom = 608.0
+custom_constants/separation = 30
+alignment = 1
 
-[node name="TitleLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_right = 102.0
-margin_bottom = 14.0
+[node name="Title" type="Label" parent="HBoxContainer/VBoxContainer"]
+margin_right = 375.0
+margin_bottom = 61.0
+custom_fonts/font = ExtResource( 1 )
 text = "Alcaramba!"
+uppercase = true
 
-[node name="NewGameLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_top = 18.0
-margin_right = 102.0
-margin_bottom = 32.0
+[node name="MenuOptions" type="VBoxContainer" parent="HBoxContainer/VBoxContainer"]
+margin_top = 91.0
+margin_right = 375.0
+margin_bottom = 608.0
+size_flags_vertical = 3
+
+[node name="NewGame" type="Button" parent="HBoxContainer/VBoxContainer/MenuOptions"]
+margin_right = 375.0
+margin_bottom = 67.0
+custom_fonts/font = ExtResource( 1 )
 text = "New Game"
 
-[node name="OptionsLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_top = 36.0
-margin_right = 102.0
-margin_bottom = 50.0
+[node name="Options" type="Button" parent="HBoxContainer/VBoxContainer/MenuOptions"]
+margin_top = 71.0
+margin_right = 375.0
+margin_bottom = 138.0
+custom_fonts/font = ExtResource( 1 )
 text = "Options"
 
-[node name="QuitLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_top = 54.0
-margin_right = 102.0
-margin_bottom = 68.0
-text = "Quit to Desktop"
+[node name="Quit" type="Button" parent="HBoxContainer/VBoxContainer/MenuOptions"]
+margin_top = 142.0
+margin_right = 375.0
+margin_bottom = 209.0
+custom_fonts/font = ExtResource( 1 )
+text = "Quit"
 
 [node name="CenterContainer" type="CenterContainer" parent="HBoxContainer"]
-margin_left = 106.0
-margin_right = 1366.0
-margin_bottom = 768.0
+margin_left = 379.0
+margin_right = 1126.0
+margin_bottom = 608.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="NewRichTextLabel" type="RichTextLabel" parent="HBoxContainer/CenterContainer"]
-margin_left = 630.0
-margin_top = 384.0
-margin_right = 630.0
-margin_bottom = 384.0
+margin_left = 373.0
+margin_top = 304.0
+margin_right = 373.0
+margin_bottom = 304.0
 bbcode_enabled = true
 bbcode_text = "adasda[b]Bold[/b]"
 text = "adasdaBold"
