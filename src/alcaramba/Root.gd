@@ -6,7 +6,6 @@ var current_scene : Node
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	main_menu = $MainMenu
-	current_scene = $MainMenu
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -21,3 +20,6 @@ func _on_MainMenu_new_game_clicked():
 	current_scene = handScene.instance()
 	get_tree().get_root().add_child(current_scene)
 	
+# Global Input Handler
+func _input(ev):
+	pass
