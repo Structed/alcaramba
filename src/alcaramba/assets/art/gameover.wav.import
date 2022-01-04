@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/gameover.wav-f17e431e43fed25e461f245e51aef463.sample"
+path="res://.import/gameover.wav-23e641ebfe468e1c93a3b883333e6832.sample"
 
 [deps]
 
-source_file="res://dodge_assets/art/gameover.wav"
-dest_files=[ "res://.import/gameover.wav-f17e431e43fed25e461f245e51aef463.sample" ]
+source_file="res://assets/art/gameover.wav"
+dest_files=[ "res://.import/gameover.wav-23e641ebfe468e1c93a3b883333e6832.sample" ]
 
 [params]
 
