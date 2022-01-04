@@ -1,14 +1,16 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://assets/fonts/XoloniumFont.tres" type="DynamicFont" id=1]
+[ext_resource path="res://MainMenu/MainMenu.gd" type="Script" id=2]
 
-[node name="MarginContainer" type="MarginContainer"]
+[node name="MainMenu" type="MarginContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_constants/margin_right = 120
 custom_constants/margin_top = 80
 custom_constants/margin_left = 120
 custom_constants/margin_bottom = 80
+script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -49,6 +51,7 @@ margin_top = 71.0
 margin_right = 375.0
 margin_bottom = 138.0
 custom_fonts/font = ExtResource( 1 )
+disabled = true
 text = "Options"
 
 [node name="Quit" type="Button" parent="HBoxContainer/VBoxContainer/MenuOptions"]
@@ -73,3 +76,6 @@ margin_bottom = 304.0
 bbcode_enabled = true
 bbcode_text = "adasda[b]Bold[/b]"
 text = "adasdaBold"
+
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/MenuOptions/NewGame" to="." method="_on_NewGame_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/MenuOptions/Quit" to="." method="_on_Quit_pressed"]
