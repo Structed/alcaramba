@@ -3,6 +3,6 @@ class_name AbstractCard
 
 enum CardTypes {MONEY, TILE}
 
-var id: int
-var value: int
-var type: int
+var _id: int
+var _value: int
+var _type: int

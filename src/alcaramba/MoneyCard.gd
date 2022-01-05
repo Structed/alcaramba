@@ -8,4 +8,4 @@ const CARDS_PER_CURRENCY = 3
 enum Currency {BLUE, YELLOW, GREEN, ORANGE}
 
 
-var currency: int
+var _currency: int
