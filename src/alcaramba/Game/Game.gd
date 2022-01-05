@@ -1,4 +1,4 @@
-extends MarginContainer
+extends Node
 
 
 # Called when the node enters the scene tree for the first time.
@@ -9,11 +9,3 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
-
-
-func _on_NewGame_pressed():
-	Global.goto_scene("res://Game/Game.tscn")
-
-
-func _on_Quit_pressed():
-	get_tree().quit()
