@@ -1,6 +1,7 @@
 extends Object
 class_name CardStack
 
+var _stack: Array
 
 
 func _init(cardType):
@@ -10,7 +11,7 @@ func _init(cardType):
 		initTiles()
 
 func initMoney():
-	stack = []
+	_stack = []
 	var id = 0
 	for currencyType in MoneyCard.Currency.size():
 		for value in range(MoneyCard.MIN_VALUE, MoneyCard.MAX_VALUE+1):
@@ -21,8 +22,14 @@ func initMoney():
 				card.value = value
 				card.currency = currencyType
 				
-				stack.append(card)
+				_stack.append(card)
 				id += 1
 
 func initTiles():
 	pass
+	
+func get_card_count() -> int:
+	return _stack.size()
+
+func shuffle():
+	_stack.shuffle()
