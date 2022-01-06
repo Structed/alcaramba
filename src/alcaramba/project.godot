@@ -15,9 +15,9 @@ _global_script_classes=[ {
 "path": "res://AbstractCard.gd"
 }, {
 "base": "Object",
-"class": "CardStack",
+"class": "AbstractCardCollection",
 "language": "GDScript",
-"path": "res://CardStack.gd"
+"path": "res://AbstractCardCollection.gd"
 }, {
 "base": "AbstractCard",
 "class": "MoneyCard",
@@ -31,7 +31,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "AbstractCard": "",
-"CardStack": "",
+"AbstractCardCollection": "",
 "MoneyCard": "",
 "TileCard": ""
 }

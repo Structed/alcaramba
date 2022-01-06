@@ -1,5 +1,5 @@
 extends Object
-class_name CardStack
+class_name AbstractCardCollection
 
 var _stack: Array
 

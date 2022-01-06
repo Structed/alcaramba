@@ -1,15 +1,15 @@
 extends Node
 
-var money: CardStack
-var tiles: CardStack
+var money: AbstractCardCollection
+var tiles: AbstractCardCollection
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	money = CardStack.new(MoneyCard.CardTypes.MONEY)
+	money = AbstractCardCollection.new(MoneyCard.CardTypes.MONEY)
 	$Hand.money_stack = money
 	print_debug("Crated a stack of %d money cards" % money.get_card_count())
 	
-	tiles = CardStack.new(MoneyCard.CardTypes.TILE)
+	tiles = AbstractCardCollection.new(MoneyCard.CardTypes.TILE)
 	print_debug("Crated a stack of %d tile cards" % tiles.get_card_count())
 	var cards = tiles.get_cards()
 	#for card in cards:
