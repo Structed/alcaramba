@@ -1,10 +1,6 @@
 extends AbstractCard
 class_name TileCard
 
-# 7 Blue/Red
-# 9 Brown/White
-# 11 Green/Violet
-
 enum TileType {BLUE,RED,BROWN,WHITE,GREEN,VIOLET}
 
 const WALL_SIDE_NONE = 0
@@ -12,7 +8,6 @@ const WALL_SIDE_TOP = 1
 const WALL_SIDE_RIGHT = 1 << 1
 const WALL_SIDE_BOTTOM = 1 << 2
 const WALL_SIDE_LEFT = 1 << 3
-
 
 const WallSide = {
 	WALL_SIDE_TOP = "TOP",

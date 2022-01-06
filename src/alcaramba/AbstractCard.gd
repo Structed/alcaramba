@@ -1,4 +1,4 @@
-extends Node
+extends Object
 class_name AbstractCard
 
 enum CardTypes {MONEY, TILE}

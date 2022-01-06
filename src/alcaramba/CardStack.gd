@@ -6,13 +6,13 @@ var _stack: Array
 
 func _init(cardType):
 	if cardType == MoneyCard.CardTypes.MONEY:
-		initMoney()
+		init_money()
 	else:
-		initTiles()
+		init_tiles()
 		
 	shuffle()
 
-func initMoney():
+func init_money():
 	_stack = []
 	var id = 0
 	for currencyType in MoneyCard.Currency.size():
@@ -27,7 +27,7 @@ func initMoney():
 				_stack.append(card)
 				id += 1
 
-func initTiles():
+func init_tiles():
 	_stack = []
 	var id = 0
 	

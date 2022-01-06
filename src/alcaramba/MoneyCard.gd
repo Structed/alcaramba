@@ -7,5 +7,5 @@ const CARDS_PER_CURRENCY = 3
 
 enum Currency {BLUE, YELLOW, GREEN, ORANGE}
 
-
+# Of type enum Currency
 var _currency: int
