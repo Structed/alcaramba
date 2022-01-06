@@ -11,6 +11,6 @@ func _ready():
 	tiles = CardStack.new(MoneyCard.CardTypes.TILE)
 	print_debug("Crated a stack of %d tile cards" % tiles.get_card_count())
 	var cards = tiles.get_cards()
-	for card in cards:
-		print_debug("Value: %d; Type: %d; Walls: %d" % [card._value, card._tile_type, card._walls])
-		card.print_enabled_walls()
+	#for card in cards:
+		#print_debug("Value: %d; Type: %d; Walls: %d" % [card._value, card._tile_type, card._walls])
+		#card.print_enabled_walls()
