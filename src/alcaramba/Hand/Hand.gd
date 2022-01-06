@@ -37,7 +37,8 @@ func create_card(cardInformation_in, id_in:int, stackPosition_in):
 	var card = Card.instance()
 	
 	card.update_card(cardInformation_in, id_in, stackPosition_in)
-	add_child(card)
+	$VBoxContainer.get_node("CardHBox").add_child(card)
+#	add_child(card)
 	return card
 	
 	
@@ -77,3 +78,11 @@ func _on_TestButton2_pressed():
 	var a = 1
 	set_visibility(!cardNodes[0].visible)
 
+func draw_card() -> MoneyCard:
+	return money_stack.draw_money_card()
+
+
+func _on_Button_pressed():
+	var card = draw_card()
+	print("Currency: %s; Value: %d" % [card._currency, card._value])
+	$VBoxContainer.get_node("ButtonsHBox").get_node("DrawCard").text = "Currency: %s; Value: %d; Rest: %d" % [card._currency, card._value, money_stack.get_card_count()]
