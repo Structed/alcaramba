@@ -2,7 +2,6 @@ extends Node2D
 
 export(PackedScene) var Card
 
-# Declare member variables here. Examples:
 var id_list =[0,1,2,1]
 var number_of_cards = id_list.size()
 var cardNodes =[]
