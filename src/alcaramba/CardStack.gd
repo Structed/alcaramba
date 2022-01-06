@@ -9,6 +9,8 @@ func _init(cardType):
 		initMoney()
 	else:
 		initTiles()
+		
+	shuffle()
 
 func initMoney():
 	_stack = []
