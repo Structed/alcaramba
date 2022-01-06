@@ -105,3 +105,12 @@ func get_cards() -> Array:
 
 func shuffle():
 	_stack.shuffle()
+
+func draw_money_card() -> MoneyCard:
+	return draw_card()
+	
+func draw_tile_card() -> TileCard:
+	return draw_card()
+
+func draw_card():
+	return _stack.pop_back()
