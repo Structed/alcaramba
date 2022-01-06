@@ -6,6 +6,7 @@ var tiles: CardStack
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	money = CardStack.new(MoneyCard.CardTypes.MONEY)
+	$Hand.money_stack = money
 	print_debug("Crated a stack of %d money cards" % money.get_card_count())
 	
 	tiles = CardStack.new(MoneyCard.CardTypes.TILE)

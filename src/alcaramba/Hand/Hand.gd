@@ -6,6 +6,7 @@ export(PackedScene) var Card
 var id_list =[0,1,2,1]
 var number_of_cards = id_list.size()
 var cardNodes =[]
+var money_stack: CardStack
 
 var title = ["color","value"]
 var cardInformation = [["orange", 3],["green",7],["red",2]]
