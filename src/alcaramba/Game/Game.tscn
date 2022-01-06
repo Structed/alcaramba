@@ -3,7 +3,12 @@
 [ext_resource path="res://Game/Game.gd" type="Script" id=1]
 [ext_resource path="res://Hand/Hand.tscn" type="PackedScene" id=2]
 
-[node name="Game" type="Node2D"]
+[node name="Game" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Hand" parent="." instance=ExtResource( 2 )]

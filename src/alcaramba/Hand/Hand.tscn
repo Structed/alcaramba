@@ -4,26 +4,31 @@
 [ext_resource path="res://Card/Card.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/fonts/XoloniumFont.tres" type="DynamicFont" id=4]
 
-[node name="Hand" type="Node2D"]
+[node name="Hand" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 Card = ExtResource( 2 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="CardHBox" type="HBoxContainer" parent="VBoxContainer"]
-margin_right = 609.0
+margin_right = 1366.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ButtonsHBox" type="HBoxContainer" parent="VBoxContainer"]
 margin_top = 4.0
-margin_right = 609.0
+margin_right = 1366.0
 margin_bottom = 71.0
 __meta__ = {
 "_edit_use_anchors_": false
