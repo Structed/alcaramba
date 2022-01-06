@@ -8,7 +8,7 @@ var number_slots = 5
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$moneyHand.allCards = allCards
+	$moneyHand.cardInformation = allCards
 	$moneyHand.initialize_hand()
 	position_cards()
 	
