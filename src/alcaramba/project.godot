@@ -8,11 +8,43 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Object",
+"class": "AbstractCard",
+"language": "GDScript",
+"path": "res://AbstractCard.gd"
+}, {
+"base": "Object",
+"class": "AbstractCardCollection",
+"language": "GDScript",
+"path": "res://AbstractCardCollection.gd"
+}, {
+"base": "AbstractCard",
+"class": "MoneyCard",
+"language": "GDScript",
+"path": "res://MoneyCard.gd"
+}, {
+"base": "AbstractCard",
+"class": "TileCard",
+"language": "GDScript",
+"path": "res://TileCard.gd"
+} ]
+_global_script_class_icons={
+"AbstractCard": "",
+"AbstractCardCollection": "",
+"MoneyCard": "",
+"TileCard": ""
+}
+
 [application]
 
 config/name="alcaramba"
-run/main_scene="res://Root.tscn"
+run/main_scene="res://MainMenu/MainMenu.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+Global="*res://Global.gd"
 
 [display]
 

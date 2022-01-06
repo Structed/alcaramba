@@ -1,7 +1,5 @@
 extends MarginContainer
 
-signal new_game_clicked
-
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -14,7 +12,7 @@ func _ready():
 
 
 func _on_NewGame_pressed():
-	emit_signal("new_game_clicked")
+	Global.goto_scene("res://Game/Game.tscn")
 
 
 func _on_Quit_pressed():

@@ -1,8 +1,63 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Hand/Hand.gd" type="Script" id=1]
 [ext_resource path="res://Card/Card.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/fonts/XoloniumFont.tres" type="DynamicFont" id=4]
 
 [node name="Hand" type="Node2D"]
 script = ExtResource( 1 )
 Card = ExtResource( 2 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CardHBox" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 609.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ButtonsHBox" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 4.0
+margin_right = 609.0
+margin_bottom = 71.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TestButton" type="Button" parent="VBoxContainer/ButtonsHBox"]
+margin_right = 130.0
+margin_bottom = 67.0
+custom_fonts/font = ExtResource( 4 )
+text = "Test"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TestButton2" type="Button" parent="VBoxContainer/ButtonsHBox"]
+margin_left = 134.0
+margin_right = 315.0
+margin_bottom = 67.0
+custom_fonts/font = ExtResource( 4 )
+text = "Test 2"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DrawCard" type="Button" parent="VBoxContainer/ButtonsHBox"]
+margin_left = 319.0
+margin_right = 609.0
+margin_bottom = 67.0
+custom_fonts/font = ExtResource( 4 )
+text = "Draw Card"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="VBoxContainer/ButtonsHBox/TestButton" to="." method="_on_TestButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonsHBox/TestButton2" to="." method="_on_TestButton2_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonsHBox/DrawCard" to="." method="_on_Button_pressed"]
