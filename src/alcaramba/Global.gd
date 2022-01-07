@@ -3,6 +3,8 @@ extends Node
 var current_scene = null
 
 func _ready():
+	randomize()
+
 	var root = get_tree().get_root()
 	# The last child of the scene tree is always the current scene after start
 	current_scene = root.get_child(root.get_child_count() - 1)
