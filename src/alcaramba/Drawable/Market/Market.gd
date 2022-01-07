@@ -36,3 +36,9 @@ func _on_RefillCards_pressed():
 		var card_node = card_scene.instance()
 		card_node._card_info = card
 		$Panel/MoneyMarket/MoneyCards.add_child(card_node)
+		card_node.connect("pressed", self, "_on_MoneyCard_pressed", [card_node])
+
+func _on_MoneyCard_pressed(card_node: TextureButton):
+	card_node.visible = false
+	var card_info = card_node._card_info # TODO: Pass card info to card hand - or re-parent drawable directly?
+	card_node.queue_free()
