@@ -3,7 +3,7 @@ extends Control
 const MAX_MONEY_MARKET_CARDS = 4
 
 var stack_money: MoneyCardCollection
-var card_scene = preload("res://NewCard/NewMoneyCard.tscn")
+var card_scene = preload("res://Drawable/Card/MoneyCardDrawable.tscn")
 
 
 # Called when the node enters the scene tree for the first time.

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://assets/art/CardTemplate.png" type="Texture" id=1]
-[ext_resource path="res://NewCard/NewMoneyCard.gd" type="Script" id=2]
+[ext_resource path="res://Drawable/Card/MoneyCardDrawable.gd" type="Script" id=1]
+[ext_resource path="res://assets/art/CardTemplate.png" type="Texture" id=2]
 [ext_resource path="res://assets/fonts/XoloniumFont.tres" type="DynamicFont" id=3]
 
 [node name="MoneyCard" type="TextureButton"]
@@ -9,8 +9,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -1302.0
 margin_bottom = -640.0
-texture_normal = ExtResource( 1 )
-script = ExtResource( 2 )
+texture_normal = ExtResource( 2 )
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -22,3 +22,6 @@ custom_fonts/font = ExtResource( 3 )
 text = "9"
 align = 1
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
