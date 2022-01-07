@@ -74,7 +74,6 @@ func _on_TestButton_pressed():
 	
 func _on_TestButton2_pressed():
 	#drop_card(id_list[-1])
-	var a = 1
 	set_visibility(!cardNodes[0].visible)
 
 func draw_card() -> MoneyCard:
