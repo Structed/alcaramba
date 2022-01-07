@@ -4,7 +4,6 @@ class_name TileCardCollection
 
 func _init():
 	_stack = []
-	var id = 0
 	
 	# Blue
 	_stack.append(TileCard.new(0, 2, TileCard.TileType.BLUE, TileCard.WALL_SIDE_LEFT | TileCard.WALL_SIDE_TOP | TileCard.WALL_SIDE_RIGHT))
