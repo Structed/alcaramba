@@ -14,14 +14,14 @@ func get_color() -> Color:
 	var color: Color
 	match _currency:
 		Currency.BLUE:
-			color = Color(0.14902, 0.360784, 1)
+			color = Colors.BLUE
 		Currency.YELLOW:
-			color = Color(1, 0.890196, 0.278431)
+			color = Colors.YELLOW
 		Currency.GREEN:
-			color = Color(0.14902, 0.498039, 0)
+			color = Colors.GREEN
 		Currency.ORANGE:
-			color = Color(1, 0.415686, 0)
+			color = Colors.ORANGE
 		_:
-			color = Color(1, 1, 1)
+			color = Colors.DEFAULT
 	
 	return color
