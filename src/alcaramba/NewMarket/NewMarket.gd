@@ -2,7 +2,7 @@ extends Control
 
 const MAX_MONEY_MARKET_CARDS = 4
 
-var stack_money: AbstractCardCollection
+var stack_money: MoneyCardCollection
 var card_scene = preload("res://NewCard/NewMoneyCard.tscn")
 
 
@@ -30,7 +30,7 @@ func _check_can_refill_cards() -> bool:
 
 
 func _on_RefillCards_pressed():
-	var card = stack_money.draw_money_card()
+	var card = stack_money.draw_card()
 	var cards_to_refill = MAX_MONEY_MARKET_CARDS - _get_active_card_count()
 	for i in range(cards_to_refill):
 		var card_node = card_scene.instance()

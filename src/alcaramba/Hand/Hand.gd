@@ -5,7 +5,7 @@ export(PackedScene) var Card
 var id_list =[0,1,2,1]
 var number_of_cards = id_list.size()
 var cardNodes =[]
-var money_stack: AbstractCardCollection
+var money_stack: MoneyCardCollection
 
 var title = ["color","value"]
 var cardInformation = [["orange", 3],["green",7],["red",2]]
@@ -78,7 +78,7 @@ func _on_TestButton2_pressed():
 	set_visibility(!cardNodes[0].visible)
 
 func draw_card() -> MoneyCard:
-	return money_stack.draw_money_card()
+	return money_stack.draw_card()
 
 
 func _on_Button_pressed():
