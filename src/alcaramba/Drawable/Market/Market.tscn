@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Drawable/Market/Market.gd" type="Script" id=1]
-[ext_resource path="res://Hand/Hand.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Drawable/HandDrawable.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/fonts/XoloniumFont.tres" type="DynamicFont" id=3]
 [ext_resource path="res://assets/art/TileMarketBackground.png" type="Texture" id=4]
 
@@ -70,11 +70,6 @@ __meta__ = {
 
 [node name="Hand" parent="Panel" instance=ExtResource( 2 )]
 anchor_top = 1.0
-margin_top = -192.0
-margin_right = 1366.0
-margin_bottom = 192.0
-rect_scale = Vector2( 0.5, 0.5 )
-size_flags_horizontal = 7
-size_flags_vertical = 7
+margin_top = -208.0
 
 [connection signal="pressed" from="Panel/MoneyMarket/RefillCards" to="." method="_on_RefillCards_pressed"]
