@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://NewMarket/NewMarket.gd" type="Script" id=1]
+[ext_resource path="res://Drawable/Market/Market.gd" type="Script" id=1]
 [ext_resource path="res://Hand/Hand.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/fonts/XoloniumFont.tres" type="DynamicFont" id=3]
 [ext_resource path="res://assets/art/TileMarketBackground.png" type="Texture" id=4]
