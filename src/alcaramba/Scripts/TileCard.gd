@@ -43,6 +43,27 @@ func _init(id, value, tile_type, walls):
 	_tile_type = tile_type
 	_walls |= walls
 
+
+func get_color() -> Color:
+	var color: Color
+	match _tile_type:
+		TileType.BLUE:
+			color = Colors.TILE_BLUE
+		TileType.RED:
+			color = Colors.TILE_RED
+		TileType.BROWN:
+			color = Colors.TILE_BROWN
+		TileType.WHITE:
+			color = Colors.TILE_WHITE
+		TileType.GREEN:
+			color = Colors.TILE_GREEN
+		TileType.VIOLET:
+			color = Colors.TILE_VIOLET
+		_:
+			color = Colors.DEFAULT
+	
+	return color
+
 # Set whether a specific side of the tile has a wall
 func set_wall(wall_side: int):
 	_walls = _walls | wall_side
