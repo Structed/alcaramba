@@ -1,6 +1,6 @@
 extends Control
 
-const MAX_MONEY_MARKET_CARDS = 4
+const MAX_MARKET_CARDS = 4
 
 var stack_money: MoneyCardCollection
 var stack_tiles: TileCardCollection
@@ -38,7 +38,7 @@ func _get_active_tile_card_count() -> int:
 
 func _check_can_refill_cards() -> bool:
 	var active_tile_cards = _get_active_tile_card_count()
-	if _get_active_money_card_count() < MAX_MONEY_MARKET_CARDS || (active_tile_cards > 0 && active_tile_cards <= MAX_MONEY_MARKET_CARDS):
+	if _get_active_money_card_count() < MAX_MARKET_CARDS || (active_tile_cards > 0 && active_tile_cards <= MAX_MARKET_CARDS):
 		return true
 	else:
 		return false
@@ -63,7 +63,7 @@ func _draw_tile(node: TileCardDrawable):
 func _on_RefillCards_pressed():
 	_refill_tiles()
 	
-	var cards_to_refill_count = MAX_MONEY_MARKET_CARDS - _get_active_money_card_count()
+	var cards_to_refill_count = MAX_MARKET_CARDS - _get_active_money_card_count()
 	for _i in range(cards_to_refill_count):
 		var card = stack_money.draw_card()		
 		var card_node = card_scene.instance()
