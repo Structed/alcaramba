@@ -38,7 +38,7 @@ func _get_active_tile_card_count() -> int:
 
 func _check_can_refill_cards() -> bool:
 	var active_tile_cards = _get_active_tile_card_count()
-	if _get_active_money_card_count() < MAX_MONEY_MARKET_CARDS || (active_tile_cards > 0 && active_tile_cards < MAX_MONEY_MARKET_CARDS):
+	if _get_active_money_card_count() < MAX_MONEY_MARKET_CARDS || (active_tile_cards > 0 && active_tile_cards <= MAX_MONEY_MARKET_CARDS):
 		return true
 	else:
 		return false
