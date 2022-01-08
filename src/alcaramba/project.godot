@@ -48,6 +48,11 @@ _global_script_classes=[ {
 "class": "TileCardCollection",
 "language": "GDScript",
 "path": "res://Scripts/TileCardCollection.gd"
+}, {
+"base": "TextureButton",
+"class": "TileCardDrawable",
+"language": "GDScript",
+"path": "res://Drawable/Card/TileCardDrawable.gd"
 } ]
 _global_script_class_icons={
 "AbstractCard": "",
@@ -57,7 +62,8 @@ _global_script_class_icons={
 "MoneyCardCollection": "",
 "Player": "",
 "TileCard": "",
-"TileCardCollection": ""
+"TileCardCollection": "",
+"TileCardDrawable": ""
 }
 
 [application]

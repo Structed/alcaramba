@@ -10,6 +10,7 @@ func _ready():
 	print_debug("Crated a stack of %d money cards" % money.get_card_count())
 
 	tiles = TileCardCollection.new()
+	$Market.stack_tiles = tiles
 	print_debug("Crated a stack of %d tile cards" % tiles.get_card_count())
 #	var cards = tiles.get_cards()
 #	for card in cards:
