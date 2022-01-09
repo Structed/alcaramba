@@ -12,7 +12,7 @@ func _ready():
 
 
 func _on_NewGame_pressed():
-	Global.goto_scene("res://Drawable/Game/Game.tscn")
+	SceneManager.goto_scene("res://Drawable/Game/Game.tscn")
 
 
 func _on_Quit_pressed():

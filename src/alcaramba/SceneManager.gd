@@ -2,6 +2,11 @@ extends Node
 
 var current_scene = null
 
+var player: Player
+
+func _init():
+	player = Player.new()
+
 func _ready():
 	randomize()
 
