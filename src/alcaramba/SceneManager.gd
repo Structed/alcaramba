@@ -2,13 +2,8 @@ extends Node
 
 var current_scene = null
 
-var player: Player
-
-func _init():
-	player = Player.new()
 
 func _ready():
-	randomize()
 
 	var root = get_tree().get_root()
 	# The last child of the scene tree is always the current scene after start
