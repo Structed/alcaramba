@@ -5,10 +5,9 @@
 [ext_resource path="res://assets/fonts/XoloniumFont.tres" type="DynamicFont" id=3]
 [ext_resource path="res://assets/art/TileMarketBackground.png" type="Texture" id=4]
 [ext_resource path="res://Drawable/Card/TileCardDrawable.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Drawable/Town/Town.tscn" type="PackedScene" id=6]
 
 [sub_resource type="CanvasItemMaterial" id=1]
-
-[sub_resource type="TileSet" id=2]
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -121,9 +120,7 @@ margin_bottom = 145.0
 anchor_top = 1.0
 margin_top = -208.0
 
-[node name="TileMap" type="TileMap" parent="."]
-position = Vector2( 1003, 360 )
-tile_set = SubResource( 2 )
-format = 1
+[node name="TileMap" parent="." instance=ExtResource( 6 )]
+position = Vector2( 650, 1 )
 
 [connection signal="pressed" from="Panel/MoneyMarket/RefillCards" to="." method="_on_RefillCards_pressed"]
