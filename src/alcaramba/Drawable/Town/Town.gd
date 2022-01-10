@@ -2,7 +2,7 @@ extends TileMap
 
 var stack_tiles: TileCardCollection = TileCardCollection.new()
 var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
-var current_tile: TileCard
+var current_tile: TileCard = TileCard.new(24, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
 
 
 # Called when the node enters the scene tree for the first time.
@@ -16,13 +16,15 @@ func _input(event):
 			var x = grid_position.x
 			var y = grid_position.y
 			
-			if event.button_index==1:				
+			if event.button_index==1:
+				#TODO check if tile is already on board
 				place_tile(x, y, current_tile)
 			if event.button_index==2 && get_cell(x, y) != -1: #right click and tile not empty
 				remove_tile(x,y)
 
 func place_tile(x: int, y: int, tile: TileCard):
 	set_cell(x, y, tile.get_id())
+	#TODO empty current_tile
 
 func remove_tile(x: int, y: int) -> int:
 	var tile_id = get_cell(x, y)
