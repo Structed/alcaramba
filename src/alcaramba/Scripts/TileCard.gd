@@ -1,7 +1,7 @@
 extends AbstractCard
 class_name TileCard
 
-enum TileType {BLUE,RED,BROWN,WHITE,GREEN,VIOLET}
+enum TileType {BLUE,RED,BROWN,WHITE,GREEN,VIOLET,START}
 
 const WALL_SIDE_NONE = 0
 const WALL_SIDE_TOP = 1
@@ -24,7 +24,8 @@ const amounts = {
 	TileType.BROWN: 9,
 	TileType.WHITE: 9,
 	TileType.GREEN: 11,
-	TileType.VIOLET: 11
+	TileType.VIOLET: 11,
+	TileType.START: 0
 }
 
 # One of TileType enum
