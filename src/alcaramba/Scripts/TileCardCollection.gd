@@ -71,7 +71,7 @@ func _init():
 #	_stack.append(TileCard.new(52, 12, TileCard.TileType.VIOLET, TileCard.WALL_SIDE_NONE))
 #	_stack.append(TileCard.new(53, 13, TileCard.TileType.VIOLET, TileCard.WALL_SIDE_RIGHT))
 
-	shuffle()
+#	shuffle()
 	
 func take_card() -> TileCard:
 	return _take_card()
