@@ -14,3 +14,6 @@ func shuffle():
 
 func _take_card():
 	return _stack.pop_back()
+	
+func get_card_by_position(position: int):
+	return _stack[position]
