@@ -8,8 +8,8 @@
 [ext_resource path="res://assets/art/Tiles/tilesheet.png" type="Texture" id=6]
 [ext_resource path="res://assets/art/enemyWalking_1.png" type="Texture" id=7]
 [ext_resource path="res://Drawable/Town/TileMap_valid_overlay.gd" type="Script" id=8]
-[ext_resource path="res://assets/art/playerGrey_walk2.png" type="Texture" id=9]
-[ext_resource path="res://assets/art/enemyWalking_2.png" type="Texture" id=10]
+[ext_resource path="res://assets/art/Tiles/notpossible.png" type="Texture" id=9]
+[ext_resource path="res://assets/art/Tiles/possible.png" type="Texture" id=10]
 
 [sub_resource type="TileSet" id=1]
 0/name = "tileBrown_03.png 0"
@@ -409,8 +409,8 @@ size = 40
 font_data = ExtResource( 5 )
 
 [sub_resource type="TileSet" id=3]
-0/name = "enemyWalking_2.png 0"
-0/texture = ExtResource( 10 )
+0/name = "notpossible.png 0"
+0/texture = ExtResource( 9 )
 0/tex_offset = Vector2( 0, 0 )
 0/modulate = Color( 1, 1, 1, 1 )
 0/region = Rect2( 0, 0, 64, 64 )
@@ -423,8 +423,8 @@ font_data = ExtResource( 5 )
 0/shape_one_way_margin = 0.0
 0/shapes = [  ]
 0/z_index = 0
-1/name = "playerGrey_walk2.png 1"
-1/texture = ExtResource( 9 )
+1/name = "possible.png 1"
+1/texture = ExtResource( 10 )
 1/tex_offset = Vector2( 0, 0 )
 1/modulate = Color( 1, 1, 1, 1 )
 1/region = Rect2( 0, 0, 64, 64 )
