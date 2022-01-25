@@ -2,36 +2,55 @@ extends TileMap
 
 var _stack_tiles: TileCardCollection = TileCardCollection.new()
 #var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
-var _current_tile: TileCard = TileCard.new(0, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
+var _starting_tile_id = 0
+var _current_tile: TileCard = TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
+var _max_size = [8,10]
+var _placement_mode : int = 0 # 0 = no placement, 1 = place tile, 2 = remove tile
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	# TODO: add starting tile to _stack_tiles: 
+	_stack_tiles.add_card(TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE))
 	place_starting_tile()
+	$TileMap_valid_overlay.hide()
 	
+# Called every frame
+func _process(delta):
+	if _placement_mode != 0:
+		#TODO: confine mouse to town?
+		1+1
+		
+	if _placement_mode == 1:
+		$TileMap_valid_overlay.show()
+	else:
+		$TileMap_valid_overlay.hide()
+		
 func _input(event):
-	# current tile is not empty
-	if _current_tile: 
+	# if _placement_mode is set for placing or removing
+	if _placement_mode != 0: 
 		# if mouse is pressed
 		if event is InputEventMouseButton && event.is_pressed():
 			# get grid position
-			var grid_position = world_to_map(event.position)
+			var grid_position = world_to_map(get_local_mouse_position())
 			var x = grid_position.x
 			var y = grid_position.y
 			
-			#left click
-			if event.button_index==1:
-				#TODO check if tile is already on board
-				print(is_placement_valid(x, y, _current_tile._id))
-				place_tile(x, y, _current_tile)
-				update_overlay(_get_border(),_current_tile._id)
+			#left click and placing mode
+			if event.button_index==1 && _placement_mode == 1:
+				if is_placement_valid(x, y, _current_tile._id):
+					# place tile and leave placement mode
+					place_tile(x, y, _current_tile)
+					_placement_mode = 0
+					update_overlay(_get_border(),_current_tile._id)
 				
-				# right click
-			if event.button_index == 2 && get_cell(x, y) != -1: #right click and tile not empty
-				remove_tile(x, y)
-				update_overlay(_get_border(), _current_tile._id)
+			# left click and removing mode 
+			if event.button_index == 1 && _placement_mode == 2:
+				# if cell not empty and cell is not starting tile and removed does not break connection
+				if get_cell(x, y) != -1 && get_cell(x, y) != _starting_tile_id && is_tile_removable(x, y):
+					var removed_tile_id = remove_tile(x, y)
+					#TODO: send tile to spare tiles
+					_stack_tiles.remove_card_by_id(removed_tile_id)
 
 func place_tile(x: int, y: int, tile: TileCard):
 	#if is_placement_valid(x,y,tile.get_id()):
@@ -40,14 +59,20 @@ func place_tile(x: int, y: int, tile: TileCard):
 func remove_tile(x: int, y: int) -> int:
 	var tile_id = get_cell(x, y)
 	set_cell(x, y, -1)
-	return tile_id	
+	return tile_id
+	
+# check if removing this tile would break continouity of town
+func is_tile_removable(x: int, y:int):
+	# TODO: logic for continuity
+	return true
 	
 func place_starting_tile() -> void:
-	var start_x = 7
-	var start_y = 8
-	var start_id = 6
+	var start_x = floor(_max_size[0])
+	var start_y = floor(_max_size[1])
+	var start_id = _starting_tile_id
 	set_cell(start_x, start_y, start_id)
-	
+
+# checks if tile specified by id can be placed at (x,y)	
 func is_placement_valid(x: int, y: int, id: int) -> bool:
 	
 	var placement_valid = false
@@ -77,7 +102,8 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 					if is_wall(center_card, next_card, direction): 
 						return false
 	return placement_valid
-	
+
+# checks if there is a wall between two tiles in a given direction, wall can be on either tile
 func is_wall(card1: TileCard, card2: TileCard, direction: String)-> bool:
 	var walls1 = card1.get_enabled_walls()
 	var walls2 = card2.get_enabled_walls()
@@ -93,20 +119,36 @@ func is_wall(card1: TileCard, card2: TileCard, direction: String)-> bool:
 	
 	return false
 
+# updates the overlay for possible tile placement in regards to the tile you want to place
 func update_overlay(border: Rect2, id_compare: int = 6):
-	for x in range(border.position.x - 1, border.position.x + border.size.x+1):
+	
+	# consider all tiles within the rectangle spanned by current tiles plus one in each direction
+	for x in range(border.position.x - 1, border.position.x + border.size.x+1): 
 		for y in range(border.position.y - 1, border.position.y + border.size.y+1):
+			# set cells according to valid/invalid
 			if is_placement_valid(x, y, id_compare ):
 				$TileMap_valid_overlay.set_cell(x,y,1)
 			else:
 				$TileMap_valid_overlay.set_cell(x,y,0)
+				
+# should be called when tile is selected in market
+func receive_tile(tile: TileCard):
+	_stack_tiles.add_card(tile)
+	_current_tile = tile
+	
+	update_overlay(_get_border(),_current_tile._id)
+	_placement_mode = 1
 
-# debug functions
+# get rectangle spanned by already placed tiles
 func _get_border():
 	return get_used_rect()
+	
 
+# debug functions
 func _on_TextureButton_pressed():
 	#DEBUG
 	_current_tile = TileCard.new(randi() % 13 + 1, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
 	_get_border()
-	print(_current_tile._id)
+	update_overlay(_get_border(),_current_tile._id)
+	_placement_mode = (_placement_mode + 1) % 3
+	print(_placement_mode)

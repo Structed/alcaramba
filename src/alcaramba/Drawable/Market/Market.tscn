@@ -21,7 +21,7 @@ __meta__ = {
 material = SubResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -718.0
+margin_right = -806.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -120,7 +120,15 @@ margin_bottom = 145.0
 anchor_top = 1.0
 margin_top = -208.0
 
-[node name="TileMap" parent="." instance=ExtResource( 6 )]
-position = Vector2( 650, 1 )
+[node name="Panel2" type="Panel" parent="."]
+margin_left = 568.0
+margin_top = -2.0
+margin_right = 1333.0
+margin_bottom = 761.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TileMap" parent="Panel2" instance=ExtResource( 6 )]
 
 [connection signal="pressed" from="Panel/MoneyMarket/RefillCards" to="." method="_on_RefillCards_pressed"]
