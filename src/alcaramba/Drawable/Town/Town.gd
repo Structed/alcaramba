@@ -4,7 +4,7 @@ var _stack_tiles: TileCardCollection = TileCardCollection.new()
 #var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 var _starting_tile_id = 0
 var _current_tile: TileCard = TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
-var _max_size = [8,10]
+var _max_size = [10,10]
 var _placement_mode : int = 0 # 0 = no placement, 1 = place tile, 2 = remove tile
 
 
@@ -19,7 +19,7 @@ func _ready():
 func _process(delta):
 	if _placement_mode != 0:
 		#TODO: confine mouse to town?
-		1+1
+		pass
 		
 	if _placement_mode == 1:
 		$TileMap_valid_overlay.show()
@@ -50,7 +50,8 @@ func _input(event):
 				if get_cell(x, y) != -1 && get_cell(x, y) != _starting_tile_id && is_tile_removable(x, y):
 					var removed_tile_id = remove_tile(x, y)
 					#TODO: send tile to spare tiles
-					_stack_tiles.remove_card_by_id(removed_tile_id)
+					update_overlay(_get_border(),_current_tile._id)
+					
 
 func place_tile(x: int, y: int, tile: TileCard):
 	#if is_placement_valid(x,y,tile.get_id()):
@@ -58,6 +59,7 @@ func place_tile(x: int, y: int, tile: TileCard):
 
 func remove_tile(x: int, y: int) -> int:
 	var tile_id = get_cell(x, y)
+	_stack_tiles.remove_card_by_id(tile_id)
 	set_cell(x, y, -1)
 	return tile_id
 	
@@ -67,8 +69,8 @@ func is_tile_removable(x: int, y:int):
 	return true
 	
 func place_starting_tile() -> void:
-	var start_x = floor(_max_size[0])
-	var start_y = floor(_max_size[1])
+	var start_x = floor(_max_size[0]/2)
+	var start_y = floor(_max_size[1]/2)
 	var start_id = _starting_tile_id
 	set_cell(start_x, start_y, start_id)
 
@@ -121,6 +123,8 @@ func is_wall(card1: TileCard, card2: TileCard, direction: String)-> bool:
 
 # updates the overlay for possible tile placement in regards to the tile you want to place
 func update_overlay(border: Rect2, id_compare: int = 6):
+	
+	$TileMap_valid_overlay.clear()
 	
 	# consider all tiles within the rectangle spanned by current tiles plus one in each direction
 	for x in range(border.position.x - 1, border.position.x + border.size.x+1): 
