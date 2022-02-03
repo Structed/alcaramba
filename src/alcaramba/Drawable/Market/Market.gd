@@ -26,13 +26,13 @@ func _get_active_money_card_count() -> int:
 	return $Panel/MoneyMarket/MoneyCards.get_child_count()
 	
 func _get_active_tile_card_count() -> int:
-	var elegible = 0 
-	elegible = elegible + 1 if $Panel/TileMarket/Card1._card_info == null else elegible
-	elegible = elegible + 1 if $Panel/TileMarket/Card2._card_info == null else elegible
-	elegible = elegible + 1 if $Panel/TileMarket/Card3._card_info == null else elegible
-	elegible = elegible + 1 if $Panel/TileMarket/Card4._card_info == null else elegible
+	var empty_slots = 0 
+	empty_slots = empty_slots + 1 if $Panel/TileMarket/Card1._card_info == null else empty_slots
+	empty_slots = empty_slots + 1 if $Panel/TileMarket/Card2._card_info == null else empty_slots
+	empty_slots = empty_slots + 1 if $Panel/TileMarket/Card3._card_info == null else empty_slots
+	empty_slots = empty_slots + 1 if $Panel/TileMarket/Card4._card_info == null else empty_slots
 	
-	return elegible
+	return empty_slots
 
 func _check_can_refill_cards() -> bool:
 	var active_tile_cards = _get_active_tile_card_count()
