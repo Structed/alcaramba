@@ -2,10 +2,12 @@ extends TileMap
 
 var _stack_tiles: TileCardCollection = TileCardCollection.new()
 #var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
-var _starting_tile_id = 0
+var _starting_tile_id = 6
 var _current_tile: TileCard = TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
-var _max_size = [10,10]
+var _max_size = [10, 10]
 var _placement_mode : int = 0 # 0 = no placement, 1 = place tile, 2 = remove tile
+
+var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
 
 # Called when the node enters the scene tree for the first time.
@@ -64,13 +66,13 @@ func remove_tile(x: int, y: int) -> int:
 	return tile_id
 	
 # check if removing this tile would break continouity of town
-func is_tile_removable(x: int, y:int):
+func is_tile_removable(x: int, y: int):
 	# TODO: logic for continuity
 	return true
 	
 func place_starting_tile() -> void:
-	var start_x = floor(_max_size[0]/2)
-	var start_y = floor(_max_size[1]/2)
+	var start_x = floor(_max_size[0] / 2)
+	var start_y = floor(_max_size[1] / 2)
 	var start_id = _starting_tile_id
 	set_cell(start_x, start_y, start_id)
 
@@ -80,19 +82,19 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 	var placement_valid = false
 	
 	# if tile is already populated return false
-	if get_cell(x,y) != -1: return false
+	if get_cell(x, y) != -1: return false
 
-	var center_card = _stack_tiles.get_card_by_id(id) # card to place
+	var center_card = _stack_tiles.get_card_info_by_id(id) # card to place
 	
 	# loop over all tiles surrounding position (including itself)
-	for _x in range(-1,2):
-		for _y in range(-1,2):
+	for _x in range(-1, 2):
+		for _y in range(-1, 2):
 			if abs(_x) != abs(_y): #leaves only tiles neighbouring up, down, left and right
-				if get_cell(x+_x, y+_y) != -1: #if neighbour tile is not empty
+				if get_cell(x + _x, y + _y) != -1: #if neighbour tile is not empty
 					
 					placement_valid = true # if tile has a neighbour it is possibly true
 					
-					var next_card = _stack_tiles.get_card_by_id(get_cell(x + _x, y + _y))
+					var next_card = _stack_tiles.get_card_info_by_id(get_cell(x + _x, y + _y))
 					# direction from tile to place to its neighbour
 					var direction =""
 					if _x == -1: direction = "LEFT"
@@ -121,26 +123,42 @@ func is_wall(card1: TileCard, card2: TileCard, direction: String)-> bool:
 	
 	return false
 
+
 # updates the overlay for possible tile placement in regards to the tile you want to place
-func update_overlay(border: Rect2, id_compare: int = 6):
+func update_overlay(border: Rect2, id_compare: int = 6) -> void:
 	
 	$TileMap_valid_overlay.clear()
 	
 	# consider all tiles within the rectangle spanned by current tiles plus one in each direction
-	for x in range(border.position.x - 1, border.position.x + border.size.x+1): 
-		for y in range(border.position.y - 1, border.position.y + border.size.y+1):
+	for x in range(border.position.x - 1, border.position.x + border.size.x + 1): 
+		for y in range(border.position.y - 1, border.position.y + border.size.y + 1):
 			# set cells according to valid/invalid
 			if is_placement_valid(x, y, id_compare ):
 				$TileMap_valid_overlay.set_cell(x,y,1)
 			else:
 				$TileMap_valid_overlay.set_cell(x,y,0)
-				
+
+
+
+# draw placed tiles
+#func draw_placed_tiles() -> void:
+#	for x in range(border.position.x, border.position.x + border.size.x): 
+#		for y in range(border.position.y, border.position.y + border.size.y):
+#			if get_cell(x, y) != -1:
+#				var tile = _stack_tiles.get_card_info_by_id(id)
+#				var tile_node = tile_card_scenee.instance()
+#				tile_node._card_info = tile
+#				$Panel/MoneyMarket/MoneyCards.add_child(card_node)
+#				card_node.connect("pressed", self, "_on_MoneyCard_pressed", [card_node])
+	
+	
+	
 # should be called when tile is selected in market
 func receive_tile(tile: TileCard):
 	_stack_tiles.add_card(tile)
 	_current_tile = tile
 	
-	update_overlay(_get_border(),_current_tile._id)
+	update_overlay(_get_border(), _current_tile._id)
 	_placement_mode = 1
 
 # get rectangle spanned by already placed tiles
@@ -153,6 +171,6 @@ func _on_TextureButton_pressed():
 	#DEBUG
 	_current_tile = TileCard.new(randi() % 13 + 1, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
 	_get_border()
-	update_overlay(_get_border(),_current_tile._id)
+	update_overlay(_get_border(), _current_tile._id)
 	_placement_mode = (_placement_mode + 1) % 3
 	print(_placement_mode)
