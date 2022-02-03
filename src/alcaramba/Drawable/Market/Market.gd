@@ -63,7 +63,7 @@ func _on_RefillCards_pressed():
 	
 	var cards_to_refill_count = MAX_MARKET_CARDS - _get_active_money_card_count()
 	for _i in range(cards_to_refill_count):
-		var card = Global.stack_money.take_card()		
+		var card = Global.stack_money.take_card()
 		var card_node = card_scene.instance()
 		card_node._card_info = card
 		$Panel/MoneyMarket/MoneyCards.add_child(card_node)
