@@ -19,6 +19,7 @@ func _ready():
 	
 # Called every frame
 func _process(delta):
+	draw_placed_tiles() 
 	if _placement_mode != 0:
 		#TODO: confine mouse to town?
 		pass
@@ -139,18 +140,21 @@ func update_overlay(border: Rect2, id_compare: int = 6) -> void:
 				$TileMap_valid_overlay.set_cell(x,y,0)
 
 
-
 # draw placed tiles
-#func draw_placed_tiles() -> void:
-#	for x in range(border.position.x, border.position.x + border.size.x): 
-#		for y in range(border.position.y, border.position.y + border.size.y):
-#			if get_cell(x, y) != -1:
-#				var tile = _stack_tiles.get_card_info_by_id(id)
-#				var tile_node = tile_card_scenee.instance()
-#				tile_node._card_info = tile
-#				$Panel/MoneyMarket/MoneyCards.add_child(card_node)
-#				card_node.connect("pressed", self, "_on_MoneyCard_pressed", [card_node])
-	
+func draw_placed_tiles() -> void:
+	var border = _get_border()
+	for x in range(border.position.x, border.position.x + border.size.x): 
+		for y in range(border.position.y, border.position.y + border.size.y):
+			if get_cell(x, y) != -1:
+				var tile = _stack_tiles.get_card_info_by_id(get_cell(x, y))
+				var tile_node = tile_card_scene.instance()
+				tile_node._card_info = tile
+				
+				var world_position = map_to_world(Vector2(x, y))
+				tile_node.set_position(world_position)
+				#tile_node.rect_scale(Vector2(0.5,0.5))
+				tile_node.set_scale(Vector2(0.5,0.5))
+				self.add_child(tile_node)	
 	
 	
 # should be called when tile is selected in market
@@ -173,4 +177,5 @@ func _on_TextureButton_pressed():
 	_get_border()
 	update_overlay(_get_border(), _current_tile._id)
 	_placement_mode = (_placement_mode + 1) % 3
-	print(_placement_mode)
+	print_debug(_placement_mode)
+	draw_placed_tiles() 
