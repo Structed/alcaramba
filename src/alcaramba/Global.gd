@@ -22,7 +22,3 @@ func _ready():
 #		card.print_enabled_walls()
 
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
