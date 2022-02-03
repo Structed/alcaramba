@@ -8,6 +8,7 @@ var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	stack_tiles.shuffle()
 	$Panel/TileMarket/Card1.connect("pressed", self, "_on_TileCard_pressed", [$Panel/TileMarket/Card1])
 	$Panel/TileMarket/Card2.connect("pressed", self, "_on_TileCard_pressed", [$Panel/TileMarket/Card2])
 	$Panel/TileMarket/Card3.connect("pressed", self, "_on_TileCard_pressed", [$Panel/TileMarket/Card3])
