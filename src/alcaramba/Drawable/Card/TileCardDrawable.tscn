@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/art/TileTemplate.png" type="Texture" id=1]
+[ext_resource path="res://Drawable/Card/TileCardDrawable.gd" type="Script" id=2]
+[ext_resource path="res://assets/fonts/XoloniumFont.tres" type="DynamicFont" id=3]
+
+[node name="TileCardDrawable" type="TextureButton"]
+self_modulate = Color( 1, 1, 1, 0 )
+margin_right = 128.0
+margin_bottom = 128.0
+texture_normal = ExtResource( 1 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Value" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = ExtResource( 3 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

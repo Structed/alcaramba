@@ -12,39 +12,70 @@ _global_script_classes=[ {
 "base": "Object",
 "class": "AbstractCard",
 "language": "GDScript",
-"path": "res://AbstractCard.gd"
+"path": "res://Scripts/AbstractCard.gd"
 }, {
 "base": "Object",
 "class": "AbstractCardCollection",
 "language": "GDScript",
-"path": "res://AbstractCardCollection.gd"
+"path": "res://Scripts/AbstractCardCollection.gd"
+}, {
+"base": "Object",
+"class": "Colors",
+"language": "GDScript",
+"path": "res://Scripts/Colors.gd"
 }, {
 "base": "AbstractCard",
 "class": "MoneyCard",
 "language": "GDScript",
-"path": "res://MoneyCard.gd"
+"path": "res://Scripts/MoneyCard.gd"
+}, {
+"base": "AbstractCardCollection",
+"class": "MoneyCardCollection",
+"language": "GDScript",
+"path": "res://Scripts/MoneyCardCollection.gd"
+}, {
+"base": "Object",
+"class": "Player",
+"language": "GDScript",
+"path": "res://Scripts/Player.gd"
 }, {
 "base": "AbstractCard",
 "class": "TileCard",
 "language": "GDScript",
-"path": "res://TileCard.gd"
+"path": "res://Scripts/TileCard.gd"
+}, {
+"base": "AbstractCardCollection",
+"class": "TileCardCollection",
+"language": "GDScript",
+"path": "res://Scripts/TileCardCollection.gd"
+}, {
+"base": "TextureButton",
+"class": "TileCardDrawable",
+"language": "GDScript",
+"path": "res://Drawable/Card/TileCardDrawable.gd"
 } ]
 _global_script_class_icons={
 "AbstractCard": "",
 "AbstractCardCollection": "",
+"Colors": "",
 "MoneyCard": "",
-"TileCard": ""
+"MoneyCardCollection": "",
+"Player": "",
+"TileCard": "",
+"TileCardCollection": "",
+"TileCardDrawable": ""
 }
 
 [application]
 
 config/name="alcaramba"
-run/main_scene="res://MainMenu/MainMenu.tscn"
+run/main_scene="res://Drawable/MainMenu/MainMenu.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
 Global="*res://Global.gd"
+SceneManager="*res://SceneManager.gd"
 
 [display]
 
