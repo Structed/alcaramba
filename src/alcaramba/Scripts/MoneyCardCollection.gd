@@ -17,5 +17,5 @@ func _init():
 				id += 1
 	shuffle()
 
-func draw_card() -> MoneyCard:
-	return _draw_card()
+func take_card() -> MoneyCard:
+	return _take_card()

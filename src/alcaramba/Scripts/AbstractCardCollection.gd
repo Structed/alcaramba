@@ -12,5 +12,5 @@ func get_cards() -> Array:
 func shuffle():
 	_stack.shuffle()
 
-func _draw_card():
+func _take_card():
 	return _stack.pop_back()

@@ -73,5 +73,5 @@ func _init():
 
 	shuffle()
 	
-func draw_card() -> TileCard:
-	return _draw_card()
+func take_card() -> TileCard:
+	return _take_card()
