@@ -87,9 +87,3 @@ func print_enabled_walls():
 
 func is_bit_enabled(index):
 	return _walls & (1 << index) != 0
-
-func enable_bit(index):
-	return _walls | (1 << index)
-
-func disable_bit(index):
-	return _walls & ~(1 << index)
