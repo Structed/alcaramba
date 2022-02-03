@@ -13,10 +13,22 @@ func update_control() -> void:
 		$Value.text = str(_card_info._value)
 		$Value.self_modulate = Color(0,0,0)
 		self_modulate = _card_info.get_color()
+		draw_walls()
 
 func set_card_info(card_info: TileCard):
 	_card_info = card_info
 	update_control()
+	
+func draw_walls():
+	var walls = _card_info.get_enabled_walls()
+	if walls["TOP"]:
+		$Panel_WallTop.visible = true
+	if walls["BOTTOM"]:
+		$Panel_WallBottom.visible = true
+	if walls["LEFT"]:
+		$Panel_WallLeft.visible = true
+	if walls["RIGHT"]:
+		$Panel_WallRight.visible = true
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
