@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Drawable/Town/Town.gd" type="Script" id=1]
 [ext_resource path="res://Drawable/Card/TileCardDrawable.gd" type="Script" id=2]
-[ext_resource path="res://assets/fonts/A Love of Thunder.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://assets/fonts/Xolonium-Regular.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://Drawable/Town/TileMap_valid_overlay.gd" type="Script" id=8]
 [ext_resource path="res://assets/art/Tiles/notpossible.png" type="Texture" id=9]
 [ext_resource path="res://assets/art/Tiles/possible.png" type="Texture" id=10]
@@ -11,7 +11,7 @@
 
 [sub_resource type="DynamicFont" id=2]
 size = 40
-font_data = ExtResource( 5 )
+font_data = ExtResource( 3 )
 
 [sub_resource type="TileSet" id=3]
 0/name = "notpossible.png 0"
