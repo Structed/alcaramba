@@ -25,7 +25,7 @@ func _process(_delta):
 func _get_active_money_card_count() -> int:
 	return $Panel/MoneyMarket/MoneyCards.get_child_count()
 	
-func _get_active_tile_card_count() -> int:
+func _get_empty_tile_slot_count() -> int:
 	var empty_slots = 0 
 	empty_slots = empty_slots + 1 if $Panel/TileMarket/Card1._card_info == null else empty_slots
 	empty_slots = empty_slots + 1 if $Panel/TileMarket/Card2._card_info == null else empty_slots
@@ -35,8 +35,8 @@ func _get_active_tile_card_count() -> int:
 	return empty_slots
 
 func _check_can_refill_cards() -> bool:
-	var active_tile_cards = _get_active_tile_card_count()
-	if _get_active_money_card_count() < MAX_MARKET_CARDS || (active_tile_cards > 0 && active_tile_cards <= MAX_MARKET_CARDS):
+	var empty_tile_slot = _get_empty_tile_slot_count()
+	if _get_active_money_card_count() < MAX_MARKET_CARDS || (empty_tile_slot > 0 && empty_tile_slot <= MAX_MARKET_CARDS):
 		return true
 	else:
 		return false
