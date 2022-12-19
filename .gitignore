@@ -3,6 +3,7 @@
 .import/
 export.cfg
 export_presets.cfg
+.vscode/settings.json
 
 # Mono-specific ignores
 .mono/
