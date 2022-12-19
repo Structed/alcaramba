@@ -16,10 +16,11 @@ func _ready():
 	_stack_tiles.add_card(TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE))
 	place_starting_tile()
 	$TileMap_valid_overlay.hide()
+	draw_placed_tiles() 
 	
 # Called every frame
 func _process(delta):
-	draw_placed_tiles() 
+	
 	if _placement_mode != 0:
 		#TODO: confine mouse to town?
 		pass
@@ -46,6 +47,7 @@ func _input(event):
 					place_tile(x, y, _current_tile)
 					_placement_mode = 0
 					update_overlay(_get_border(),_current_tile._id)
+					draw_placed_tiles() 
 				
 			# left click and removing mode 
 			if event.button_index == 1 && _placement_mode == 2:
@@ -54,6 +56,7 @@ func _input(event):
 					var removed_tile_id = remove_tile(x, y)
 					#TODO: send tile to spare tiles
 					update_overlay(_get_border(),_current_tile._id)
+					draw_placed_tiles() 
 					
 
 func place_tile(x: int, y: int, tile: TileCard):
@@ -142,6 +145,9 @@ func update_overlay(border: Rect2, id_compare: int = 6) -> void:
 
 # draw placed tiles
 func draw_placed_tiles() -> void:
+	
+	#TODO: delete all tile_node instances
+	
 	var border = _get_border()
 	for x in range(border.position.x, border.position.x + border.size.x): 
 		for y in range(border.position.y, border.position.y + border.size.y):
