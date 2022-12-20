@@ -8,29 +8,30 @@ var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$Panel/TileMarket/Card1.connect("pressed", self, "_on_TileCard_pressed", [$Panel/TileMarket/Card1])
-	$Panel/TileMarket/Card2.connect("pressed", self, "_on_TileCard_pressed", [$Panel/TileMarket/Card2])
-	$Panel/TileMarket/Card3.connect("pressed", self, "_on_TileCard_pressed", [$Panel/TileMarket/Card3])
-	$Panel/TileMarket/Card4.connect("pressed", self, "_on_TileCard_pressed", [$Panel/TileMarket/Card4])
+	Global.stack_tiles.shuffle()
+	$MarketsPanel/TileMarket/Card1.connect("pressed", self, "_on_TileCard_pressed", [$MarketsPanel/TileMarket/Card1])
+	$MarketsPanel/TileMarket/Card2.connect("pressed", self, "_on_TileCard_pressed", [$MarketsPanel/TileMarket/Card2])
+	$MarketsPanel/TileMarket/Card3.connect("pressed", self, "_on_TileCard_pressed", [$MarketsPanel/TileMarket/Card3])
+	$MarketsPanel/TileMarket/Card4.connect("pressed", self, "_on_TileCard_pressed", [$MarketsPanel/TileMarket/Card4])
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	var can_refill = _check_can_refill_cards()
 	if (can_refill):
-		$Panel/MoneyMarket/RefillCards.disabled = false
+		$MarketsPanel/MoneyMarket/RefillCards.disabled = false
 	else:
-		$Panel/MoneyMarket/RefillCards.disabled = true
+		$MarketsPanel/MoneyMarket/RefillCards.disabled = true
 
 func _get_active_money_card_count() -> int:
-	return $Panel/MoneyMarket/MoneyCards.get_child_count()
+	return $MarketsPanel/MoneyMarket/MoneyCards.get_child_count()
 	
 func _get_empty_tile_slot_count() -> int:
 	var empty_slots = 0 
-	empty_slots = empty_slots + 1 if $Panel/TileMarket/Card1._card_info == null else empty_slots
-	empty_slots = empty_slots + 1 if $Panel/TileMarket/Card2._card_info == null else empty_slots
-	empty_slots = empty_slots + 1 if $Panel/TileMarket/Card3._card_info == null else empty_slots
-	empty_slots = empty_slots + 1 if $Panel/TileMarket/Card4._card_info == null else empty_slots
+	empty_slots = empty_slots + 1 if $MarketsPanel/TileMarket/Card1._card_info == null else empty_slots
+	empty_slots = empty_slots + 1 if $MarketsPanel/TileMarket/Card2._card_info == null else empty_slots
+	empty_slots = empty_slots + 1 if $MarketsPanel/TileMarket/Card3._card_info == null else empty_slots
+	empty_slots = empty_slots + 1 if $MarketsPanel/TileMarket/Card4._card_info == null else empty_slots
 	
 	return empty_slots
 
@@ -47,10 +48,10 @@ func _on_TileCard_pressed(card_node: TextureButton):
 	card_node.visible = false
 
 func _refill_tiles():
-	_draw_tile($Panel/TileMarket/Card1)
-	_draw_tile($Panel/TileMarket/Card2)
-	_draw_tile($Panel/TileMarket/Card3)
-	_draw_tile($Panel/TileMarket/Card4)
+	_draw_tile($MarketsPanel/TileMarket/Card1)
+	_draw_tile($MarketsPanel/TileMarket/Card2)
+	_draw_tile($MarketsPanel/TileMarket/Card3)
+	_draw_tile($MarketsPanel/TileMarket/Card4)
 		
 func _draw_tile(node: TileCardDrawable):
 	if node._card_info == null:
@@ -66,10 +67,10 @@ func _on_RefillCards_pressed():
 		var card = Global.stack_money.take_card()
 		var card_node = card_scene.instance()
 		card_node._card_info = card
-		$Panel/MoneyMarket/MoneyCards.add_child(card_node)
+		$MarketsPanel/MoneyMarket/MoneyCards.add_child(card_node)
 		card_node.connect("pressed", self, "_on_MoneyCard_pressed", [card_node])
 
 func _on_MoneyCard_pressed(card_node: TextureButton):
 	card_node.disconnect("pressed", self, "_on_MoneyCard_pressed")
-	$Panel/MoneyMarket/MoneyCards.remove_child(card_node)
-	$Panel/Hand/Cards.add_child(card_node)
+	$MarketsPanel/MoneyMarket/MoneyCards.remove_child(card_node)
+	$MarketsPanel/Hand/Cards.add_child(card_node)
