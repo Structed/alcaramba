@@ -46,6 +46,9 @@ func _input(event):
 			var x = grid_position.x
 			var y = grid_position.y
 			
+			var label = get_parent().get_node("DebugPanel/DebugItems/PositionContainer/Value") as Label
+			label.text = "%d | %d" % [x, y]
+			
 			#left click and placing mode
 			if event.button_index == 1 && _placement_mode == 1:
 				if is_placement_valid(x, y, _current_tile._id):
