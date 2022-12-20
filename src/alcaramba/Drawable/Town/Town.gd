@@ -32,8 +32,8 @@ func _process(delta):
 
 func _placement_mode_set(mode):
 	_placement_mode = mode
-	var label = get_parent().get_node("DebugPanel/DebugItems/ModeContainer/Value") as Label
-	label.text = _placement_mode as String
+#	var label = get_parent().get_node("DebugPanel/DebugItems/ModeContainer/Value") as Label
+#	label.text = _placement_mode as String
 
 
 func _input(event):
@@ -46,8 +46,8 @@ func _input(event):
 			var x = grid_position.x
 			var y = grid_position.y
 			
-			var label = get_parent().get_node("DebugPanel/DebugItems/PositionContainer/Value") as Label
-			label.text = "%d | %d" % [x, y]
+#			var label = get_parent().get_node("DebugPanel/DebugItems/PositionContainer/Value") as Label
+#			label.text = "%d | %d" % [x, y]
 			
 			#left click and placing mode
 			if event.button_index == 1 && _placement_mode == 1:
