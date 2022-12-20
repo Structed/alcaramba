@@ -44,9 +44,6 @@ rect_scale = Vector2( 1.5, 1.5 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="RefillCards" type="Button" parent="MarketsPanel/MoneyMarket"]
 anchor_left = 1.0
