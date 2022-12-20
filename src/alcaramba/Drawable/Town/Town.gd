@@ -130,7 +130,7 @@ func is_wall(card1: TileCard, card2: TileCard, direction: String)-> bool:
 	match direction:
 		"UP":
 			return walls1.TOP or walls2.BOTTOM
-		"DOWM":
+		"DOWN":
 			return walls1.BOTTOM or walls2.TOP
 		"RIGHT":
 			return walls1.RIGHT or walls2.LEFT 
