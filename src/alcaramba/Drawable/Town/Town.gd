@@ -10,6 +10,7 @@ var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	_stack_tiles.initialize_for_game_start() # Implement Player stack and handover/keeping of tiles
 	self._placement_mode = 0
 	_stack_tiles.add_card(TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE))
 	place_starting_tile()

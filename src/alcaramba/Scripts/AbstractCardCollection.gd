@@ -1,7 +1,7 @@
 extends Object
 class_name AbstractCardCollection
 
-var _stack: Array
+var _stack: Array = []
 	
 func get_card_count() -> int:
 	return _stack.size()

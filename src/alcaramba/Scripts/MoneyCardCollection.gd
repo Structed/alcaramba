@@ -1,8 +1,8 @@
 extends AbstractCardCollection
 class_name MoneyCardCollection
 
-func _init():
-	_stack = []
+
+func initialize_for_game_start():
 	var id = 0
 	for currencyType in MoneyCard.Currency.size():
 		for value in range(MoneyCard.MIN_VALUE, MoneyCard.MAX_VALUE+1):
