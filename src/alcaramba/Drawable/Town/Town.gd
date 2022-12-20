@@ -157,9 +157,16 @@ func update_overlay(border: Rect2, id_compare: int = 6) -> void:
 
 # draw placed tiles
 func draw_placed_tiles() -> void:
+	# TODO: Optimimize process, only remove/draw neccessary tiles
+		
+	# Remove all Cards which are already here to be drawn:
+	var children = get_children()
+	for child in children:
+		if child is TileCardDrawable:
+			remove_child(child)
+			child.free()
 	
-	#TODO: delete all tile_node instances
-	
+	# Redraw
 	var border = _get_border()
 	for x in range(border.position.x, border.position.x + border.size.x): 
 		for y in range(border.position.y, border.position.y + border.size.y):
