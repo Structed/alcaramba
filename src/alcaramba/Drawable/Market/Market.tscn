@@ -72,9 +72,6 @@ margin_bottom = 161.0
 texture = ExtResource( 4 )
 expand = true
 stretch_mode = 6
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Card1" parent="Panel/TileMarket" instance=ExtResource( 5 )]
 anchor_left = 0.5
