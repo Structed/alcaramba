@@ -4,19 +4,19 @@ var _stack_tiles: TileCardCollection = TileCardCollection.new()
 var _starting_tile_id = 6
 var _current_tile: TileCard = TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
 var _max_size = [10, 10]
-var _placement_mode : int = 0 # 0 = no placement, 1 = place tile, 2 = remove tile
+var _placement_mode : int = 0 setget _placement_mode_set # 0 = no placement, 1 = place tile, 2 = remove tile
 
 var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
+	self._placement_mode = 0
 	_stack_tiles.add_card(TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE))
 	place_starting_tile()
 	$TileMap_valid_overlay.hide()
 	draw_placed_tiles() 
-	
+
+
 # Called every frame
 func _process(delta):
 	
@@ -28,7 +28,14 @@ func _process(delta):
 		$TileMap_valid_overlay.show()
 	else:
 		$TileMap_valid_overlay.hide()
-		
+
+
+func _placement_mode_set(mode):
+	_placement_mode = mode
+	var label = get_parent().get_node("DebugPanel/DebugItems/ModeContainer/Value") as Label
+	label.text = _placement_mode as String
+
+
 func _input(event):
 	# if _placement_mode is set for placing or removing
 	if _placement_mode != 0: 
@@ -44,7 +51,7 @@ func _input(event):
 				if is_placement_valid(x, y, _current_tile._id):
 					# place tile and leave placement mode
 					place_tile(x, y, _current_tile)
-					_placement_mode = 0
+					self._placement_mode = 0
 					update_overlay(_get_border(), _current_tile._id)
 					draw_placed_tiles() 
 				
@@ -172,7 +179,7 @@ func receive_tile(tile: TileCard):
 	_current_tile = tile
 	
 	update_overlay(_get_border(), _current_tile._id)
-	_placement_mode = 1
+	self._placement_mode = 1
 
 # get rectangle spanned by already placed tiles
 func _get_border():
@@ -185,6 +192,6 @@ func _on_TextureButton_pressed():
 	_current_tile = TileCard.new(randi() % 13 + 1, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
 	_get_border()
 	update_overlay(_get_border(), _current_tile._id)
-	_placement_mode = (_placement_mode + 1) % 3
+	self._placement_mode = (_placement_mode + 1) % 3
 	print_debug(_placement_mode)
 	draw_placed_tiles() 
