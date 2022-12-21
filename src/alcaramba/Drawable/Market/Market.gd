@@ -19,9 +19,9 @@ func _ready():
 func _process(_delta):
 	var can_refill = _check_can_refill_cards()
 	if (can_refill):
-		$MarketsPanel/MoneyMarket/RefillCards.disabled = false
+		$MarketsPanel/EndTurnButton.disabled = false
 	else:
-		$MarketsPanel/MoneyMarket/RefillCards.disabled = true
+		$MarketsPanel/EndTurnButton.disabled = true
 
 func _get_active_money_card_count() -> int:
 	return $MarketsPanel/MoneyMarket/MoneyCards.get_child_count()
@@ -59,7 +59,7 @@ func _draw_tile(node: TileCardDrawable):
 		node.set_card_info(card_info)
 		node.visible = true
 
-func _on_RefillCards_pressed():
+func _on_EndTurnButton_pressed():
 	_refill_tiles()
 	
 	var cards_to_refill_count = MAX_MARKET_CARDS - _get_active_money_card_count()
