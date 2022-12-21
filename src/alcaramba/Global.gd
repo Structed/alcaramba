@@ -12,7 +12,7 @@ func _init():
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
-	
+
 	stack_money.initialize_for_game_start()
 	print_debug("Crated a stack of %d money cards" % stack_money.get_card_count())
 
