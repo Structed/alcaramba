@@ -9,10 +9,11 @@ var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.stack_tiles.shuffle()
-	$MarketsPanel/TileMarket/Card1.connect("pressed", self, "_on_TileCard_pressed", [$MarketsPanel/TileMarket/Card1])
-	$MarketsPanel/TileMarket/Card2.connect("pressed", self, "_on_TileCard_pressed", [$MarketsPanel/TileMarket/Card2])
-	$MarketsPanel/TileMarket/Card3.connect("pressed", self, "_on_TileCard_pressed", [$MarketsPanel/TileMarket/Card3])
-	$MarketsPanel/TileMarket/Card4.connect("pressed", self, "_on_TileCard_pressed", [$MarketsPanel/TileMarket/Card4])
+	var _ignore
+	_ignore = $MarketsPanel/TileMarket/Card1.connect("pressed", self, "_on_TileCard_pressed", [$MarketsPanel/TileMarket/Card1])
+	_ignore = $MarketsPanel/TileMarket/Card2.connect("pressed", self, "_on_TileCard_pressed", [$MarketsPanel/TileMarket/Card2])
+	_ignore = $MarketsPanel/TileMarket/Card3.connect("pressed", self, "_on_TileCard_pressed", [$MarketsPanel/TileMarket/Card3])
+	_ignore = $MarketsPanel/TileMarket/Card4.connect("pressed", self, "_on_TileCard_pressed", [$MarketsPanel/TileMarket/Card4])
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
