@@ -114,43 +114,4 @@ rect_min_size = Vector2( 960, 1080 )
 
 [node name="TileMap" parent="TownPanel" instance=ExtResource( 6 )]
 
-[node name="DebugPanel" type="Panel" parent="TownPanel"]
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -180.0
-margin_bottom = 200.0
-
-[node name="DebugItems" type="VBoxContainer" parent="TownPanel/DebugPanel"]
-margin_right = 40.0
-margin_bottom = 40.0
-
-[node name="ModeContainer" type="HBoxContainer" parent="TownPanel/DebugPanel/DebugItems"]
-margin_right = 87.0
-margin_bottom = 14.0
-
-[node name="Label" type="Label" parent="TownPanel/DebugPanel/DebugItems/ModeContainer"]
-margin_right = 44.0
-margin_bottom = 14.0
-text = "Mode: "
-
-[node name="Value" type="Label" parent="TownPanel/DebugPanel/DebugItems/ModeContainer"]
-margin_left = 48.0
-margin_right = 48.0
-margin_bottom = 14.0
-
-[node name="PositionContainer" type="HBoxContainer" parent="TownPanel/DebugPanel/DebugItems"]
-margin_top = 18.0
-margin_right = 87.0
-margin_bottom = 32.0
-
-[node name="Label" type="Label" parent="TownPanel/DebugPanel/DebugItems/PositionContainer"]
-margin_right = 83.0
-margin_bottom = 14.0
-text = "Tile Position:"
-
-[node name="Value" type="Label" parent="TownPanel/DebugPanel/DebugItems/PositionContainer"]
-margin_left = 87.0
-margin_right = 87.0
-margin_bottom = 14.0
-
 [connection signal="pressed" from="MarketsPanel/EndTurnButton" to="." method="_on_EndTurnButton_pressed"]
