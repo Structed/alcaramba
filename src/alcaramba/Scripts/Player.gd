@@ -4,7 +4,6 @@ class_name Player
 
 var index: int
 var name: String
-#var alcaramba_layout#: AlcarambaLayout
 var money_cards : MoneyCardCollection = MoneyCardCollection.new()
 var tile_cards: TileCardCollection = TileCardCollection.new()
 

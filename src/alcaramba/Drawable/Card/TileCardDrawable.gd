@@ -29,7 +29,3 @@ func draw_walls():
 		$Panel_WallLeft.visible = true
 	if walls["RIGHT"]:
 		$Panel_WallRight.visible = true
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
