@@ -21,7 +21,7 @@ func get_card_info_by_id(id: int):
 			return card
 	return null
 	
-func add_card(card):
+func add_card(card : AbstractCard):
 	_stack.append(card)
 
 # removes all cards with certain id
