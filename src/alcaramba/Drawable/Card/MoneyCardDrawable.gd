@@ -1,4 +1,5 @@
 extends TextureButton
+class_name MoneyCardDrawable
 
 
 var _card_info: MoneyCard
