@@ -1,13 +1,15 @@
 extends Node
 
-var player: Player
+var players: Array = []
+var active_player: Player
 var stack_money: MoneyCardCollection = MoneyCardCollection.new()
 var stack_tiles: TileCardCollection = TileCardCollection.new()
 var market_stack_money: MoneyCardCollection = MoneyCardCollection.new()
 var market_stack_tiles: TileCardCollection = TileCardCollection.new()
 
 func _init():
-	player = Player.new()
+	active_player = Player.new(0, "Player 1")
+	players.append(active_player)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
