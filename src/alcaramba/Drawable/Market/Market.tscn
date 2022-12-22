@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Drawable/Market/Market.gd" type="Script" id=1]
 [ext_resource path="res://Drawable/HandDrawable.tscn" type="PackedScene" id=2]
-[ext_resource path="res://assets/fonts/XoloniumFont.tres" type="DynamicFont" id=3]
 [ext_resource path="res://assets/art/TileMarketBackground.png" type="Texture" id=4]
 [ext_resource path="res://Drawable/Card/TileCardDrawable.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Drawable/Town/Town.tscn" type="PackedScene" id=6]
@@ -19,7 +18,8 @@ script = ExtResource( 1 )
 material = SubResource( 1 )
 margin_right = 960.0
 margin_bottom = 1080.0
-rect_min_size = Vector2( 960, 1080 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="MoneyMarket" type="Panel" parent="MarketsPanel"]
 anchor_right = 1.0
@@ -106,7 +106,8 @@ text = "End Turn"
 margin_left = 964.0
 margin_right = 1924.0
 margin_bottom = 1080.0
-rect_min_size = Vector2( 960, 1080 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="TileMap" parent="TownPanel" instance=ExtResource( 6 )]
 
