@@ -26,14 +26,14 @@ func _process(_delta):
 
 func _get_active_money_card_count() -> int:
 	return $MarketsPanel/MoneyMarket/MoneyCards.get_child_count()
-	
+
 func _get_empty_tile_slot_count() -> int:
-	var empty_slots = 0 
+	var empty_slots = 0
 	empty_slots = empty_slots + 1 if $MarketsPanel/TileMarket/Card1._card_info == null else empty_slots
 	empty_slots = empty_slots + 1 if $MarketsPanel/TileMarket/Card2._card_info == null else empty_slots
 	empty_slots = empty_slots + 1 if $MarketsPanel/TileMarket/Card3._card_info == null else empty_slots
 	empty_slots = empty_slots + 1 if $MarketsPanel/TileMarket/Card4._card_info == null else empty_slots
-	
+
 	return empty_slots
 
 func _check_can_refill_cards() -> bool:
@@ -43,9 +43,9 @@ func _check_can_refill_cards() -> bool:
 	else:
 		return false
 
-func _on_TileCard_pressed(card_node: TextureButton):
-	#card_node.disconnect("pressed", self, "on_TileCard_pressed")
-	(card_node as TileCardDrawable)._card_info = null
+func _on_TileCard_pressed(card_node: TileCardDrawable):
+	Global.active_player.tile_cards_yard.add_card(card_node._card_info)
+	card_node._card_info = null
 	card_node.visible = false
 
 func _refill_tiles():
@@ -53,7 +53,7 @@ func _refill_tiles():
 	_draw_tile($MarketsPanel/TileMarket/Card2)
 	_draw_tile($MarketsPanel/TileMarket/Card3)
 	_draw_tile($MarketsPanel/TileMarket/Card4)
-		
+
 func _draw_tile(node: TileCardDrawable):
 	if node._card_info == null:
 		var card_info = Global.stack_tiles.take_card()
@@ -62,7 +62,7 @@ func _draw_tile(node: TileCardDrawable):
 
 func _on_EndTurnButton_pressed():
 	_refill_tiles()
-	
+
 	var cards_to_refill_count = MAX_MARKET_CARDS - _get_active_money_card_count()
 	for _i in range(cards_to_refill_count):
 		var card = Global.stack_money.take_card()
@@ -71,7 +71,8 @@ func _on_EndTurnButton_pressed():
 		$MarketsPanel/MoneyMarket/MoneyCards.add_child(card_node)
 		card_node.connect("pressed", self, "_on_MoneyCard_pressed", [card_node])
 
-func _on_MoneyCard_pressed(card_node: TextureButton):
+func _on_MoneyCard_pressed(card_node: MoneyCardDrawable):
 	card_node.disconnect("pressed", self, "_on_MoneyCard_pressed")
+	Global.active_player.money_cards.add_card(card_node._card_info)
 	$MarketsPanel/MoneyMarket/MoneyCards.remove_child(card_node)
 	$MarketsPanel/Hand/Cards.add_child(card_node)

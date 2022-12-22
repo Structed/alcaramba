@@ -1,4 +1,5 @@
 extends TextureButton
+class_name MoneyCardDrawable
 
 
 var _card_info: MoneyCard
@@ -9,8 +10,3 @@ func _ready():
 	$Value.text = str(_card_info._value)
 	$Value.self_modulate = Color(0,0,0)
 	self_modulate = _card_info.get_color()
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass

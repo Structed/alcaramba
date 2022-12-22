@@ -19,7 +19,7 @@ func _ready():
 
 
 # Called every frame
-func _process(delta):
+func _process(_delta):
 
 	if _placement_mode != 0:
 		# TODO: confine mouse to town?
