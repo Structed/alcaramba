@@ -100,7 +100,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -313.0
 margin_top = -67.0
-custom_fonts/font = ExtResource( 3 )
 text = "End Turn"
 
 [node name="TownPanel" type="Panel" parent="."]
