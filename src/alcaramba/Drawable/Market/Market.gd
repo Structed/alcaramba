@@ -44,7 +44,7 @@ func _check_can_refill_cards() -> bool:
 		return false
 
 func _on_TileCard_pressed(card_node: TileCardDrawable):
-	Global.active_player.tile_cards.add_card(card_node._card_info)
+	Global.active_player.tile_cards_yard.add_card(card_node._card_info)
 	card_node._card_info = null
 	card_node.visible = false
 
