@@ -29,7 +29,7 @@ func get_empty_tile_slot_count() -> int:
 	return empty_slots
 
 
-func cards_can_be_refilled():
+func is_missing_cards():
 	var empty_tile_slot_count = get_empty_tile_slot_count()
 	return empty_tile_slot_count > 0 && empty_tile_slot_count <= MAX_TILE_MARKET_CARDS
 

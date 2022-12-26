@@ -7,7 +7,7 @@ const MAX_MONEY_MARKET_CARDS = 4
 var card_scene = preload("res://Drawable/Card/MoneyCardDrawable.tscn")
 
 
-func cards_can_be_refilled():
+func is_missing_cards():
 	return _get_active_money_card_count() < MAX_MONEY_MARKET_CARDS
 
 

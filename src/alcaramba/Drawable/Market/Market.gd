@@ -24,7 +24,7 @@ func _process(_delta):
 
 
 func _check_can_refill_cards() -> bool:
-	if money_market.cards_can_be_refilled() || tile_market.cards_can_be_refilled():
+	if money_market.is_missing_cards() || tile_market.is_missing_cards():
 		return true
 	else:
 		return false
