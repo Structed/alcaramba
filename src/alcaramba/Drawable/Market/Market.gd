@@ -31,7 +31,7 @@ func _check_can_refill_cards() -> bool:
 
 
 func _on_EndTurnButton_pressed():
-	tile_market.refill_tiles()
+	tile_market.refill()
 	money_market.refill()
 
 
