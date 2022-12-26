@@ -5,15 +5,20 @@ const MAX_MARKET_CARDS = 4
 var card_scene = preload("res://Drawable/Card/MoneyCardDrawable.tscn")
 var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
+onready var card1 = get_node("%Card1")
+onready var card2 = get_node("%Card2")
+onready var card3 = get_node("%Card3")
+onready var card4 = get_node("%Card4")
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.stack_tiles.shuffle()
 	var _ignore
-	_ignore = $MarketsPanel/TileMarket/Card1.connect("pressed", self, "_on_TileCard_pressed", [$MarketsPanel/TileMarket/Card1])
-	_ignore = $MarketsPanel/TileMarket/Card2.connect("pressed", self, "_on_TileCard_pressed", [$MarketsPanel/TileMarket/Card2])
-	_ignore = $MarketsPanel/TileMarket/Card3.connect("pressed", self, "_on_TileCard_pressed", [$MarketsPanel/TileMarket/Card3])
-	_ignore = $MarketsPanel/TileMarket/Card4.connect("pressed", self, "_on_TileCard_pressed", [$MarketsPanel/TileMarket/Card4])
+	_ignore = card1.connect("pressed", self, "_on_TileCard_pressed", [card1])
+	_ignore = card2.connect("pressed", self, "_on_TileCard_pressed", [card2])
+	_ignore = card3.connect("pressed", self, "_on_TileCard_pressed", [card3])
+	_ignore = card4.connect("pressed", self, "_on_TileCard_pressed", [card4])
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -29,10 +34,10 @@ func _get_active_money_card_count() -> int:
 
 func _get_empty_tile_slot_count() -> int:
 	var empty_slots = 0
-	empty_slots = empty_slots + 1 if $MarketsPanel/TileMarket/Card1._card_info == null else empty_slots
-	empty_slots = empty_slots + 1 if $MarketsPanel/TileMarket/Card2._card_info == null else empty_slots
-	empty_slots = empty_slots + 1 if $MarketsPanel/TileMarket/Card3._card_info == null else empty_slots
-	empty_slots = empty_slots + 1 if $MarketsPanel/TileMarket/Card4._card_info == null else empty_slots
+	empty_slots = empty_slots + 1 if card1._card_info == null else empty_slots
+	empty_slots = empty_slots + 1 if card2._card_info == null else empty_slots
+	empty_slots = empty_slots + 1 if card3._card_info == null else empty_slots
+	empty_slots = empty_slots + 1 if card4._card_info == null else empty_slots
 
 	return empty_slots
 
@@ -49,10 +54,10 @@ func _on_TileCard_pressed(card_node: TileCardDrawable):
 	card_node.visible = false
 
 func _refill_tiles():
-	_draw_tile($MarketsPanel/TileMarket/Card1)
-	_draw_tile($MarketsPanel/TileMarket/Card2)
-	_draw_tile($MarketsPanel/TileMarket/Card3)
-	_draw_tile($MarketsPanel/TileMarket/Card4)
+	_draw_tile(card1)
+	_draw_tile(card2)
+	_draw_tile(card3)
+	_draw_tile(card4)
 
 func _draw_tile(node: TileCardDrawable):
 	if node._card_info == null:
