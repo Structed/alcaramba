@@ -9,8 +9,8 @@
 
 [node name="Market" type="VBoxContainer"]
 material = SubResource( 1 )
-margin_right = 1924.0
-margin_bottom = 1080.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 1 )
@@ -19,7 +19,7 @@ script = ExtResource( 1 )
 unique_name_in_owner = true
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 1924.0
+margin_right = 1920.0
 margin_bottom = 333.0
 rect_scale = Vector2( 1, 1 )
 
@@ -30,7 +30,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
 margin_top = 337.0
-margin_right = 1924.0
+margin_right = 1920.0
 margin_bottom = 671.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -39,14 +39,14 @@ size_flags_vertical = 3
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 675.0
-margin_right = 1924.0
+margin_right = 1920.0
 margin_bottom = 1008.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="BottomMarketNav" type="HBoxContainer" parent="."]
 margin_top = 1012.0
-margin_right = 1924.0
+margin_right = 1920.0
 margin_bottom = 1079.0
 
 [node name="EndTurnButton" type="Button" parent="BottomMarketNav"]
