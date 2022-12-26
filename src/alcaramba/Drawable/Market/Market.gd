@@ -36,4 +36,4 @@ func _on_EndTurnButton_pressed():
 
 
 func _on_money_card_selected(card_node: MoneyCardDrawable):
-	$MarketsPanel/Hand/Cards.add_child(card_node)
+	$Hand/Cards.add_child(card_node)
