@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Drawable/Market/Market.gd" type="Script" id=1]
 [ext_resource path="res://Drawable/HandDrawable.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Drawable/Market/TileMarket.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Drawable/Market/MoneyMarket.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Drawable/Town/Town.tscn" type="PackedScene" id=6]
 
 [sub_resource type="CanvasItemMaterial" id=1]
@@ -20,21 +21,13 @@ margin_bottom = 1080.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="MoneyMarket" type="Panel" parent="MarketsPanel"]
+[node name="MoneyMarket" parent="MarketsPanel" instance=ExtResource( 4 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_right = 960.0
 margin_bottom = 333.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="MoneyCards" type="HBoxContainer" parent="MarketsPanel/MoneyMarket"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_right = -455.0
-margin_bottom = -64.0
-rect_scale = Vector2( 1.5, 1.5 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
-alignment = 1
+rect_scale = Vector2( 1, 1 )
 
 [node name="TileMarket" parent="MarketsPanel" instance=ExtResource( 3 )]
 unique_name_in_owner = true
