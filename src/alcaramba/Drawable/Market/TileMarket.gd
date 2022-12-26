@@ -34,7 +34,7 @@ func cards_can_be_refilled():
 	return empty_tile_slot_count > 0 && empty_tile_slot_count <= MAX_TILE_MARKET_CARDS
 
 
-func refill_tiles():
+func refill():
 	_draw_tile(card1)
 	_draw_tile(card2)
 	_draw_tile(card3)
