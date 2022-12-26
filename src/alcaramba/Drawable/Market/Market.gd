@@ -5,68 +5,37 @@ const MAX_MARKET_CARDS = 4
 var card_scene = preload("res://Drawable/Card/MoneyCardDrawable.tscn")
 var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
-onready var card1 = get_node("%Card1")
-onready var card2 = get_node("%Card2")
-onready var card3 = get_node("%Card3")
-onready var card4 = get_node("%Card4")
+onready var end_turn_button = get_node("%EndTurnButton")
+onready var tile_market = get_node("%TileMarket")
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.stack_tiles.shuffle()
-	var _ignore
-	_ignore = card1.connect("pressed", self, "_on_TileCard_pressed", [card1])
-	_ignore = card2.connect("pressed", self, "_on_TileCard_pressed", [card2])
-	_ignore = card3.connect("pressed", self, "_on_TileCard_pressed", [card3])
-	_ignore = card4.connect("pressed", self, "_on_TileCard_pressed", [card4])
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	var can_refill = _check_can_refill_cards()
 	if (can_refill):
-		$MarketsPanel/EndTurnButton.disabled = false
+		end_turn_button.disabled = false
 	else:
-		$MarketsPanel/EndTurnButton.disabled = true
+		end_turn_button.disabled = true
+
 
 func _get_active_money_card_count() -> int:
 	return $MarketsPanel/MoneyMarket/MoneyCards.get_child_count()
 
-func _get_empty_tile_slot_count() -> int:
-	var empty_slots = 0
-	empty_slots = empty_slots + 1 if card1._card_info == null else empty_slots
-	empty_slots = empty_slots + 1 if card2._card_info == null else empty_slots
-	empty_slots = empty_slots + 1 if card3._card_info == null else empty_slots
-	empty_slots = empty_slots + 1 if card4._card_info == null else empty_slots
-
-	return empty_slots
 
 func _check_can_refill_cards() -> bool:
-	var empty_tile_slot = _get_empty_tile_slot_count()
-	if _get_active_money_card_count() < MAX_MARKET_CARDS || (empty_tile_slot > 0 && empty_tile_slot <= MAX_MARKET_CARDS):
+	if _get_active_money_card_count() < MAX_MARKET_CARDS || tile_market.cards_can_be_refilled():
 		return true
 	else:
 		return false
 
-func _on_TileCard_pressed(card_node: TileCardDrawable):
-	Global.active_player.tile_cards_yard.add_card(card_node._card_info)
-	card_node._card_info = null
-	card_node.visible = false
-
-func _refill_tiles():
-	_draw_tile(card1)
-	_draw_tile(card2)
-	_draw_tile(card3)
-	_draw_tile(card4)
-
-func _draw_tile(node: TileCardDrawable):
-	if node._card_info == null:
-		var card_info = Global.stack_tiles.take_card()
-		node.set_card_info(card_info)
-		node.visible = true
 
 func _on_EndTurnButton_pressed():
-	_refill_tiles()
+	tile_market.refill_tiles()
 
 	var cards_to_refill_count = MAX_MARKET_CARDS - _get_active_money_card_count()
 	for _i in range(cards_to_refill_count):
@@ -75,6 +44,7 @@ func _on_EndTurnButton_pressed():
 		card_node._card_info = card
 		$MarketsPanel/MoneyMarket/MoneyCards.add_child(card_node)
 		card_node.connect("pressed", self, "_on_MoneyCard_pressed", [card_node])
+
 
 func _on_MoneyCard_pressed(card_node: MoneyCardDrawable):
 	card_node.disconnect("pressed", self, "_on_MoneyCard_pressed")
