@@ -70,7 +70,6 @@ func _input(event):
 				if cell_to_remove != TileMap.INVALID_CELL && cell_to_remove != _starting_tile_id && is_tile_removable(x, y):
 					var removed_tile_id = remove_tile(x, y)
 					# TODO #19: send tile to spare tiles
-					update_overlay(_get_border(),_current_tile._id)
 					draw_placed_tiles()
 
 
