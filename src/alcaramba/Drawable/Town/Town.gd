@@ -6,6 +6,7 @@ var _starting_tile_id = 6
 var _current_tile: TileCard = TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
 var _max_size = [10, 10]
 var _placement_mode : int = 0 setget _placement_mode_set # 0 = no placement, 1 = place tile, 2 = remove tile
+onready var _tilemap_overlay = get_node("%TileMap_valid_overlay")
 
 var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
@@ -31,9 +32,9 @@ func _process(_delta):
 		pass
 
 	if _placement_mode == 1:
-		$TileMap_valid_overlay.show()
+		_tilemap_overlay.show()
 	else:
-		$TileMap_valid_overlay.hide()
+		_tilemap_overlay.hide()
 
 
 func _placement_mode_set(mode):
@@ -148,15 +149,15 @@ func is_wall(card1: TileCard, card2: TileCard, direction: String)-> bool:
 # updates the overlay for possible tile placement in regards to the tile you want to place
 func update_overlay(border: Rect2, id_compare: int = 6) -> void:
 
-	$TileMap_valid_overlay.clear()
-	cleanup_placed_tiles($TileMap_valid_overlay)
+	_tilemap_overlay.clear()
+	cleanup_placed_tiles(_tilemap_overlay)
 
 	# consider all tiles within the rectangle spanned by current tiles plus one in each direction
 	for x in range(border.position.x - 1, border.position.x + border.size.x + 1):
 		for y in range(border.position.y - 1, border.position.y + border.size.y + 1):
 			# set cells according to valid/invalid
 			if is_placement_valid(x, y, id_compare ):
-				draw_tile($TileMap_valid_overlay, x, y, id_compare)
+				draw_tile(_tilemap_overlay, x, y, id_compare)
 
 
 # can be used for preview as well as for actual placement

@@ -35,6 +35,7 @@ __meta__ = {
 }
 
 [node name="TileMap_valid_overlay" type="TileMap" parent="."]
+unique_name_in_owner = true
 modulate = Color( 1, 1, 1, 0.196078 )
 collision_layer = 2
 occluder_light_mask = 2
