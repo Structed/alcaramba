@@ -1,47 +1,15 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Drawable/Town/Town.gd" type="Script" id=1]
 [ext_resource path="res://Drawable/Card/TileCardDrawable.gd" type="Script" id=2]
 [ext_resource path="res://assets/fonts/Xolonium-Regular.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://Drawable/Town/TileMap_valid_overlay.gd" type="Script" id=8]
-[ext_resource path="res://assets/art/Tiles/notpossible.png" type="Texture" id=9]
-[ext_resource path="res://assets/art/Tiles/possible.png" type="Texture" id=10]
 
 [sub_resource type="TileSet" id=1]
 
 [sub_resource type="DynamicFont" id=2]
 size = 40
 font_data = ExtResource( 3 )
-
-[sub_resource type="TileSet" id=3]
-0/name = "notpossible.png 0"
-0/texture = ExtResource( 9 )
-0/tex_offset = Vector2( 0, 0 )
-0/modulate = Color( 1, 1, 1, 1 )
-0/region = Rect2( 0, 0, 64, 64 )
-0/tile_mode = 0
-0/occluder_offset = Vector2( 0, 0 )
-0/navigation_offset = Vector2( 0, 0 )
-0/shape_offset = Vector2( 0, 0 )
-0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-0/shape_one_way = false
-0/shape_one_way_margin = 0.0
-0/shapes = [  ]
-0/z_index = 0
-1/name = "possible.png 2"
-1/texture = ExtResource( 10 )
-1/tex_offset = Vector2( 0, 0 )
-1/modulate = Color( 1, 1, 1, 1 )
-1/region = Rect2( 0, 0, 64, 64 )
-1/tile_mode = 0
-1/occluder_offset = Vector2( 0, 0 )
-1/navigation_offset = Vector2( 0, 0 )
-1/shape_offset = Vector2( 0, 0 )
-1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-1/shape_one_way = false
-1/shape_one_way_margin = 0.0
-1/shapes = [  ]
-1/z_index = 0
 
 [node name="TileMap" type="TileMap"]
 tile_set = SubResource( 1 )
@@ -68,7 +36,6 @@ __meta__ = {
 
 [node name="TileMap_valid_overlay" type="TileMap" parent="."]
 modulate = Color( 1, 1, 1, 0.196078 )
-tile_set = SubResource( 3 )
 collision_layer = 2
 occluder_light_mask = 2
 format = 1
