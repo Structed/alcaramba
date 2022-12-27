@@ -155,7 +155,6 @@ func update_overlay(border: Rect2, id_compare: int = 6) -> void:
 		for y in range(border.position.y - 1, border.position.y + border.size.y + 1):
 			# set cells according to valid/invalid
 			if is_placement_valid(x, y, id_compare ):
-#				$TileMap_valid_overlay.set_cell(x, y, 1)
 				draw_tile($TileMap_valid_overlay, x, y, id_compare)
 
 
@@ -174,7 +173,7 @@ func draw_tile(tile_map: TileMap, x, y, card_id):
 	#tile_node.rect_scale(Vector2(0.5, 0.5))
 	tile_node.set_scale(Vector2(0.5, 0.5))
 	tile_map.add_child(tile_node)
-	
+
 
 # can be used for preview overlay as well as for actual placement
 # @param tile_map: TileMap - Which TileMap to remove from - Town or Overlay
