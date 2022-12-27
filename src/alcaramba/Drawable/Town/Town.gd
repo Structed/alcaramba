@@ -17,7 +17,7 @@ func _ready():
 	place_starting_tile()
 	$TileMap_valid_overlay.hide()
 	draw_placed_tiles()
-	
+
 	OverlayDebugInfo.set_horizontal_align_right()
 	OverlayDebugInfo.set_vertical_align_bottom()
 
@@ -37,7 +37,7 @@ func _process(_delta):
 
 func _placement_mode_set(mode):
 	_placement_mode = mode
-	
+
 	OverlayDebugInfo.set_label("PlacementMode",  "Placement Mode: "+ _placement_mode as String)
 
 
@@ -59,7 +59,6 @@ func _input(event):
 					# place tile and leave placement mode
 					place_tile(x, y, _current_tile)
 					self._placement_mode = 0
-					update_overlay(_get_border(), _current_tile._id)
 					draw_placed_tiles()
 
 			# left click and removing mode
@@ -68,8 +67,8 @@ func _input(event):
 				var cell_to_remove = get_cell(x, y)
 				if cell_to_remove != TileMap.INVALID_CELL && cell_to_remove != _starting_tile_id && is_tile_removable(x, y):
 					var removed_tile_id = remove_tile(x, y)
-					update_overlay(_get_border(),_current_tile._id)
 					# TODO #19: send tile to spare tiles
+					update_overlay(_get_border(),_current_tile._id)
 					draw_placed_tiles()
 
 
