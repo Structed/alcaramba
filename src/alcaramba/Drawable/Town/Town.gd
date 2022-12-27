@@ -148,43 +148,58 @@ func is_wall(card1: TileCard, card2: TileCard, direction: String)-> bool:
 func update_overlay(border: Rect2, id_compare: int = 6) -> void:
 
 	$TileMap_valid_overlay.clear()
+	cleanup_placed_tiles($TileMap_valid_overlay)
 
 	# consider all tiles within the rectangle spanned by current tiles plus one in each direction
 	for x in range(border.position.x - 1, border.position.x + border.size.x + 1):
 		for y in range(border.position.y - 1, border.position.y + border.size.y + 1):
 			# set cells according to valid/invalid
 			if is_placement_valid(x, y, id_compare ):
-				$TileMap_valid_overlay.set_cell(x, y, 1)
+#				$TileMap_valid_overlay.set_cell(x, y, 1)
+				draw_tile($TileMap_valid_overlay, x, y, id_compare)
 			else:
 				$TileMap_valid_overlay.set_cell(x, y, 0)
 
 
+# can be used for preview as well as for actual placement
+# @param tile_map: TileMap - Which TileMap to draw on - Town or Overlay
+# @param x: - TileMap local x coordinate
+# @param y: - TileMap local y coordinate
+# @param card_id: - Card ID, which is usually also the cell ID
+func draw_tile(tile_map: TileMap, x, y, card_id):
+	var tile = _stack_tiles.get_card_info_by_id(card_id)
+	var tile_node = tile_card_scene.instance()
+	tile_node._card_info = tile
+
+	var world_position = tile_map.map_to_world(Vector2(x, y))
+	tile_node.set_position(world_position)
+	#tile_node.rect_scale(Vector2(0.5, 0.5))
+	tile_node.set_scale(Vector2(0.5, 0.5))
+	tile_map.add_child(tile_node)
+	
+
+# can be used for preview overlay as well as for actual placement
+# @param tile_map: TileMap - Which TileMap to remove from - Town or Overlay
+func cleanup_placed_tiles(tile_map: TileMap):
+	# Remove all Cards which are already here to be drawn:
+	var children = tile_map.get_children()
+	for child in children:
+		if child is TileCardDrawable:
+			tile_map.remove_child(child)
+			child.free()
+
 # draw placed tiles
 func draw_placed_tiles() -> void:
 	# TODO: Optimimize process, only remove/draw neccessary tiles
-
-	# Remove all Cards which are already here to be drawn:
-	var children = get_children()
-	for child in children:
-		if child is TileCardDrawable:
-			remove_child(child)
-			child.free()
+	cleanup_placed_tiles(self)
 
 	# Redraw
 	var border = _get_border()
 	for x in range(border.position.x, border.position.x + border.size.x):
 		for y in range(border.position.y, border.position.y + border.size.y):
-			var current_cell = get_cell(x, y)
-			if current_cell != TileMap.INVALID_CELL:
-				var tile = _stack_tiles.get_card_info_by_id(current_cell)
-				var tile_node = tile_card_scene.instance()
-				tile_node._card_info = tile
-
-				var world_position = map_to_world(Vector2(x, y))
-				tile_node.set_position(world_position)
-				#tile_node.rect_scale(Vector2(0.5, 0.5))
-				tile_node.set_scale(Vector2(0.5, 0.5))
-				self.add_child(tile_node)
+			var card_id = get_cell(x, y)
+			if card_id != TileMap.INVALID_CELL:
+				draw_tile(self, x, y, card_id)
 
 
 # should be called when tile is selected in market
