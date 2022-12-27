@@ -10,7 +10,7 @@ var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	_stack_tiles.initialize_for_game_start() # Implement Player stack and handover/keeping of tiles
+	#_stack_tiles.initialize_for_game_start() # Implement Player stack and handover/keeping of tiles
 	self._placement_mode = 0
 	_stack_tiles.add_card(TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE))
 	place_starting_tile()
@@ -64,8 +64,7 @@ func _input(event):
 				var cell_to_remove = get_cell(x, y)
 				if cell_to_remove != TileMap.INVALID_CELL && cell_to_remove != _starting_tile_id && is_tile_removable(x, y):
 					var removed_tile_id = remove_tile(x, y)
-					#TODO: send tile to spare tiles
-					update_overlay(_get_border(),_current_tile._id)
+					#TODO 19: send tile to spare tiles
 					draw_placed_tiles()
 
 
@@ -82,7 +81,7 @@ func remove_tile(x: int, y: int) -> int:
 
 # check if removing this tile would break continouity of town
 func is_tile_removable(x: int, y: int):
-	# TODO: logic for continuity
+	# TODO 15: logic for continuity
 	return true
 
 func place_starting_tile() -> void:
@@ -199,7 +198,10 @@ func _get_border():
 # debug functions
 func _on_TextureButton_pressed():
 	#DEBUG
+	var id = -2
+	#while id
 	_current_tile = TileCard.new(randi() % 13 + 1, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
+	OverlayDebugInfo.set_label("Tile ID",  "Tile ID: "+ _current_tile.get_id() as String)
 	_get_border()
 	update_overlay(_get_border(), _current_tile._id)
 	self._placement_mode = (_placement_mode + 1) % 3
