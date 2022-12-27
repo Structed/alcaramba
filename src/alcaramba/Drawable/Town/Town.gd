@@ -157,8 +157,6 @@ func update_overlay(border: Rect2, id_compare: int = 6) -> void:
 			if is_placement_valid(x, y, id_compare ):
 #				$TileMap_valid_overlay.set_cell(x, y, 1)
 				draw_tile($TileMap_valid_overlay, x, y, id_compare)
-			else:
-				$TileMap_valid_overlay.set_cell(x, y, 0)
 
 
 # can be used for preview as well as for actual placement
