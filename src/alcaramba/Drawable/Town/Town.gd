@@ -13,7 +13,7 @@ var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 func _ready():
 	_stack_tiles.initialize_for_game_start() # Implement Player stack and handover/keeping of tiles
 	self._placement_mode = 0
-	_stack_tiles.add_card(TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE))
+	_town_tiles.add_card(TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE))
 	place_starting_tile()
 	$TileMap_valid_overlay.hide()
 	draw_placed_tiles()
@@ -72,6 +72,7 @@ func _input(event):
 func place_tile(x: int, y: int, tile: TileCard):
 	# if is_placement_valid(x,y,tile.get_id()):
 	set_cell(x, y, tile.get_id())
+	_town_tiles.add_card(tile)
 
 func remove_tile(x: int, y: int) -> int:
 	var tile_id = get_cell(x, y)
@@ -199,9 +200,10 @@ func _get_border():
 # debug functions
 func _on_TextureButton_pressed():
 	#DEBUG
-	var id = -2
-	#while id
-	_current_tile = TileCard.new(randi() % 13 + 1, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
+	var id = _starting_tile_id
+	while _town_tiles.get_card_info_by_id(id) != null:
+		id = randi() % 30 +1
+	_current_tile = TileCard.new(id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
 	OverlayDebugInfo.set_label("Tile ID",  "Tile ID: "+ _current_tile.get_id() as String)
 	_get_border()
 	update_overlay(_get_border(), _current_tile._id)
