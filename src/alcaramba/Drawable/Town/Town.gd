@@ -65,7 +65,7 @@ func _input(event):
 				var cell_to_remove = get_cell(x, y)
 				if cell_to_remove != TileMap.INVALID_CELL && cell_to_remove != _starting_tile_id && is_tile_removable(x, y):
 					var removed_tile_id = remove_tile(x, y)
-					#TODO 19: send tile to spare tiles
+					# TODO #19: send tile to spare tiles
 					draw_placed_tiles()
 
 
@@ -83,7 +83,7 @@ func remove_tile(x: int, y: int) -> int:
 
 # check if removing this tile would break continouity of town
 func is_tile_removable(x: int, y: int):
-	# TODO 15: logic for continuity
+	# TODO #15: logic for continuity
 	return true
 
 func place_starting_tile() -> void:
