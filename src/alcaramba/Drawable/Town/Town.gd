@@ -18,8 +18,9 @@ func _ready():
 	$TileMap_valid_overlay.hide()
 	draw_placed_tiles()
 
+	OverlayDebugInfo.show()
 	OverlayDebugInfo.set_horizontal_align_right()
-	OverlayDebugInfo.set_vertical_align_bottom()
+	OverlayDebugInfo.set_vertical_align_top()
 
 
 # Called every frame
