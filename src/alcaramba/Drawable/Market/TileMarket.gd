@@ -3,6 +3,9 @@ extends TextureRect
 
 const MAX_TILE_MARKET_CARDS = 4
 
+# Receives a `TileCardDrawable`
+signal tile_card_selected
+
 var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
 onready var card1 = get_node("%Card1")
@@ -49,6 +52,4 @@ func _draw_tile(node: TileCardDrawable):
 
 
 func _on_TileCard_pressed(card_node: TileCardDrawable):
-	Global.active_player.tile_cards_yard.add_card(card_node._card_info)
-	card_node._card_info = null
-	card_node.visible = false
+	emit_signal("tile_card_selected", card_node)

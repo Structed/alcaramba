@@ -1,11 +1,15 @@
 extends TileMap
 
+# Receives a TileCard
+signal tile_placed
+
 var _stack_tiles: TileCardCollection = TileCardCollection.new() # complete stack for tile info
 var _town_tiles: TileCardCollection = TileCardCollection.new() # stack for acually placed tiles
 var _starting_tile_id = 6
 var _current_tile: TileCard = TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
 var _max_size = [10, 10]
 var _placement_mode : int = 0 setget _placement_mode_set # 0 = no placement, 1 = place tile, 2 = remove tile
+
 onready var _tilemap_overlay = get_node("%TileMap_valid_overlay")
 
 var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
@@ -77,6 +81,7 @@ func place_tile(x: int, y: int, tile: TileCard):
 	# if is_placement_valid(x,y,tile.get_id()):
 	set_cell(x, y, tile.get_id())
 	_town_tiles.add_card(tile)
+	emit_signal("tile_placed", tile)
 
 func remove_tile(x: int, y: int) -> int:
 	var tile_id = get_cell(x, y)
@@ -201,9 +206,9 @@ func draw_placed_tiles() -> void:
 
 
 # should be called when tile is selected in market
-func receive_tile(tile: TileCard):
-	_stack_tiles.add_card(tile)
-	_current_tile = tile
+func receive_tile(tile: TileCardDrawable):
+#	_stack_tiles.add_card(tile._card_info)
+	_current_tile = tile._card_info
 
 	update_overlay(_get_border(), _current_tile._id)
 	self._placement_mode = 1

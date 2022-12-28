@@ -15,11 +15,12 @@ anchor_bottom = 0.0
 margin_right = 958.0
 margin_bottom = 1080.0
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="TownPanelContainer" type="PanelContainer" parent="."]
 margin_left = 962.0
 margin_right = 1920.0
 margin_bottom = 1080.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TileMap" parent="PanelContainer" instance=ExtResource( 3 )]
+[node name="Town" parent="TownPanelContainer" instance=ExtResource( 3 )]
+unique_name_in_owner = true
