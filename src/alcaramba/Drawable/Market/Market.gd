@@ -13,6 +13,7 @@ onready var money_market = get_node("%MoneyMarket")
 func _ready():
 	Global.stack_tiles.shuffle()
 	money_market.connect("money_card_selected", self, "_on_money_card_selected")
+	_on_EndTurnButton_pressed()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
