@@ -67,7 +67,7 @@ func _input(event):
 			if event.button_index == 1 && _placement_mode == 2:
 				# if cell not empty and cell is not starting tile and removed does not break connection
 				var cell_to_remove = get_cell(x, y)
-				if cell_to_remove != TileMap.INVALID_CELL && cell_to_remove != _starting_tile_id && is_tile_removable(x, y):
+				if cell_to_remove != TileMap.INVALID_CELL && cell_to_remove != _starting_tile_id && _is_tile_removable(x, y):
 					var removed_tile_id = remove_tile(x, y)
 					# TODO #19: send tile to spare tiles
 					draw_placed_tiles()
@@ -86,21 +86,21 @@ func remove_tile(x: int, y: int) -> int:
 	return tile_id
 
 # check if removing this tile would break continouity of town
-func is_tile_removable(x: int, y: int):
+func _is_tile_removable(x: int, y: int):
+	
 	var removal_valid = true
-
-	# if tile is not populated return false
-	if get_cell(x, y) == TileMap.INVALID_CELL: return false
 	
+	# if tile is not populated or starting tile, removal not valid
+	if get_cell(x, y) == TileMap.INVALID_CELL || get_cell(x, y) == _starting_tile_id: return false
+	
+	# loop over each neighbour, remove test tile and neighbour then check if neighbour placement is stall valid
 	var test_id = get_cell(x, y)
-	
-	# loop over each neighbour, remove test tile and neighbour then check if neighbour placement is stall valid 	
 	set_cell(x, y, TileMap.INVALID_CELL)
 	for _x in range(-1, 2):
 		for _y in range(-1, 2):
 			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
 				var neighbour_id = get_cell(x + _x, y + _y)
-				# if neighbour tile is empty or starting tile removal is valid for this neighbour
+				# if neighbour tile is empty or starting tile, removal is valid regarding this neighbour
 				if neighbour_id != TileMap.INVALID_CELL && neighbour_id != _starting_tile_id:  
 					set_cell(x + _x, y + _y, TileMap.INVALID_CELL)
 					# if neighbour tile can not be placed removal of test tile not valid
@@ -109,6 +109,7 @@ func is_tile_removable(x: int, y: int):
 	set_cell(x, y, test_id) # readd test tile
 	
 	return removal_valid
+
 
 func place_starting_tile() -> void:
 	var start_x = floor(_max_size[0] / 2)
