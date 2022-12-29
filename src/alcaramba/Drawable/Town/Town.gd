@@ -5,7 +5,7 @@ signal tile_placed
 
 var _stack_tiles: TileCardCollection = TileCardCollection.new() # complete stack for tile info
 var _town_tiles: TileCardCollection = TileCardCollection.new() # stack for acually placed tiles
-var _starting_tile_id = 6
+var _starting_tile_id = 54
 var _current_tile: TileCard = TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
 var _max_size = [10, 10]
 var _placement_mode : int = 0 setget _placement_mode_set # 0 = no placement, 1 = place tile, 2 = remove tile
@@ -17,8 +17,9 @@ var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_stack_tiles.initialize_for_game_start() # Implement Player stack and handover/keeping of tiles
+	_stack_tiles.add_card(_current_tile)
 	self._placement_mode = 0
-	_town_tiles.add_card(TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE))
+	_town_tiles.add_card(_current_tile)
 	place_starting_tile()
 	$TileMap_valid_overlay.hide()
 	draw_placed_tiles()
