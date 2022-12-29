@@ -13,8 +13,8 @@ func _init(player_index : int, player_name : String):
 	self.name = player_name
 
 func add_town_tile(tile: TileCard, position: Vector2):
-	var x: int = position.x
-	var y: int = position.y
+	var x: int = position.x as int
+	var y: int = position.y as int
 	if not town_tiles.has(x):
 		town_tiles[x] = {}
 	
