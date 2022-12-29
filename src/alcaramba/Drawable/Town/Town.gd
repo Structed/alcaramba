@@ -192,7 +192,6 @@ func draw_tile(tile_map: TileMap, x, y, card_id):
 
 	var world_position = tile_map.map_to_world(Vector2(x, y))
 	tile_node.set_position(world_position)
-	#tile_node.rect_scale(Vector2(0.5, 0.5))
 	tile_node.set_scale(Vector2(0.5, 0.5))
 	tile_map.add_child(tile_node)
 
@@ -223,7 +222,6 @@ func draw_placed_tiles() -> void:
 
 # should be called when tile is selected in market
 func receive_tile(tile: TileCardDrawable):
-#	_stack_tiles.add_card(tile._card_info)
 	_current_tile = tile._card_info
 
 	update_overlay(_get_border(), _current_tile._id)
