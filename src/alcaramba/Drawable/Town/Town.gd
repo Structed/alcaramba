@@ -71,26 +71,44 @@ func _input(event):
 					var removed_tile_id = remove_tile(x, y)
 					# TODO #19: send tile to spare tiles
 					draw_placed_tiles()
+				else: print_debug("cell not removable")
 
 
 func place_tile(x: int, y: int, tile: TileCard):
-	# if is_placement_valid(x,y,tile.get_id()):
 	set_cell(x, y, tile.get_id())
 	_town_tiles.add_card(tile)
 
 func remove_tile(x: int, y: int) -> int:
 	var tile_id = get_cell(x, y)
 	_stack_tiles.remove_card_by_id(tile_id)
-	if is_removal_valid(x,y):
-		set_cell(x, y, TileMap.INVALID_CELL)
-	else: print_debug("tile not removable")
+	set_cell(x, y, TileMap.INVALID_CELL)
 	print_debug("Removed tile %d at (%d|%d)" % [tile_id, x, y])
 	return tile_id
 
 # check if removing this tile would break continouity of town
 func is_tile_removable(x: int, y: int):
-	# TODO #15: logic for continuity
-	return true
+	var removal_valid = true
+
+	# if tile is not populated return false
+	if get_cell(x, y) == TileMap.INVALID_CELL: return false
+	
+	var test_id = get_cell(x, y)
+	
+	# loop over each neighbour, remove test tile and neighbour then check if neighbour placement is stall valid 	
+	set_cell(x, y, TileMap.INVALID_CELL)
+	for _x in range(-1, 2):
+		for _y in range(-1, 2):
+			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
+				var neighbour_id = get_cell(x + _x, y + _y)
+				# if neighbour tile is empty or starting tile removal is valid for this neighbour
+				if neighbour_id != TileMap.INVALID_CELL && neighbour_id != _starting_tile_id:  
+					set_cell(x + _x, y + _y, TileMap.INVALID_CELL)
+					# if neighbour tile can not be placed removal of test tile not valid
+					if !is_placement_valid(x + _x, y + _y, neighbour_id): removal_valid = false
+					set_cell(x + _x, y + _y, neighbour_id)
+	set_cell(x, y, test_id) # readd test tile
+	
+	return removal_valid
 
 func place_starting_tile() -> void:
 	var start_x = floor(_max_size[0] / 2)
@@ -145,31 +163,6 @@ func is_wall(card1: TileCard, card2: TileCard, direction: String)-> bool:
 			return walls1.LEFT or walls2.RIGHT
 
 	return false
-
-# check if removal of tile at this coordinates is possible
-func is_removal_valid(x: int, y: int) -> bool:
-	var removal_valid = true
-
-	# if tile is not populated return false
-	if get_cell(x, y) == TileMap.INVALID_CELL: return false
-	
-	var test_id = get_cell(x, y)
-	
-	# loop over each neighbour, remove test tile and neighbour then check if neighbour placement is stall valid 	
-	set_cell(x, y, TileMap.INVALID_CELL)
-	for _x in range(-1, 2):
-		for _y in range(-1, 2):
-			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
-				var neighbour_id = get_cell(x + _x, y + _y)
-				# if neighbour tile is empty or starting tile removal is valid for this neighbour
-				if neighbour_id != TileMap.INVALID_CELL && neighbour_id != _starting_tile_id:  
-					set_cell(x + _x, y + _y, TileMap.INVALID_CELL)
-					# if neighbour tile can not be placed removal of test tile not valid
-					if !is_placement_valid(x + _x, y + _y, neighbour_id): removal_valid = false
-					set_cell(x + _x, y + _y, neighbour_id)
-	set_cell(x, y, test_id) # readd test tile
-	
-	return removal_valid
 
 
 # updates the overlay for possible tile placement in regards to the tile you want to place
