@@ -28,5 +28,4 @@ func _on_tile_card_selected(card_node: TileCardDrawable):
 
 
 func _on_tile_placed(card_node: TileCard):
-	Global.active_player.tile_cards_yard.add_card(card_node)
 	_selected_tile.clear()
