@@ -1,6 +1,6 @@
 extends TileMap
 
-# Receives a TileCard
+# Receives a TileCard, VEcto2 position
 signal tile_placed
 
 var _stack_tiles: TileCardCollection = TileCardCollection.new() # complete stack for tile info
@@ -82,7 +82,7 @@ func place_tile(x: int, y: int, tile: TileCard):
 	# if is_placement_valid(x,y,tile.get_id()):
 	set_cell(x, y, tile.get_id())
 	_town_tiles.add_card(tile)
-	emit_signal("tile_placed", tile)
+	emit_signal("tile_placed", tile, Vector2(x, y))
 
 func remove_tile(x: int, y: int) -> int:
 	var tile_id = get_cell(x, y)

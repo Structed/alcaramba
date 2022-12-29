@@ -27,5 +27,6 @@ func _on_tile_card_selected(card_node: TileCardDrawable):
 	_selected_tile.select()
 
 
-func _on_tile_placed(card_node: TileCard):
+func _on_tile_placed(tile: TileCard, position: Vector2):
+	Global.active_player.add_town_tile(tile, position)
 	_selected_tile.clear()
