@@ -6,7 +6,7 @@ var _selected_tile: TileCardDrawable
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
+	OverlayDebugInfo.show()
 	OverlayDebugInfo.set_horizontal_align_right()
 	OverlayDebugInfo.set_vertical_align_top()
 	
