@@ -15,14 +15,18 @@ func _ready():
 
 
 func _on_tile_card_selected(card_node: TileCardDrawable):
+	# If another tile was clicked, we need to first reset the previous tile
+	if _selected_tile != null && card_node != _selected_tile:
+		_selected_tile.reset()
+
 	_selected_tile = card_node
 	if _town.is_connected("tile_placed", self, "_on_tile_placed"):
 		_town.disconnect("tile_placed", self, "_on_tile_placed")
 	_town.connect("tile_placed", self, "_on_tile_placed")
-	_town.receive_tile(card_node)
-	$Market.self_modulate.a = 0.5
+	_town.receive_tile(_selected_tile)
+	_selected_tile.select()
 
 
 func _on_tile_placed(card_node: TileCard):
 	Global.active_player.tile_cards_yard.add_card(card_node)
-	_selected_tile.reset()
+	_selected_tile.clear()

@@ -37,7 +37,18 @@ func reset_walls():
 	$Panel_WallLeft.visible = false
 	$Panel_WallRight.visible = false
 
-# Resets the drawable: remove card info andsets it to invisible
+func select():
+	set_scale(Vector2(1.5, 1.5))
+	
+func deselect():
+	set_scale(Vector2(1, 1))
+
+# Resets the drawable
 func reset():
-	_card_info = null
+	deselect()
+
+# remove card info, set invisible and reset
+func clear():
 	visible = false
+	_card_info = null
+	reset()
