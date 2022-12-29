@@ -1,11 +1,15 @@
 extends TileMap
 
+# Receives a TileCard, VEcto2 position
+signal tile_placed
+
 var _stack_tiles: TileCardCollection = TileCardCollection.new() # complete stack for tile info
 var _town_tiles: TileCardCollection = TileCardCollection.new() # stack for acually placed tiles
-var _starting_tile_id = 6
+var _starting_tile_id = 54
 var _current_tile: TileCard = TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
 var _max_size = [10, 10]
 var _placement_mode : int = 0 setget _placement_mode_set # 0 = no placement, 1 = place tile, 2 = remove tile
+
 onready var _tilemap_overlay = get_node("%TileMap_valid_overlay")
 
 var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
@@ -13,8 +17,9 @@ var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_stack_tiles.initialize_for_game_start() # Implement Player stack and handover/keeping of tiles
+	_stack_tiles.add_card(_current_tile)
 	self._placement_mode = 0
-	_town_tiles.add_card(TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE))
+	_town_tiles.add_card(_current_tile)
 	place_starting_tile()
 	$TileMap_valid_overlay.hide()
 	draw_placed_tiles()
@@ -77,6 +82,7 @@ func _input(event):
 func place_tile(x: int, y: int, tile: TileCard):
 	set_cell(x, y, tile.get_id())
 	_town_tiles.add_card(tile)
+	emit_signal("tile_placed", tile, Vector2(x, y))
 
 func remove_tile(x: int, y: int) -> int:
 	var tile_id = get_cell(x, y)
@@ -121,6 +127,8 @@ func place_starting_tile() -> void:
 func is_placement_valid(x: int, y: int, id: int) -> bool:
 
 	var placement_valid = false
+	var double_wall = false
+	var has_connection = false
 
 	# if tile is already populated return false
 	if get_cell(x, y) != TileMap.INVALID_CELL: return false
@@ -144,26 +152,39 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 					if _y ==  1: direction = "DOWN"
 					if _y == -1: direction = "UP"
 
-					# is there a wall between the two tiles
-					if is_wall(center_card, next_card, direction):
-						return false
+					# are there walls between the two tiles?
+					# 0 -> placement possible, 1 -> impossible, 2 -> maybe possible if other connection exists and is 0
+					match walls_between(center_card, next_card, direction):
+						0: has_connection = true
+						1: return false
+						2: double_wall = true
+					
+	if double_wall: return has_connection
 	return placement_valid
 
-# checks if there is a wall between two tiles in a given direction, wall can be on either tile
-func is_wall(card1: TileCard, card2: TileCard, direction: String)-> bool:
+# number of walls between tiles
+func walls_between(card1: TileCard, card2: TileCard, direction: String)-> int:
 	var walls1 = card1.get_enabled_walls()
 	var walls2 = card2.get_enabled_walls()
 	match direction:
 		"UP":
-			return walls1.TOP or walls2.BOTTOM
+			if walls1.TOP or walls2.BOTTOM:
+				if walls1.TOP and walls2.BOTTOM: return 2 # both tiles have walls
+				else: return 1 # only one tile has wall
 		"DOWN":
-			return walls1.BOTTOM or walls2.TOP
+			if walls1.BOTTOM or walls2.TOP:
+				if walls1.BOTTOM and walls2.TOP: return 2
+				else: return 1
 		"RIGHT":
-			return walls1.RIGHT or walls2.LEFT
+			if walls1.RIGHT or walls2.LEFT:
+				if walls1.RIGHT and walls2.LEFT: return 2
+				else: return 1
 		"LEFT":
-			return walls1.LEFT or walls2.RIGHT
+			if walls1.LEFT or walls2.RIGHT:
+				if walls1.LEFT and walls2.RIGHT: return 2
+				else: return 1
 
-	return false
+	return 0
 
 
 # updates the overlay for possible tile placement in regards to the tile you want to place
@@ -192,7 +213,6 @@ func draw_tile(tile_map: TileMap, x, y, card_id):
 
 	var world_position = tile_map.map_to_world(Vector2(x, y))
 	tile_node.set_position(world_position)
-	#tile_node.rect_scale(Vector2(0.5, 0.5))
 	tile_node.set_scale(Vector2(0.5, 0.5))
 	tile_map.add_child(tile_node)
 
@@ -222,9 +242,8 @@ func draw_placed_tiles() -> void:
 
 
 # should be called when tile is selected in market
-func receive_tile(tile: TileCard):
-	_stack_tiles.add_card(tile)
-	_current_tile = tile
+func receive_tile(tile: TileCardDrawable):
+	_current_tile = tile._card_info
 
 	update_overlay(_get_border(), _current_tile._id)
 	self._placement_mode = 1

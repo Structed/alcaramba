@@ -19,6 +19,7 @@ func _ready():
 	print_debug("Crated a stack of %d money cards" % stack_money.get_card_count())
 
 	stack_tiles.initialize_for_game_start()
+	stack_tiles.shuffle()
 	print_debug("Crated a stack of %d tile cards" % stack_tiles.get_card_count())
 #	var cards = stack_tiles.get_cards()
 #	for card in cards:

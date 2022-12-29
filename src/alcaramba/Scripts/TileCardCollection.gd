@@ -3,7 +3,7 @@ class_name TileCardCollection
 
 
 func initialize_for_game_start():
-	
+
 	# Blue
 	_stack.append(TileCard.new(0, 2, TileCard.TileType.BLUE, TileCard.WALL_SIDE_LEFT | TileCard.WALL_SIDE_TOP | TileCard.WALL_SIDE_RIGHT))
 	_stack.append(TileCard.new(1, 3, TileCard.TileType.BLUE, TileCard.WALL_SIDE_LEFT | TileCard.WALL_SIDE_BOTTOM))
@@ -69,6 +69,6 @@ func initialize_for_game_start():
 	_stack.append(TileCard.new(51, 11, TileCard.TileType.VIOLET, TileCard.WALL_SIDE_NONE))
 	_stack.append(TileCard.new(52, 12, TileCard.TileType.VIOLET, TileCard.WALL_SIDE_NONE))
 	_stack.append(TileCard.new(53, 13, TileCard.TileType.VIOLET, TileCard.WALL_SIDE_RIGHT))
-	
+
 func take_card() -> TileCard:
 	return _take_card()
