@@ -8,10 +8,10 @@ signal tile_card_selected
 
 var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
-onready var card1 = get_node("%Card1")
-onready var card2 = get_node("%Card2")
-onready var card3 = get_node("%Card3")
-onready var card4 = get_node("%Card4")
+onready var card1: TileCardDrawable = get_node("%Card1")
+onready var card2: TileCardDrawable = get_node("%Card2")
+onready var card3: TileCardDrawable = get_node("%Card3")
+onready var card4: TileCardDrawable = get_node("%Card4")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -38,6 +38,10 @@ func is_missing_cards():
 
 
 func refill():
+	card1.reset()
+	card2.reset()
+	card3.reset()
+	card4.reset()
 	_draw_tile(card1)
 	_draw_tile(card2)
 	_draw_tile(card3)
