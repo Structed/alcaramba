@@ -22,13 +22,13 @@ func set_card_info(card_info: TileCard):
 
 func draw_walls():
 	var walls = _card_info.get_enabled_walls()
-	if walls["TOP"]:
+	if walls[TileCard.WallSide.WALL_SIDE_TOP]:
 		$Panel_WallTop.visible = true
-	if walls["BOTTOM"]:
+	if walls[TileCard.WallSide.WALL_SIDE_BOTTOM]:
 		$Panel_WallBottom.visible = true
-	if walls["LEFT"]:
+	if walls[TileCard.WallSide.WALL_SIDE_LEFT]:
 		$Panel_WallLeft.visible = true
-	if walls["RIGHT"]:
+	if walls[TileCard.WallSide.WALL_SIDE_RIGHT]:
 		$Panel_WallRight.visible = true
 
 func reset_walls():
