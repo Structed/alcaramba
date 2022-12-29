@@ -106,6 +106,8 @@ func place_starting_tile() -> void:
 func is_placement_valid(x: int, y: int, id: int) -> bool:
 
 	var placement_valid = false
+	var double_wall = false
+	var has_connection = false
 
 	# if tile is already populated return false
 	if get_cell(x, y) != TileMap.INVALID_CELL: return false
@@ -129,26 +131,39 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 					if _y ==  1: direction = "DOWN"
 					if _y == -1: direction = "UP"
 
-					# is there a wall between the two tiles
-					if is_wall(center_card, next_card, direction):
-						return false
+					# are there walls between the two tiles?
+					# 0 -> placement possible, 1 -> impossible, 2 -> maybe possible if other connection exists and is 0
+					match walls_between(center_card, next_card, direction):
+						0: has_connection = true
+						1: return false
+						2: double_wall = true
+					
+	if double_wall: return has_connection
 	return placement_valid
 
-# checks if there is a wall between two tiles in a given direction, wall can be on either tile
-func is_wall(card1: TileCard, card2: TileCard, direction: String)-> bool:
+# number of walls between tiles
+func walls_between(card1: TileCard, card2: TileCard, direction: String)-> int:
 	var walls1 = card1.get_enabled_walls()
 	var walls2 = card2.get_enabled_walls()
 	match direction:
 		"UP":
-			return walls1.TOP or walls2.BOTTOM
+			if walls1.TOP or walls2.BOTTOM:
+				if walls1.TOP and walls2.BOTTOM: return 2 # both tiles have walls
+				else: return 1 # only one tile has wall
 		"DOWN":
-			return walls1.BOTTOM or walls2.TOP
+			if walls1.BOTTOM or walls2.TOP:
+				if walls1.BOTTOM and walls2.TOP: return 2
+				else: return 1
 		"RIGHT":
-			return walls1.RIGHT or walls2.LEFT
+			if walls1.RIGHT or walls2.LEFT:
+				if walls1.RIGHT and walls2.LEFT: return 2
+				else: return 1
 		"LEFT":
-			return walls1.LEFT or walls2.RIGHT
+			if walls1.LEFT or walls2.RIGHT:
+				if walls1.LEFT and walls2.RIGHT: return 2
+				else: return 1
 
-	return false
+	return 0
 
 
 # updates the overlay for possible tile placement in regards to the tile you want to place
