@@ -92,8 +92,8 @@ func _is_tile_removable(x: int, y: int):
 	
 	# if tile is not populated or starting tile, removal not valid
 	if get_cell(x, y) == TileMap.INVALID_CELL || get_cell(x, y) == _starting_tile_id: return false
-	
-	# loop over each neighbour, remove test tile and neighbour then check if neighbour placement is stall valid
+	#TODO: if four neighbours -> false
+	# loop over each neighbour, remove test tile and neighbour then check if neighbour placement is still valid
 	var test_id = get_cell(x, y)
 	set_cell(x, y, TileMap.INVALID_CELL)
 	for _x in range(-1, 2):
@@ -101,7 +101,7 @@ func _is_tile_removable(x: int, y: int):
 			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
 				var neighbour_id = get_cell(x + _x, y + _y)
 				# if neighbour tile is empty or starting tile, removal is valid regarding this neighbour
-				if neighbour_id != TileMap.INVALID_CELL && neighbour_id != _starting_tile_id:  
+				if neighbour_id != TileMap.INVALID_CELL:  
 					set_cell(x + _x, y + _y, TileMap.INVALID_CELL)
 					# if neighbour tile can not be placed removal of test tile not valid
 					if !is_placement_valid(x + _x, y + _y, neighbour_id): removal_valid = false
