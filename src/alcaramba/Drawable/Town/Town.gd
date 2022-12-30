@@ -107,10 +107,11 @@ func _is_tile_removable(x: int, y: int):
 			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
 				var neighbour_id = get_cell(x + _x, y + _y)
 				# if neighbour tile is empty or starting tile, removal is valid regarding this neighbour
-				if neighbour_id != TileMap.INVALID_CELL:  
+				if neighbour_id != TileMap.INVALID_CELL:
 					set_cell(x + _x, y + _y, TileMap.INVALID_CELL)
 					# if neighbour tile can not be placed removal of test tile not valid
-					if !is_placement_valid(x + _x, y + _y, neighbour_id): removal_valid = false
+					if !is_placement_valid(x + _x, y + _y, neighbour_id): 
+						removal_valid = false
 					set_cell(x + _x, y + _y, neighbour_id)
 	set_cell(x, y, test_id) # readd test tile
 	
@@ -131,7 +132,12 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 	var has_connection = false
 
 	# if tile is already populated return false
-	if get_cell(x, y) != TileMap.INVALID_CELL: return false
+	if get_cell(x, y) != TileMap.INVALID_CELL: 
+		return false
+		
+	# starting tile can always be placed if position is empty
+	if id == _starting_tile_id:
+		return true
 
 	var center_card = _stack_tiles.get_card_info_by_id(id) # card to place
 
@@ -139,12 +145,12 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 	for _x in range(-1, 2):
 		for _y in range(-1, 2):
 			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
-				var current_cell = get_cell(x + _x, y + _y)
-				if current_cell != TileMap.INVALID_CELL: # if neighbour tile is not empty
+				var neighbour_cell = get_cell(x + _x, y + _y)
+				if neighbour_cell != TileMap.INVALID_CELL: # if neighbour tile is not empty
 
 					placement_valid = true # if tile has a neighbour it is possibly true
 
-					var next_card = _stack_tiles.get_card_info_by_id(current_cell)
+					var next_card = _stack_tiles.get_card_info_by_id(neighbour_cell)
 					# direction from tile to place to its neighbour
 					var direction = ""
 					if _x == -1: direction = "LEFT"
