@@ -120,16 +120,19 @@ func _is_tile_removable(x: int, y: int) -> bool:
 	set_cell(x, y, test_id) # readd test tile
 	
 	return removal_valid
-	
+
+# returns number of occupied neighbour tiles
 func _count_neighbours(x: int, y: int) -> int:
-	return 1
-#	var n_neighbours = 0
-#	for _x in range(-1, 2):
-#		for _y in range(-1, 2):
-#			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
-#				var neighbour_cell = get_cell(x + _x, y + _y)
-#				if get_cell(x + _x, y + _y) != TileMap.INVALID_CELL:
-#					n_neighbours = n_neighbours +1
+	var n_neighbours = 0
+	# loop over 3x3 grid around tile
+	for _x in range(-1, 2):
+		for _y in range(-1, 2):
+			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
+				var neighbour_cell = get_cell(x + _x, y + _y)
+				# count occupied tiles
+				if neighbour_cell != TileMap.INVALID_CELL:
+					n_neighbours = n_neighbours +1
+	return n_neighbours
 
 
 func place_starting_tile() -> void:
@@ -162,7 +165,7 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 				var neighbour_cell = get_cell(x + _x, y + _y)
 				# if neigbour cell is empty it would become a hole if it already has three other neighbours
 				if neighbour_cell == TileMap.INVALID_CELL:
-					if _count_neighbours(x, y) == 3:
+					if _count_neighbours(x + _x, y + _y) == 3:
 						
 						return false
 				
