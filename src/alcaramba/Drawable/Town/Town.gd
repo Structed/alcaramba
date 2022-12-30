@@ -78,20 +78,28 @@ func _input(event):
 					draw_placed_tiles()
 				else: print_debug("cell not removable")
 
-
+# adds card to TileMap and town stack
+# @param tile: - TileCard received from market/spare tiles
+# @param x: - TileMap local x coordinate
+# @param y: - TileMap local y coordinate
 func place_tile(x: int, y: int, tile: TileCard):
 	set_cell(x, y, tile.get_id())
 	_town_tiles.add_card(tile)
 	emit_signal("tile_placed", tile, Vector2(x, y))
 
+# remove tile from TileMap and town stack and returns its id
+# @param x: - TileMap local x coordinate
+# @param y: - TileMap local y coordinate
 func remove_tile(x: int, y: int) -> int:
 	var tile_id = get_cell(x, y)
-	_stack_tiles.remove_card_by_id(tile_id)
+	_town_tiles.remove_card_by_id(tile_id)
 	set_cell(x, y, TileMap.INVALID_CELL)
 	print_debug("Removed tile %d at (%d|%d)" % [tile_id, x, y])
 	return tile_id
 
 # check if removing this tile would break continouity of town
+# @param x: - TileMap local x coordinate
+# @param y: - TileMap local y coordinate
 func _is_tile_removable(x: int, y: int) -> bool:
 	
 	var removal_valid = true
@@ -122,6 +130,8 @@ func _is_tile_removable(x: int, y: int) -> bool:
 	return removal_valid
 
 # returns number of occupied neighbour tiles
+# @param x: - TileMap local x coordinate
+# @param y: - TileMap local y coordinate
 func _count_neighbours(x: int, y: int) -> int:
 	var n_neighbours = 0
 	# loop over 3x3 grid around tile
@@ -142,6 +152,9 @@ func place_starting_tile() -> void:
 	set_cell(start_x, start_y, start_id)
 
 # checks if tile specified by id can be placed at (x,y)
+# @param x: - TileMap local x coordinate
+# @param y: - TileMap local y coordinate
+# @param id: - cell ID to place
 func is_placement_valid(x: int, y: int, id: int) -> bool:
 
 	var placement_valid = false
@@ -149,12 +162,10 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 	var has_connection = false
 
 	# if tile is already populated return false
-	if get_cell(x, y) != TileMap.INVALID_CELL: 
-		return false
+	if get_cell(x, y) != TileMap.INVALID_CELL: return false
 		
 	# starting tile can always be placed if position is empty
-	if id == _starting_tile_id:
-		return true
+	if id == _starting_tile_id: return true
 
 	var center_card = _stack_tiles.get_card_info_by_id(id) # card to place
 
@@ -165,9 +176,7 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 				var neighbour_cell = get_cell(x + _x, y + _y)
 				# if neigbour cell is empty it would become a hole if it already has three other neighbours
 				if neighbour_cell == TileMap.INVALID_CELL:
-					if _count_neighbours(x + _x, y + _y) == 3:
-						
-						return false
+					if _count_neighbours(x + _x, y + _y) == 3: return false
 				
 				# is neighbour is not empty check for walls
 				if neighbour_cell != TileMap.INVALID_CELL: # if neighbour tile is not empty
@@ -182,7 +191,7 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 					if _y ==  1: direction = "DOWN"
 					if _y == -1: direction = "UP"
 
-					# how many walls are there walls between the two tiles?
+					# how many walls are there between the two tiles?
 					# 0 -> placement possible, 1 -> impossible, 2 -> maybe possible if another connection exists where there are no walls
 					match walls_between(center_card, next_card, direction):
 						0: has_connection = true
