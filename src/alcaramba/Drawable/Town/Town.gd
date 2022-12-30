@@ -92,13 +92,17 @@ func remove_tile(x: int, y: int) -> int:
 	return tile_id
 
 # check if removing this tile would break continouity of town
-func _is_tile_removable(x: int, y: int):
+func _is_tile_removable(x: int, y: int) -> bool:
 	
 	var removal_valid = true
 	
 	# if tile is not populated or starting tile, removal not valid
 	if get_cell(x, y) == TileMap.INVALID_CELL || get_cell(x, y) == _starting_tile_id: return false
-	#TODO: if four neighbours -> false
+	
+	# check if removal would leave hole, happens if all four neighbours are present
+	if _count_neighbours(x, y) == 4: 
+		return false
+	
 	# loop over each neighbour, remove test tile and neighbour then check if neighbour placement is still valid
 	var test_id = get_cell(x, y)
 	set_cell(x, y, TileMap.INVALID_CELL)
@@ -110,12 +114,22 @@ func _is_tile_removable(x: int, y: int):
 				if neighbour_id != TileMap.INVALID_CELL:
 					set_cell(x + _x, y + _y, TileMap.INVALID_CELL)
 					# if neighbour tile can not be placed removal of test tile not valid
-					if !is_placement_valid(x + _x, y + _y, neighbour_id): 
+					if !is_placement_valid(x + _x, y + _y, neighbour_id):
 						removal_valid = false
 					set_cell(x + _x, y + _y, neighbour_id)
 	set_cell(x, y, test_id) # readd test tile
 	
 	return removal_valid
+	
+func _count_neighbours(x: int, y: int) -> int:
+	return 1
+#	var n_neighbours = 0
+#	for _x in range(-1, 2):
+#		for _y in range(-1, 2):
+#			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
+#				var neighbour_cell = get_cell(x + _x, y + _y)
+#				if get_cell(x + _x, y + _y) != TileMap.INVALID_CELL:
+#					n_neighbours = n_neighbours +1
 
 
 func place_starting_tile() -> void:
@@ -146,6 +160,13 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 		for _y in range(-1, 2):
 			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
 				var neighbour_cell = get_cell(x + _x, y + _y)
+				# if neigbour cell is empty it would become a hole if it already has three other neighbours
+				if neighbour_cell == TileMap.INVALID_CELL:
+					if _count_neighbours(x, y) == 3:
+						
+						return false
+				
+				# is neighbour is not empty check for walls
 				if neighbour_cell != TileMap.INVALID_CELL: # if neighbour tile is not empty
 
 					placement_valid = true # if tile has a neighbour it is possibly true
@@ -158,8 +179,8 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 					if _y ==  1: direction = "DOWN"
 					if _y == -1: direction = "UP"
 
-					# are there walls between the two tiles?
-					# 0 -> placement possible, 1 -> impossible, 2 -> maybe possible if other connection exists and is 0
+					# how many walls are there walls between the two tiles?
+					# 0 -> placement possible, 1 -> impossible, 2 -> maybe possible if another connection exists where there are no walls
 					match walls_between(center_card, next_card, direction):
 						0: has_connection = true
 						1: return false
@@ -194,7 +215,7 @@ func walls_between(card1: TileCard, card2: TileCard, direction: String)-> int:
 
 
 # updates the overlay for possible tile placement in regards to the tile you want to place
-func update_overlay(border: Rect2, id_compare: int = 6) -> void:
+func update_overlay(border: Rect2, id_compare: int = _starting_tile_id) -> void:
 
 	_tilemap_overlay.clear()
 	cleanup_placed_tiles(_tilemap_overlay)
