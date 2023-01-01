@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Drawable/Town/Town.gd" type="Script" id=1]
 [ext_resource path="res://Drawable/Card/TileCardDrawable.gd" type="Script" id=2]
 [ext_resource path="res://assets/fonts/Xolonium-Regular.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://Drawable/Town/SpareTiles.gd" type="Script" id=4]
 [ext_resource path="res://Drawable/Town/TileMap_valid_overlay.gd" type="Script" id=8]
 
 [sub_resource type="TileSet" id=1]
@@ -10,6 +11,8 @@
 [sub_resource type="DynamicFont" id=2]
 size = 40
 font_data = ExtResource( 3 )
+
+[sub_resource type="CanvasItemMaterial" id=3]
 
 [node name="TileMap" type="TileMap"]
 tile_set = SubResource( 1 )
@@ -26,8 +29,10 @@ __meta__ = {
 [node name="Label" type="Label" parent="TextureButton"]
 modulate = Color( 0.784314, 0.290196, 0.290196, 1 )
 self_modulate = Color( 0.262745, 0.447059, 0.329412, 1 )
-margin_right = 235.0
-margin_bottom = 62.0
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 255.0
+margin_bottom = 64.0
 custom_fonts/font = SubResource( 2 )
 text = "Change Tile"
 __meta__ = {
@@ -48,13 +53,6 @@ margin_top = 191.0
 margin_right = 185.0
 margin_bottom = 231.0
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TileMap_distances" type="TileMap" parent="."]
-unique_name_in_owner = true
-format = 1
 
 [node name="SpareTiles" type="VBoxContainer" parent="."]
 margin_left = 644.0
