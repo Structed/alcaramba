@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Drawable/Town/Town.gd" type="Script" id=1]
 [ext_resource path="res://Drawable/Card/TileCardDrawable.gd" type="Script" id=2]
@@ -12,6 +12,8 @@
 size = 40
 font_data = ExtResource( 3 )
 
+[sub_resource type="CanvasItemMaterial" id=3]
+
 [node name="TileMap" type="TileMap"]
 tile_set = SubResource( 1 )
 format = 1
@@ -22,17 +24,14 @@ margin_right = 226.0
 margin_bottom = 57.0
 
 [node name="Label" type="Label" parent="TextureButton"]
-modulate = Color( 0.784314, 0.290196, 0.290196, 1 )
-self_modulate = Color( 0.262745, 0.447059, 0.329412, 1 )
+modulate = Color( 0.133333, 0.839216, 0.239216, 1 )
+show_behind_parent = true
 margin_left = 2.0
 margin_top = 2.0
 margin_right = 255.0
 margin_bottom = 64.0
 custom_fonts/font = SubResource( 2 )
 text = "Change Tile"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TileMap_valid_overlay" type="TileMap" parent="."]
 unique_name_in_owner = true
@@ -49,11 +48,23 @@ margin_right = 185.0
 margin_bottom = 231.0
 script = ExtResource( 2 )
 
-[node name="SpareTiles" type="VBoxContainer" parent="."]
-margin_left = 644.0
-margin_top = 121.0
-margin_right = 837.0
-margin_bottom = 443.0
+[node name="ContainerRight" type="VBoxContainer" parent="."]
+material = SubResource( 3 )
+margin_left = 616.0
+margin_top = 287.0
+margin_right = 949.0
+margin_bottom = 883.0
+
+[node name="CurrentTile" type="VBoxContainer" parent="ContainerRight"]
+margin_right = 333.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 0, 50 )
+
+[node name="SpareTiles" type="VBoxContainer" parent="ContainerRight"]
+margin_top = 54.0
+margin_right = 333.0
+margin_bottom = 104.0
+rect_min_size = Vector2( 50, 50 )
 script = ExtResource( 4 )
 
 [connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]
