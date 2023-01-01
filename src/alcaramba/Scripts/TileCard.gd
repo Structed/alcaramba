@@ -74,17 +74,17 @@ func get_wall(wall_side: int):
 	return _walls & wall_side
 	
 func get_enabled_walls():
-	var enabled_walls = {"TOP": false, "RIGHT": false, "BOTTOM": false, "LEFT": false}
-	enabled_walls["TOP"] = is_bit_enabled(0)
-	enabled_walls["RIGHT"] = is_bit_enabled(1)
-	enabled_walls["BOTTOM"] = is_bit_enabled(2)
-	enabled_walls["LEFT"] = is_bit_enabled(3)
+	var enabled_walls = {WallSide.WALL_SIDE_TOP: false, WallSide.WALL_SIDE_RIGHT: false, WallSide.WALL_SIDE_BOTTOM: false, WallSide.WALL_SIDE_LEFT: false}
+	enabled_walls[WallSide.WALL_SIDE_TOP] = is_bit_enabled(0)
+	enabled_walls[WallSide.WALL_SIDE_RIGHT] = is_bit_enabled(1)
+	enabled_walls[WallSide.WALL_SIDE_BOTTOM] = is_bit_enabled(2)
+	enabled_walls[WallSide.WALL_SIDE_LEFT] = is_bit_enabled(3)
 	return enabled_walls
 	
 func print_enabled_walls():
 	var walls = get_enabled_walls()
 	for wall_key in walls:
-		print("%s: %s" % [wall_key, walls[wall_key]])
+		print("TileID: %s - %s: %s" % [_id, wall_key, walls[wall_key]])
 
 func is_bit_enabled(index):
 	return _walls & (1 << index) != 0
