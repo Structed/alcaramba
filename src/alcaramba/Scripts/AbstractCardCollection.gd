@@ -2,10 +2,10 @@ extends Object
 class_name AbstractCardCollection
 
 var _stack: Array = []
-
+	
 func get_card_count() -> int:
 	return _stack.size()
-
+	
 func get_cards() -> Array:
 	return _stack
 
@@ -14,12 +14,15 @@ func shuffle():
 
 func _take_card():
 	return _stack.pop_back()
-
+	
 func get_card_info_by_id(id: int):
 	for card in _stack:
 		if card._id == id:
 			return card
 	return null
+
+func get_card_info_by_index(index: int):
+	return _stack[index]
 
 func add_card(card : AbstractCard):
 	_stack.append(card)
