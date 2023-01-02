@@ -103,16 +103,16 @@ func remove_tile(x: int, y: int) -> int:
 func _is_tile_removable(x: int, y: int) -> bool:
 	
 	var removal_valid = true
+	var test_id = get_cell(x, y)
 	
 	# if tile is not populated or starting tile, removal not valid
-	if get_cell(x, y) == TileMap.INVALID_CELL || get_cell(x, y) == _starting_tile_id: return false
+	if test_id == TileMap.INVALID_CELL || test_id == _starting_tile_id: return false
 	
 	# check if removal would leave hole, happens if all four neighbours are present
 	if _count_neighbours(x, y) == 4: 
 		return false
 	
 	# loop over each neighbour, remove test tile and neighbour then check if neighbour placement is still valid
-	var test_id = get_cell(x, y)
 	set_cell(x, y, TileMap.INVALID_CELL)
 	for _x in range(-1, 2):
 		for _y in range(-1, 2):
@@ -124,6 +124,7 @@ func _is_tile_removable(x: int, y: int) -> bool:
 					# if neighbour tile can not be placed removal of test tile not valid
 					if !is_placement_valid(x + _x, y + _y, neighbour_id):
 						removal_valid = false
+					# readd neighbour tile
 					set_cell(x + _x, y + _y, neighbour_id)
 	set_cell(x, y, test_id) # readd test tile
 	
@@ -141,7 +142,7 @@ func _count_neighbours(x: int, y: int) -> int:
 				var neighbour_cell = get_cell(x + _x, y + _y)
 				# count occupied tiles
 				if neighbour_cell != TileMap.INVALID_CELL:
-					n_neighbours = n_neighbours +1
+					n_neighbours = n_neighbours + 1
 	return n_neighbours
 
 
@@ -151,7 +152,7 @@ func place_starting_tile() -> void:
 	var start_id = _starting_tile_id
 	set_cell(start_x, start_y, start_id)
 
-# checks if tile specified by id can be placed at (x,y)
+# checks if tile specified by id can be placed at (x, y)
 # @param x: - TileMap local x coordinate
 # @param y: - TileMap local y coordinate
 # @param id: - cell ID to place
