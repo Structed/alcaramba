@@ -1,6 +1,6 @@
 extends HBoxContainer
+class_name MoneyMarket
 
-signal money_card_selected
 
 const MAX_MONEY_MARKET_CARDS = 4
 
@@ -20,13 +20,12 @@ func refill():
 	for _i in range(cards_to_refill_count):
 		var card = Global.stack_money.take_card()
 		var card_node = card_scene.instance()
-		card_node._card_info = card
+		card_node.card_info = card
 		add_child(card_node)
 		card_node.connect("pressed", self, "_on_MoneyCard_pressed", [card_node])
 
 
 func _on_MoneyCard_pressed(card_node: MoneyCardDrawable):
 	card_node.disconnect("pressed", self, "_on_MoneyCard_pressed")
-	Global.active_player.money_cards.add_card(card_node._card_info)
+	Global.active_player.money_cards.add_card(card_node.card_info)
 	remove_child(card_node)
-	emit_signal("money_card_selected", card_node)

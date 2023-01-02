@@ -1,10 +1,8 @@
 extends TextureRect
+class_name TileMarket
 
 
 const MAX_TILE_MARKET_CARDS = 4
-
-# Receives a `TileCardDrawable`
-signal tile_card_selected
 
 var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
@@ -12,14 +10,6 @@ onready var card1: TileCardDrawable = get_node("%Card1")
 onready var card2: TileCardDrawable = get_node("%Card2")
 onready var card3: TileCardDrawable = get_node("%Card3")
 onready var card4: TileCardDrawable = get_node("%Card4")
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	var _ignore
-	_ignore = card1.connect("pressed", self, "_on_TileCard_pressed", [card1])
-	_ignore = card2.connect("pressed", self, "_on_TileCard_pressed", [card2])
-	_ignore = card3.connect("pressed", self, "_on_TileCard_pressed", [card3])
-	_ignore = card4.connect("pressed", self, "_on_TileCard_pressed", [card4])
 
 
 func get_empty_tile_slot_count() -> int:
@@ -54,6 +44,3 @@ func _draw_tile(node: TileCardDrawable):
 		node.set_card_info(card_info)
 		node.visible = true
 
-
-func _on_TileCard_pressed(card_node: TileCardDrawable):
-	emit_signal("tile_card_selected", card_node)

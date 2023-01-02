@@ -8,8 +8,12 @@ const CARDS_PER_CURRENCY = 3
 enum Currency {BLUE, YELLOW, GREEN, ORANGE}
 
 # Of type enum Currency
-var _currency: int
+var _currency: int setget ,get_currency
 
+
+# Returns the Card's color, depending on the currency
+# @visibility: public
+# returns: Color - Colors.DEFAULT if no match with Currency
 func get_color() -> Color:
 	var color: Color
 	match _currency:
@@ -25,3 +29,10 @@ func get_color() -> Color:
 			color = Colors.DEFAULT
 	
 	return color
+
+
+# Returns the currency
+# @visibility: public
+# returns: MoneyCard.Currency - enum value
+func get_currency() -> int:
+	return _currency

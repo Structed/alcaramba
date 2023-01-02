@@ -2,6 +2,8 @@ extends TextureButton
 class_name TileCardDrawable
 
 var _card_info: TileCard
+# Added to be able to select the currency in the TileMarket
+export(MoneyCard.Currency) var currency
 
 
 # Called when the node enters the scene tree for the first time.
