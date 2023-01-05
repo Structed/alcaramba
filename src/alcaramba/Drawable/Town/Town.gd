@@ -9,6 +9,7 @@ var _starting_tile_id = 54
 var _current_tile: TileCard = TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
 var _max_size = [10, 10]
 var _placement_mode : int = 0 setget _placement_mode_set # 0 = no placement, 1 = place tile, 2 = remove tile
+var _distances : TileMap # contains distances along shortest path to starting tile
 
 onready var _tilemap_overlay = get_node("%TileMap_valid_overlay")
 
@@ -291,6 +292,26 @@ func receive_tile(tile: TileCardDrawable):
 # get rectangle spanned by already placed tiles
 func _get_border():
 	return get_used_rect()
+
+# updates _distances, containing distance to starting tile along shortest path
+# implentation of dijkstra algorithm
+func _update_distances() -> void:
+	
+	# set all distances impossibly high where a towntile is present
+	var bignumber = 10000
+	var tilepositions.get_used_cells() # returns a Vector2 containing positions of filled town spaces
+	for position in tilepositions:
+		_distances.set_cell(position, bignumber)
+	# set starting tile to distance zero
+	_distances.set_cell()
+	
+	# loop over steps, ends when all distances have been assigned
+	for i =
+		# loop over rectangle containing all town tiles
+		var border = _get_border()
+		for x in range(border.position.x, border.position.x + border.size.x):
+			for y in range(border.position.y, border.position.y + border.size.y):
+				get_used_cells_by_id(id: int) 
 
 
 # debug functions
