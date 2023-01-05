@@ -1,6 +1,6 @@
 extends TileMap
 
-# Receives a TileCard, VEcto2 position
+# Receives a TileCard, Vector2 position
 signal tile_placed
 
 var _stack_tiles: TileCardCollection = TileCardCollection.new() # complete stack for tile info
@@ -9,9 +9,11 @@ var _starting_tile_id = 54
 var _current_tile: TileCard = TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
 var _max_size = [10, 10]
 var _placement_mode : int = 0 setget _placement_mode_set # 0 = no placement, 1 = place tile, 2 = remove tile
-var _distances : TileMap # contains distances along shortest path to starting tile
+var _max_int = 10000 # very big number needed for distance/connectivity calculations
+
 
 onready var _tilemap_overlay = get_node("%TileMap_valid_overlay")
+onready var _distances = get_node("%TileMap_distances")
 
 var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
@@ -22,6 +24,7 @@ func _ready():
 	self._placement_mode = 0
 	_town_tiles.add_card(_current_tile)
 	place_starting_tile()
+	_update_distances() 
 	$TileMap_valid_overlay.hide()
 	draw_placed_tiles()
 
@@ -74,10 +77,13 @@ func _input(event):
 				# if cell not empty and cell is not starting tile and removed does not break connection
 				var cell_to_remove = get_cell(x, y)
 				if cell_to_remove != TileMap.INVALID_CELL && cell_to_remove != _starting_tile_id && _is_tile_removable(x, y):
-					var removed_tile_id = remove_tile(x, y)
+					var removed_tile_id = remove_tile(x, y) # remove tile and return its id
 					# TODO #19: send tile to spare tiles
 					draw_placed_tiles()
-				else: print_debug("cell not removable")
+				else: 
+					print_debug("cell not removable")
+					draw_placed_tiles()
+				
 
 # adds card to TileMap and town stack
 # @param tile: - TileCard received from market/spare tiles
@@ -113,11 +119,22 @@ func _is_tile_removable(x: int, y: int) -> bool:
 	if _count_neighbours(x, y) == 4: 
 		return false
 	
-	# loop over each neighbour, remove test tile and neighbour then check if neighbour placement is still valid
+	# remove test tile and neighbour then check if neighbour placement is still valid
 	set_cell(x, y, TileMap.INVALID_CELL)
+	
+	# if any tile has infinite distance, the connection to start was broken
+	_update_distances()
+	var check = _distances.get_used_cells_by_id(_max_int)
+	if !_distances.get_used_cells_by_id(_max_int).empty():
+		removal_valid = false
+	
+	# loop over each neighbour,
 	for _x in range(-1, 2):
 		for _y in range(-1, 2):
 			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
+				
+				# check if neighbour placement is still valid, with test tile removed
+				
 				var neighbour_id = get_cell(x + _x, y + _y)
 				# if neighbour tile is empty or starting tile, removal is valid regarding this neighbour
 				if neighbour_id != TileMap.INVALID_CELL:
@@ -128,6 +145,7 @@ func _is_tile_removable(x: int, y: int) -> bool:
 					# readd neighbour tile
 					set_cell(x + _x, y + _y, neighbour_id)
 	set_cell(x, y, test_id) # readd test tile
+	_update_distances() # recalculate distances for restored town
 	
 	return removal_valid
 
@@ -135,16 +153,7 @@ func _is_tile_removable(x: int, y: int) -> bool:
 # @param x: - TileMap local x coordinate
 # @param y: - TileMap local y coordinate
 func _count_neighbours(x: int, y: int) -> int:
-	var n_neighbours = 0
-	# loop over 3x3 grid around tile
-	for _x in range(-1, 2):
-		for _y in range(-1, 2):
-			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
-				var neighbour_cell = get_cell(x + _x, y + _y)
-				# count occupied tiles
-				if neighbour_cell != TileMap.INVALID_CELL:
-					n_neighbours = n_neighbours + 1
-	return n_neighbours
+	return get_neighbours(x, y).size()
 
 
 func place_starting_tile() -> void:
@@ -294,24 +303,49 @@ func _get_border():
 	return get_used_rect()
 
 # updates _distances, containing distance to starting tile along shortest path
-# implentation of dijkstra algorithm
+# implentation of dijkstra algorithm, with all paths equal one
 func _update_distances() -> void:
 	
 	# set all distances impossibly high where a towntile is present
-	var bignumber = 10000
-	var tilepositions.get_used_cells() # returns a Vector2 containing positions of filled town spaces
-	for position in tilepositions:
-		_distances.set_cell(position, bignumber)
-	# set starting tile to distance zero
-	_distances.set_cell()
+
+	var tilepositions  = self.get_used_cells() # returns a Vector2 containing positions of filled town spaces
+	for pos in tilepositions:
+		_distances.set_cell(pos.x, pos.y, _max_int)
+		
+	var test = _distances.get_used_cells()
 	
-	# loop over steps, ends when all distances have been assigned
-	for i =
-		# loop over rectangle containing all town tiles
-		var border = _get_border()
-		for x in range(border.position.x, border.position.x + border.size.x):
-			for y in range(border.position.y, border.position.y + border.size.y):
-				get_used_cells_by_id(id: int) 
+	# set starting tile to distance zero
+	var starting_position = get_used_cells_by_id(_starting_tile_id)[0]
+	_distances.set_cell(starting_position.x, starting_position.y, 0)
+	
+	# loop over steps from starting tile, ends when all distances have been assigned
+	for step  in range(0,20):
+		# loop over filled positions
+		for pos in tilepositions:
+			if _distances.get_cell(pos.x, pos.y) == step:
+				for neighbour in get_neighbours(pos.x, pos.y):
+					# loop over all unassigned distances, all assigned distances are always the shortest because all paths are length one
+					# TODO: check for walls, then path invalid and do not update neighbour
+					if _distances.get_cell(neighbour.x, neighbour.y) == _max_int:
+						_distances.set_cell(neighbour.x, neighbour.y, step + 1)
+						
+	
+	test = _distances.get_used_cells_by_id(_max_int)
+	return
+
+# returns vector with positions of all valid neighbours to position (x, y)
+func get_neighbours(x: int, y: int):
+	
+	var neighbours = []
+	# loop over all tiles surrounding position (including itself)
+	for _x in range(-1, 2):
+		for _y in range(-1, 2):
+			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
+				# if tile is not empty, add position to return array
+				if get_cell(x + _x, y + _y) != TileMap.INVALID_CELL:
+					neighbours.append(Vector2(x + _x, y + _y))
+
+	return neighbours
 
 
 # debug functions

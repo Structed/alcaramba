@@ -43,4 +43,8 @@ margin_right = 185.0
 margin_bottom = 231.0
 script = ExtResource( 2 )
 
+[node name="TileMap_distances" type="TileMap" parent="."]
+unique_name_in_owner = true
+format = 1
+
 [connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]
