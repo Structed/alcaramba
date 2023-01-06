@@ -13,7 +13,8 @@ var _max_int = 10000 # very big number needed for distance/connectivity calculat
 
 
 onready var _tilemap_overlay = get_node("%TileMap_valid_overlay")
-onready var _distances = get_node("%TileMap_distances")
+onready var _distances = get_node("%TileMap_distances") # grid to check connectivity of valid tiles
+onready var _inverse_distances = get_node("%TileMap_distances") # grid to check connectivity of invalid tiles
 
 var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
@@ -24,7 +25,7 @@ func _ready():
 	self._placement_mode = 0
 	_town_tiles.add_card(_current_tile)
 	place_starting_tile()
-	_update_distances() 
+	_update_distancemap(_distances) 
 	$TileMap_valid_overlay.hide()
 	draw_placed_tiles()
 
@@ -120,7 +121,7 @@ func _is_tile_removable(x: int, y: int) -> bool:
 	set_cell(x, y, TileMap.INVALID_CELL)
 	
 	# if any tile has infinite distance, the connection to start was broken
-	_update_distances()
+	_update_distancemap(_distances)
 	if !_distances.get_used_cells_by_id(_max_int).empty():
 		removal_valid = false
 	
@@ -137,7 +138,7 @@ func _is_tile_removable(x: int, y: int) -> bool:
 			set_cellv(neighbour, neighbour_id)
 
 	set_cell(x, y, test_id) # readd test tile
-	_update_distances() # recalculate distances for restored town
+	_update_distancemap(_distances) # recalculate distances for restored town
 	
 	return removal_valid
 
@@ -168,6 +169,11 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 		
 	# starting tile can always be placed if position is empty
 	if id == _starting_tile_id: return true
+	
+#	# check if placing tiles would create hole
+#	_update_distancemap(_inverse_distances, true)
+#	if !_inverse_distances.get_used_cells_by_id(_max_int).empty():
+#		return false
 
 	# loop over all tiles surrounding position, including invalid ones
 	for neighbour in get_neighbours(x, y, true):
@@ -306,31 +312,41 @@ func _get_border():
 
 # updates _distances, containing distance to starting tile along shortest path
 # implentation of dijkstra algorithm, with all paths equal one
-func _update_distances() -> void:
+func _update_distancemap(distancemap: TileMap, invert = false) -> void:
 	
 	# set all distances impossibly high where a towntile is present
-	_distances.clear()
+	distancemap.clear()
+	
+	var border = _get_border()
+	if invert:
+		for x in range(border.position.x, border.position.x + border.size.x):
+			for y in range(border.position.y, border.position.y + border.size.y):
+				distancemap.set_cell(x, y, _max_int)
+	
 	var tilepositions  = self.get_used_cells() # returns a Vector2 containing positions of filled town spaces
 	for pos in tilepositions:
-		_distances.set_cell(pos.x, pos.y, _max_int)
+		distancemap.set_cell(pos.x, pos.y, _max_int)
+		
 	
-	# starting tile has zero distance to itself
+	# starting tile has zero distance to itself	
 	var starting_position = get_used_cells_by_id(_starting_tile_id)[0]
-	_distances.set_cell(starting_position.x, starting_position.y, 0)
+	if invert:
+		starting_position = Vector2(border.position.x, border.position.y)
+	distancemap.set_cell(starting_position.x, starting_position.y, 0)
 	
-	# loop over steps from starting tile, max number of steps is less than number of tiles
-	for step  in range(0, tilepositions.size()):
+	# loop over steps from starting tile, max number of steps is less than number of tiles, times three for inverse paths
+	for step  in range(0, tilepositions.size()*3):
 		# loop over filled positions
 		for pos in tilepositions:
 			
-			if _distances.get_cell(pos.x, pos.y) == step:
+			if distancemap.get_cell(pos.x, pos.y) == step:
 				# loop over neighbour position
 				for neighbour in get_neighbours(pos.x, pos.y):
 					# check if distance is unassigned, all assigned distances are always the shortest because all paths are length one
-					if _distances.get_cell(neighbour.x, neighbour.y) == _max_int:
+					if distancemap.get_cell(neighbour.x, neighbour.y) == _max_int:
 						# check for walls, then path invalid and do not update neighbour
 						if walls_between(pos, neighbour) == 0:
-							_distances.set_cell(neighbour.x, neighbour.y, step + 1)
+							distancemap.set_cell(neighbour.x, neighbour.y, step + 1)
 
 	return
 
