@@ -20,12 +20,8 @@ func _display_tiles():
 		var tile_node = tile_scene.instance()
 		tile_node._card_info = _stack_spare_tiles.get_card_info_by_index(_i)
 		add_child(tile_node)
-		var children = self.get_children()
 
-func receive_tile(tile: TileCard):
-	pass
-
-
+# removed tile from town is added to spare parts
 func _on_TileMap_tile_removed(tile):
 	_stack_spare_tiles.add_card(tile)
 	_display_tiles()
