@@ -77,13 +77,10 @@ func _input(event):
 				# if cell not empty and cell is not starting tile and removed does not break connection
 				var cell_to_remove = get_cell(x, y)
 				if cell_to_remove != TileMap.INVALID_CELL && cell_to_remove != _starting_tile_id && _is_tile_removable(x, y):
-					var removed_tile_id = remove_tile(x, y) # remove tile and return its id
-					# TODO #19: send tile to spare tiles
-					draw_placed_tiles()
-				else: 
-					print_debug("cell not removable")
-					draw_placed_tiles()
-				
+					var _removed_tile_id = remove_tile(x, y) # remove tile and return its id
+					# TODO #19: send _removed_tile_id to spare tiles
+				draw_placed_tiles()
+
 
 # adds card to TileMap and town stack
 # @param tile: - TileCard received from market/spare tiles
@@ -208,9 +205,10 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 						1: return false
 						2: double_wall = true
 					
-	if double_wall: return has_connection
+	if double_wall: return has_connection # placement possible if another connection exists where there are no walls
 	return placement_valid
 
+# TODO: refactor to merge the two walls_between functions, ...1 should be used. Change function call in _is_placement_valid
 # number of walls between tiles
 func walls_between(card1: TileCard, card2: TileCard, direction: String)-> int:
 	var walls1 = card1.get_enabled_walls()
@@ -234,22 +232,25 @@ func walls_between(card1: TileCard, card2: TileCard, direction: String)-> int:
 				else: return 1
 
 	return 0
-
-func walls_between1(pos1, pos2)-> int:
+	
+# returns the number of walls between two tiles
+# @param pos1: - Vector2 containing position of first tile
+# @param pos2 - Vector2 containing position of second tile
+func walls_between1(pos1: Vector2, pos2: Vector2) -> int:
 
 	# get corresponding TileCards
 	var card1 = _town_tiles.get_card_info_by_id(get_cell(pos1.x, pos1.y))
 	var card2 = _town_tiles.get_card_info_by_id(get_cell(pos2.x, pos2.y))
 
-	# get direction from card1 to card2
+	# get direction from card1 to card2, only for neighbouring tiles
 	var direction
-	if pos1.x - pos2.x < 0:
+	if pos1.x - pos2.x == -1:
 		direction = "RIGHT"
-	elif pos1.x - pos2.x > 0:
+	elif pos1.x - pos2.x == 1:
 		direction = "LEFT"
-	elif pos1.y - pos2.y > 0:
+	elif pos1.y - pos2.y == 1:
 		direction = "UP"
-	elif pos1.y - pos2.y < 0:
+	elif pos1.y - pos2.y == -1:
 		direction = "DOWN"
 
 	var walls1 = card1.get_enabled_walls()
@@ -272,7 +273,6 @@ func walls_between1(pos1, pos2)-> int:
 				if walls1.LEFT and walls2.RIGHT: return 2
 				else: return 1
 
-	print(direction)
 	return 0
 
 
@@ -352,7 +352,7 @@ func _update_distances() -> void:
 	for pos in tilepositions:
 		_distances.set_cell(pos.x, pos.y, _max_int)
 	
-	# set starting tile to distance zero
+	# starting tile has zero distance to itself
 	var starting_position = get_used_cells_by_id(_starting_tile_id)[0]
 	_distances.set_cell(starting_position.x, starting_position.y, 0)
 	
@@ -372,7 +372,7 @@ func _update_distances() -> void:
 
 	return
 
-# returns vector with positions of all valid neighbours to position (x, y)
+# returns array ov Vector2 with positions of all valid neighbours to position (x, y)
 func get_neighbours(x: int, y: int):
 	
 	var neighbours = []
