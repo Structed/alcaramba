@@ -169,8 +169,8 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 	# starting tile can always be placed if position is empty
 	if id == _starting_tile_id: return true
 
-	# loop over all tiles surrounding position (including itself)
-	for neighbour in get_neighbours(x, y):
+	# loop over all tiles surrounding position, including invalid ones
+	for neighbour in get_neighbours(x, y, true):
 		var neighbour_id = get_cellv(neighbour)
 		# if neighbour cell is empty, it would become a hole if it already has three other neighbours
 		if neighbour_id == TileMap.INVALID_CELL:
@@ -335,7 +335,7 @@ func _update_distances() -> void:
 	return
 
 # returns array ov Vector2 with positions of all valid neighbours to position (x, y)
-func get_neighbours(x: int, y: int):
+func get_neighbours(x: int, y: int, include_invalid = false):
 	
 	var neighbours = []
 	# loop over all tiles surrounding position (including itself)
@@ -343,7 +343,9 @@ func get_neighbours(x: int, y: int):
 		for _y in range(-1, 2):
 			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
 				# if tile is not empty, add position to return array
-				if get_cell(x + _x, y + _y) != TileMap.INVALID_CELL:
+				if include_invalid:
+					neighbours.append(Vector2(x + _x, y + _y))
+				elif get_cell(x + _x, y + _y) != TileMap.INVALID_CELL:
 					neighbours.append(Vector2(x + _x, y + _y))
 
 	return neighbours
