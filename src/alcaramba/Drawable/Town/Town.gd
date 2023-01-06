@@ -124,22 +124,18 @@ func _is_tile_removable(x: int, y: int) -> bool:
 	if !_distances.get_used_cells_by_id(_max_int).empty():
 		removal_valid = false
 	
-	# loop over each neighbour,
-	for _x in range(-1, 2):
-		for _y in range(-1, 2):
-			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
-				
-				# check if neighbour placement is still valid, with test tile removed
-				
-				var neighbour_id = get_cell(x + _x, y + _y)
-				# if neighbour tile is empty or starting tile, removal is valid regarding this neighbour
-				if neighbour_id != TileMap.INVALID_CELL:
-					set_cell(x + _x, y + _y, TileMap.INVALID_CELL)
-					# if neighbour tile can not be placed removal of test tile not valid
-					if !is_placement_valid(x + _x, y + _y, neighbour_id):
-						removal_valid = false
-					# readd neighbour tile
-					set_cell(x + _x, y + _y, neighbour_id)
+	# loop over each neighbour, for each neighbour check if placement is still valid, with test tile remove
+	for neighbour in get_neighbours(x, y):
+		var neighbour_id = get_cellv(neighbour)
+		# if neighbour tile is empty or starting tile, removal is valid regarding this neighbour
+		if neighbour_id != TileMap.INVALID_CELL:
+			set_cellv(neighbour, TileMap.INVALID_CELL)
+			# if neighbour tile can not be placed removal of test tile not valid
+			if !is_placement_valid(neighbour.x, neighbour.y, neighbour_id):
+				removal_valid = false
+			# readd neighbour tile
+			set_cellv(neighbour, neighbour_id)
+
 	set_cell(x, y, test_id) # readd test tile
 	_update_distances() # recalculate distances for restored town
 	
@@ -150,7 +146,6 @@ func _is_tile_removable(x: int, y: int) -> bool:
 # @param y: - TileMap local y coordinate
 func _count_neighbours(x: int, y: int) -> int:
 	return get_neighbours(x, y).size()
-
 
 func place_starting_tile() -> void:
 	var start_x = floor(_max_size[0] / 2)
@@ -177,70 +172,41 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 	var center_card = _stack_tiles.get_card_info_by_id(id) # card to place
 
 	# loop over all tiles surrounding position (including itself)
-	for _x in range(-1, 2):
-		for _y in range(-1, 2):
-			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
-				var neighbour_cell = get_cell(x + _x, y + _y)
-				# if neigbour cell is empty it would become a hole if it already has three other neighbours
-				if neighbour_cell == TileMap.INVALID_CELL:
-					if _count_neighbours(x + _x, y + _y) == 3: return false
-				
-				# is neighbour is not empty check for walls
-				if neighbour_cell != TileMap.INVALID_CELL: # if neighbour tile is not empty
+	for neighbour in get_neighbours(x, y):
+		var neighbour_id = get_cellv(neighbour)
+		# if neighbour cell is empty, it would become a hole if it already has three other neighbours
+		if neighbour_id == TileMap.INVALID_CELL:
+			if _count_neighbours(neighbour.x, neighbour.y) == 3: return false
+		
+		# is neighbour is not empty check for walls
+		if neighbour_id != TileMap.INVALID_CELL: # if neighbour tile is not empty
 
-					placement_valid = true # if tile has a neighbour it is possibly true
+			placement_valid = true # if tile has a neighbour it is possibly true
 
-					var next_card = _stack_tiles.get_card_info_by_id(neighbour_cell)
-					# direction from tile to place to its neighbour
-					var direction = ""
-					if _x == -1: direction = "LEFT"
-					if _x ==  1: direction = "RIGHT"
-					if _y ==  1: direction = "DOWN"
-					if _y == -1: direction = "UP"
+			var next_card = _stack_tiles.get_card_info_by_id(neighbour_id)
 
-					# how many walls are there between the two tiles?
-					# 0 -> placement possible, 1 -> impossible, 2 -> maybe possible if another connection exists where there are no walls
-					match walls_between(center_card, next_card, direction):
-						0: has_connection = true
-						1: return false
-						2: double_wall = true
+			# how many walls are there between neighbour and tile to place?
+			# 0 -> placement possible, 1 -> impossible, 2 -> maybe possible if another connection exists where there are no walls
+			match walls_between(Vector2(x, y), neighbour, id):
+				0: has_connection = true
+				1: return false
+				2: double_wall = true
 					
 	if double_wall: return has_connection # placement possible if another connection exists where there are no walls
 	return placement_valid
 
-# TODO: refactor to merge the two walls_between functions, ...1 should be used. Change function call in _is_placement_valid
-# number of walls between tiles
-func walls_between(card1: TileCard, card2: TileCard, direction: String)-> int:
-	var walls1 = card1.get_enabled_walls()
-	var walls2 = card2.get_enabled_walls()
-	match direction:
-		"UP":
-			if walls1.TOP or walls2.BOTTOM:
-				if walls1.TOP and walls2.BOTTOM: return 2 # both tiles have walls
-				else: return 1 # only one tile has wall
-		"DOWN":
-			if walls1.BOTTOM or walls2.TOP:
-				if walls1.BOTTOM and walls2.TOP: return 2
-				else: return 1
-		"RIGHT":
-			if walls1.RIGHT or walls2.LEFT:
-				if walls1.RIGHT and walls2.LEFT: return 2
-				else: return 1
-		"LEFT":
-			if walls1.LEFT or walls2.RIGHT:
-				if walls1.LEFT and walls2.RIGHT: return 2
-				else: return 1
-
-	return 0
-	
 # returns the number of walls between two tiles
 # @param pos1: - Vector2 containing position of first tile
 # @param pos2 - Vector2 containing position of second tile
-func walls_between1(pos1: Vector2, pos2: Vector2) -> int:
+# @param id: - optional id if pos2 is empty but a check is needed as if a tile with this id had been set there
+func walls_between(pos1: Vector2, pos2: Vector2, id1 = -1, id2 = -1) -> int:
+	
+	if id1 == -1: id1 = get_cellv(pos1) # if no id was passed, get it town map
+	if id2 == -1: id2 = get_cellv(pos2) # if no id was passed, get it town map
 
 	# get corresponding TileCards
-	var card1 = _town_tiles.get_card_info_by_id(get_cell(pos1.x, pos1.y))
-	var card2 = _town_tiles.get_card_info_by_id(get_cell(pos2.x, pos2.y))
+	var card1 = _stack_tiles.get_card_info_by_id(id1)
+	var card2 = _stack_tiles.get_card_info_by_id(id2)
 
 	# get direction from card1 to card2, only for neighbouring tiles
 	var direction
@@ -367,7 +333,7 @@ func _update_distances() -> void:
 					# check if distance is unassigned, all assigned distances are always the shortest because all paths are length one
 					if _distances.get_cell(neighbour.x, neighbour.y) == _max_int:
 						# check for walls, then path invalid and do not update neighbour
-						if walls_between1(pos, neighbour) == 0:
+						if walls_between(pos, neighbour) == 0:
 							_distances.set_cell(neighbour.x, neighbour.y, step + 1)
 
 	return
