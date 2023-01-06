@@ -124,7 +124,6 @@ func _is_tile_removable(x: int, y: int) -> bool:
 	
 	# if any tile has infinite distance, the connection to start was broken
 	_update_distances()
-	var check = _distances.get_used_cells_by_id(_max_int)
 	if !_distances.get_used_cells_by_id(_max_int).empty():
 		removal_valid = false
 	
@@ -236,6 +235,46 @@ func walls_between(card1: TileCard, card2: TileCard, direction: String)-> int:
 
 	return 0
 
+func walls_between1(pos1, pos2)-> int:
+
+	# get corresponding TileCards
+	var card1 = _town_tiles.get_card_info_by_id(get_cell(pos1.x, pos1.y))
+	var card2 = _town_tiles.get_card_info_by_id(get_cell(pos2.x, pos2.y))
+
+	# get direction from card1 to card2
+	var direction
+	if pos1.x - pos2.x < 0:
+		direction = "RIGHT"
+	elif pos1.x - pos2.x > 0:
+		direction = "LEFT"
+	elif pos1.y - pos2.y > 0:
+		direction = "UP"
+	elif pos1.y - pos2.y < 0:
+		direction = "DOWN"
+
+	var walls1 = card1.get_enabled_walls()
+	var walls2 = card2.get_enabled_walls()
+	match direction:
+		"UP":
+			if walls1.TOP or walls2.BOTTOM:
+				if walls1.TOP and walls2.BOTTOM: return 2 # both tiles have walls
+				else: return 1 # only one tile has wall
+		"DOWN":
+			if walls1.BOTTOM or walls2.TOP:
+				if walls1.BOTTOM and walls2.TOP: return 2
+				else: return 1
+		"RIGHT":
+			if walls1.RIGHT or walls2.LEFT:
+				if walls1.RIGHT and walls2.LEFT: return 2
+				else: return 1
+		"LEFT":
+			if walls1.LEFT or walls2.RIGHT:
+				if walls1.LEFT and walls2.RIGHT: return 2
+				else: return 1
+
+	print(direction)
+	return 0
+
 
 # updates the overlay for possible tile placement in regards to the tile you want to place
 func update_overlay(border: Rect2, id_compare: int = _starting_tile_id) -> void:
@@ -289,6 +328,7 @@ func draw_placed_tiles() -> void:
 			var card_id = get_cell(x, y)
 			if card_id != TileMap.INVALID_CELL:
 				draw_tile(self, x, y, card_id)
+	return
 
 
 # should be called when tile is selected in market
@@ -307,30 +347,29 @@ func _get_border():
 func _update_distances() -> void:
 	
 	# set all distances impossibly high where a towntile is present
-
+	_distances.clear()
 	var tilepositions  = self.get_used_cells() # returns a Vector2 containing positions of filled town spaces
 	for pos in tilepositions:
 		_distances.set_cell(pos.x, pos.y, _max_int)
-		
-	var test = _distances.get_used_cells()
 	
 	# set starting tile to distance zero
 	var starting_position = get_used_cells_by_id(_starting_tile_id)[0]
 	_distances.set_cell(starting_position.x, starting_position.y, 0)
 	
-	# loop over steps from starting tile, ends when all distances have been assigned
-	for step  in range(0,20):
+	# loop over steps from starting tile, max number of steps is less than number of tiles
+	for step  in range(0, tilepositions.size()):
 		# loop over filled positions
 		for pos in tilepositions:
+			
 			if _distances.get_cell(pos.x, pos.y) == step:
+				# loop over neighbour position
 				for neighbour in get_neighbours(pos.x, pos.y):
-					# loop over all unassigned distances, all assigned distances are always the shortest because all paths are length one
-					# TODO: check for walls, then path invalid and do not update neighbour
+					# check if distance is unassigned, all assigned distances are always the shortest because all paths are length one
 					if _distances.get_cell(neighbour.x, neighbour.y) == _max_int:
-						_distances.set_cell(neighbour.x, neighbour.y, step + 1)
-						
-	
-	test = _distances.get_used_cells_by_id(_max_int)
+						# check for walls, then path invalid and do not update neighbour
+						if walls_between1(pos, neighbour) == 0:
+							_distances.set_cell(neighbour.x, neighbour.y, step + 1)
+
 	return
 
 # returns vector with positions of all valid neighbours to position (x, y)
