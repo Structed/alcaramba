@@ -169,8 +169,6 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 	# starting tile can always be placed if position is empty
 	if id == _starting_tile_id: return true
 
-	var center_card = _stack_tiles.get_card_info_by_id(id) # card to place
-
 	# loop over all tiles surrounding position (including itself)
 	for neighbour in get_neighbours(x, y):
 		var neighbour_id = get_cellv(neighbour)
@@ -182,8 +180,6 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 		if neighbour_id != TileMap.INVALID_CELL: # if neighbour tile is not empty
 
 			placement_valid = true # if tile has a neighbour it is possibly true
-
-			var next_card = _stack_tiles.get_card_info_by_id(neighbour_id)
 
 			# how many walls are there between neighbour and tile to place?
 			# 0 -> placement possible, 1 -> impossible, 2 -> maybe possible if another connection exists where there are no walls
