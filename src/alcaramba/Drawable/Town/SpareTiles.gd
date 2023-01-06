@@ -22,6 +22,6 @@ func _display_tiles():
 		add_child(tile_node)
 
 # removed tile from town is added to spare parts
-func _on_TileMap_tile_removed(tile):
+func _on_TileMap_tile_removed(tile: TileCard):
 	_stack_spare_tiles.add_card(tile)
 	_display_tiles()
