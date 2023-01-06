@@ -124,17 +124,15 @@ func _is_tile_removable(x: int, y: int) -> bool:
 	if !_distances.get_used_cells_by_id(_max_int).empty():
 		removal_valid = false
 	
-	# loop over each neighbour, for each neighbour check if placement is still valid, with test tile remove
-	for neighbour in get_neighbours(x, y):
+	# loop over each valid neighbour, for each neighbour check if placement is still valid, with test tile remove
+	for neighbour in get_valid_neighbours(x, y):
 		var neighbour_id = get_cellv(neighbour)
-		# if neighbour tile is empty or starting tile, removal is valid regarding this neighbour
-		if neighbour_id != TileMap.INVALID_CELL:
-			set_cellv(neighbour, TileMap.INVALID_CELL)
-			# if neighbour tile can not be placed removal of test tile not valid
-			if !is_placement_valid(neighbour.x, neighbour.y, neighbour_id):
-				removal_valid = false
-			# readd neighbour tile
-			set_cellv(neighbour, neighbour_id)
+		set_cellv(neighbour, TileMap.INVALID_CELL)
+		# if neighbour tile can not be placed removal of test tile not valid
+		if !is_placement_valid(neighbour.x, neighbour.y, neighbour_id):
+			removal_valid = false
+		# readd neighbour tile
+		set_cellv(neighbour, neighbour_id)
 
 	set_cell(x, y, test_id) # readd test tile
 	_update_distances() # recalculate distances for restored town
@@ -145,7 +143,7 @@ func _is_tile_removable(x: int, y: int) -> bool:
 # @param x: - TileMap local x coordinate
 # @param y: - TileMap local y coordinate
 func _count_neighbours(x: int, y: int) -> int:
-	return get_neighbours(x, y).size()
+	return get_all_neighbours(x, y).size()
 
 func place_starting_tile() -> void:
 	var start_x = floor(_max_size[0] / 2)
@@ -170,7 +168,7 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 	if id == _starting_tile_id: return true
 
 	# loop over all tiles surrounding position (including itself)
-	for neighbour in get_neighbours(x, y):
+	for neighbour in get_all_neighbours(x, y):
 		var neighbour_id = get_cellv(neighbour)
 		# if neighbour cell is empty, it would become a hole if it already has three other neighbours
 		if neighbour_id == TileMap.INVALID_CELL:
@@ -325,7 +323,7 @@ func _update_distances() -> void:
 			
 			if _distances.get_cell(pos.x, pos.y) == step:
 				# loop over neighbour position
-				for neighbour in get_neighbours(pos.x, pos.y):
+				for neighbour in get_valid_neighbours(pos.x, pos.y):
 					# check if distance is unassigned, all assigned distances are always the shortest because all paths are length one
 					if _distances.get_cell(neighbour.x, neighbour.y) == _max_int:
 						# check for walls, then path invalid and do not update neighbour
@@ -334,8 +332,8 @@ func _update_distances() -> void:
 
 	return
 
-# returns array ov Vector2 with positions of all valid neighbours to position (x, y)
-func get_neighbours(x: int, y: int):
+# returns array ov Vector2 with positions of all neighbours to position (x, y)
+func get_all_neighbours(x: int, y: int):
 	
 	var neighbours = []
 	# loop over all tiles surrounding position (including itself)
@@ -345,6 +343,17 @@ func get_neighbours(x: int, y: int):
 				# if tile is not empty, add position to return array
 				if get_cell(x + _x, y + _y) != TileMap.INVALID_CELL:
 					neighbours.append(Vector2(x + _x, y + _y))
+
+	return neighbours
+
+# returns positions of all valid neighbours to position (x, y)
+func get_valid_neighbours(x: int, y: int):
+	# get all neighbour positions
+	var neighbours = get_all_neighbours(x, y)
+	# remove invalid cells
+	for _i in range(neighbours.size()):
+		if get_cellv(neighbours[_i]) != TileMap.INVALID_CELL:
+			neighbours.remove(_i)
 
 	return neighbours
 
