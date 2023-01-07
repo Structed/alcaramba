@@ -170,19 +170,26 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 	# starting tile can always be placed if position is empty
 	if id == _starting_tile_id: return true
 	
-#	# check if placing tiles would create hole
-#	_update_distancemap(_inverse_distances, true)
-#	if !_inverse_distances.get_used_cells_by_id(_max_int).empty():
-#		return false
-
+	# can not be placed without neighbours
+	if _count_neighbours(x, y) == 0: return false
+	
+	# check if placing tiles would create hole:
+	# preliminarily set tile
+	set_cell(x, y, id)
+	# if not all invalid cells are connected to each other, a hole was created
+	_update_distancemap(_inverse_distances, true)
+	var hole_created = !_inverse_distances.get_used_cells_by_id(_max_int).empty()
+	# clear test tile
+	set_cell(x, y, TileMap.INVALID_CELL)
+	if hole_created:
+		return false
+	
+	# check if there is any connection and if walls block placement:
 	# loop over all tiles surrounding position, including invalid ones
 	for neighbour in get_neighbours(x, y, true):
 		var neighbour_id = get_cellv(neighbour)
-		# if neighbour cell is empty, it would become a hole if it already has three other neighbours
-		if neighbour_id == TileMap.INVALID_CELL:
-			if _count_neighbours(neighbour.x, neighbour.y) == 3: return false
 		
-		# is neighbour is not empty check for walls
+		# if neighbour is not empty, check for walls
 		if neighbour_id != TileMap.INVALID_CELL: # if neighbour tile is not empty
 
 			placement_valid = true # if tile has a neighbour it is possibly true
@@ -205,6 +212,10 @@ func walls_between(pos1: Vector2, pos2: Vector2, id1 = -1, id2 = -1) -> int:
 	
 	if id1 == -1: id1 = get_cellv(pos1) # if no id was passed, get it town map
 	if id2 == -1: id2 = get_cellv(pos2) # if no id was passed, get it town map
+	
+	# if one tile is empty walls do not matter, return zero walls for convenience in calls
+	if id1 == TileMap.INVALID_CELL && id2 == TileMap.INVALID_CELL:
+		return 0
 
 	# get corresponding TileCards
 	var card1 = _stack_tiles.get_card_info_by_id(id1)
@@ -316,37 +327,43 @@ func _update_distancemap(distancemap: TileMap, invert = false) -> void:
 	
 	# set all distances impossibly high where a towntile is present
 	distancemap.clear()
-	
-	var border = _get_border()
-	if invert:
-		for x in range(border.position.x, border.position.x + border.size.x):
-			for y in range(border.position.y, border.position.y + border.size.y):
-				distancemap.set_cell(x, y, _max_int)
-	
+
+	# fill all positions of town tiles with very large distances
 	var tilepositions  = self.get_used_cells() # returns a Vector2 containing positions of filled town spaces
 	for pos in tilepositions:
 		distancemap.set_cell(pos.x, pos.y, _max_int)
-		
-	
-	# starting tile has zero distance to itself	
 	var starting_position = get_used_cells_by_id(_starting_tile_id)[0]
+
+	# if inverse path is calculated, flip all tiles within a rectangle around town
+	var border = _get_border()
 	if invert:
-		starting_position = Vector2(border.position.x, border.position.y)
+		for _x in range(border.position.x - 1, border.position.x + border.size.x + 1):
+			for _y in range(border.position.y - 1, border.position.y + border.size.y + 1): 
+				if distancemap.get_cell(_x, _y) == TileMap.INVALID_CELL: 
+					distancemap.set_cell(_x, _y, _max_int)
+				else:
+					distancemap.set_cell(_x, _y, TileMap.INVALID_CELL)
+		# in this case starting position is upper left corner
+		starting_position = Vector2(border.position.x - 1, border.position.y - 1)
+
+	# starting tile has zero distance to itself
 	distancemap.set_cell(starting_position.x, starting_position.y, 0)
 	
 	# loop over steps from starting tile, max number of steps is less than number of tiles, times three for inverse paths
-	for step  in range(0, tilepositions.size()*3):
+	for step  in range(0, tilepositions.size()*30):
 		# loop over filled positions
-		for pos in tilepositions:
+		for pos in distancemap.get_used_cells():
 			
-			if distancemap.get_cell(pos.x, pos.y) == step:
+			if distancemap.get_cellv(pos) == step:
 				# loop over neighbour position
-				for neighbour in get_neighbours(pos.x, pos.y):
+				for neighbour in get_neighbours(pos.x, pos.y, true):
 					# check if distance is unassigned, all assigned distances are always the shortest because all paths are length one
-					if distancemap.get_cell(neighbour.x, neighbour.y) == _max_int:
+					if distancemap.get_cellv(neighbour) == _max_int:
 						# check for walls, then path invalid and do not update neighbour
-						if walls_between(pos, neighbour) == 0:
-							distancemap.set_cell(neighbour.x, neighbour.y, step + 1)
+						if invert: 
+							distancemap.set_cellv(neighbour, step + 1)
+						elif walls_between(pos, neighbour) == 0:
+							distancemap.set_cellv(neighbour, step + 1)
 
 	return
 
