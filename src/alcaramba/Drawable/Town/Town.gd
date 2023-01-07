@@ -323,6 +323,7 @@ func _get_border():
 
 # updates _distances, containing distance to starting tile along shortest path
 # implentation of dijkstra algorithm, with all paths equal one
+# @param invert: if true, connections between empty cells are checked instead of town tiles
 func _update_distancemap(distancemap: TileMap, invert = false) -> void:
 	
 	# set all distances impossibly high where a towntile is present
@@ -351,24 +352,22 @@ func _update_distancemap(distancemap: TileMap, invert = false) -> void:
 	
 	# loop over steps from starting tile, max number of steps is less than number of tiles, times three for inverse paths
 	for step  in range(0, tilepositions.size()*30):
-		# loop over filled positions
-		for pos in distancemap.get_used_cells():
-			
-			if distancemap.get_cellv(pos) == step:
-				# loop over neighbour position
-				for neighbour in get_neighbours(pos.x, pos.y, true):
-					# check if distance is unassigned, all assigned distances are always the shortest because all paths are length one
-					if distancemap.get_cellv(neighbour) == _max_int:
-						# check for walls, then path invalid and do not update neighbour
-						if invert: 
-							distancemap.set_cellv(neighbour, step + 1)
-						elif walls_between(pos, neighbour) == 0:
-							distancemap.set_cellv(neighbour, step + 1)
+		# loop over all positions with distance step from starting tile
+		for pos in distancemap.get_used_cells_by_id(step):
+			# loop over its neighburs
+			for neighbour in get_neighbours(pos.x, pos.y, true):
+				# check if distance is unassigned, all assigned distances are always the shortest because all paths are length one
+				if distancemap.get_cellv(neighbour) == _max_int:
+					# path 
+					if invert: 
+						distancemap.set_cellv(neighbour, step + 1)
+					elif walls_between(pos, neighbour) == 0:
+						distancemap.set_cellv(neighbour, step + 1)
 
 	return
 
 # returns array ov Vector2 with positions of all valid neighbours to position (x, y)
-func get_neighbours(x: int, y: int, include_invalid = false):
+func get_neighbours(x: int, y: int, include_empty_cells = false):
 	
 	var neighbours = []
 	# loop over all tiles surrounding position (including itself)
@@ -376,7 +375,7 @@ func get_neighbours(x: int, y: int, include_invalid = false):
 		for _y in range(-1, 2):
 			if abs(_x) != abs(_y): # leaves only tiles neighbouring up, down, left and right
 				# if tile is not empty, add position to return array
-				if include_invalid:
+				if include_empty_cells:
 					neighbours.append(Vector2(x + _x, y + _y))
 				elif get_cell(x + _x, y + _y) != TileMap.INVALID_CELL:
 					neighbours.append(Vector2(x + _x, y + _y))
