@@ -382,23 +382,24 @@ func get_neighbours(x: int, y: int, include_empty_cells = false):
 
 	return neighbours
 
-
+# get length of longest wall in town
 func longest_wall() -> int:
-	# Tilemaps that count outgoing walls for each corner
+	# Tilemaps that count outgoing walls for each corner, positions represent corners, and id represents how many walls are in the corresponding direction
 	var map_right = TileMap.new()
 	var map_left = TileMap.new()
 	var map_up = TileMap.new()
 	var map_down = TileMap.new()
 	
-	# create array of positions with wall tiles
+	# create array of positions that contain town tiles
 	var wall_centers = get_used_cells()
 
-	var delta = 1 # arbitrary integer unequal zero
+	var delta = 1 # arbitrary integer unequal zero, was not sure if 1 would work because of invalidcell = -1
+	# for all tiles, if there are walls, increment the direction layers at the corresponding corner
 	for position in wall_centers:
-
 		# get walls for this position
 		var wall_sides = _reference_tiles.get_card_info_by_id(get_cellv(position)).get_enabled_walls()
 		
+		# corners of tile, left upper gets same indices as tile center in town map
 		var leftupper = position
 		var leftlower = Vector2(position.x, position.y + 1)
 		var rightupper = Vector2(position.x + 1, position.y)
@@ -417,43 +418,48 @@ func longest_wall() -> int:
 			increment_tile(map_down, leftupper, delta)
 			increment_tile(map_up, leftlower, delta)
 	
-	# get array of all corners that are connected to a wall, remove multiple entries
+	# get array of all corners that have a wall connection, remove multiple entries
 	var corners_with_wall = map_right.get_used_cells() + map_left.get_used_cells() + map_up.get_used_cells() + map_down.get_used_cells()
 	corners_with_wall = array_unique(corners_with_wall)
 	
-	# walls start and end at corners with one or three walls
+	# walls can start only at corners with one or three walls
 	var starting_positions: Array = []
 	for position in corners_with_wall:
-		# plus four is because the addition of walls to e.g. map_right started with INVALID_CELL (= -1)
-		var wall_count = map_right.get_cellv(position) + map_left.get_cellv(position) + map_up.get_cellv(position) + map_down.get_cellv(position) + 4
-		if  wall_count % 2 * delta != 0:
+		# add all connections from the direction layers, plus four is because the addition of walls to e.g. map_right started with INVALID_CELL (= -1)
+		var wall_count = (map_right.get_cellv(position) + map_left.get_cellv(position) + map_up.get_cellv(position) + map_down.get_cellv(position) + 4) / delta
+		# if wall count is even, wall can not start here
+		if  wall_count % 2 != 0:
 			starting_positions.append(position)
 	
-	var lengths = []
+	# start at each starting position and follow along the wall until end is reached
+	# this implemantation counts every wall twice, but was easier to implement
+	var lengths = [] # array that will store all wall lengths
 	for position in starting_positions:
-		var count = 0
-		var ended = false
-		var current_position = position
-		var direction = -1 # needed to avoid going back and forth on same wall segment
+		var count = 0 # count steps for wall length
+		var ended = false # triggers when no further connection can be found
+		var current_position = position # position that travels along the wall
+		var last_direction = -1 # needed to avoid going back and forth on same wall segment
 		
 		while ended == false:
 			count = count + 1
-			if map_right.get_cellv(current_position) == delta - 1 && direction != 1:
-				direction = 0
+			# if node has a connection in a certain direction take that path if you did not come from that direction
+			# and there is no double wall. Second condition is equal to exactly one delta in direction layer (-1 for starting with invalid cell)
+			if map_right.get_cellv(current_position) == delta - 1 && last_direction != 1:
+				last_direction = 0
 				current_position.x = current_position.x + 1
-			elif map_left.get_cellv(current_position) == delta - 1 && direction != 0:
+			elif map_left.get_cellv(current_position) == delta - 1 && last_direction != 0:
 				current_position.x = current_position.x - 1
-				direction = 1
-			elif map_up.get_cellv(current_position) == delta - 1 && direction != 3:
+				last_direction = 1
+			elif map_up.get_cellv(current_position) == delta - 1 && last_direction != 3:
 				current_position.y = current_position.y - 1
-				direction = 2
-			elif map_down.get_cellv(current_position) == delta - 1 && direction != 2:
+				last_direction = 2
+			elif map_down.get_cellv(current_position) == delta - 1 && last_direction != 2:
 				current_position.y = current_position.y + 1
-				direction = 3
+				last_direction = 3
 			else: 
 				ended = true
 				count = count - 1 # if nothing is found count is to high
-
+		# add steps for this starting_position
 		lengths.append(count)
 	
 	return int(max(0, lengths.max())) # max(0, ...) is necessary when there are no walls and array is empty
