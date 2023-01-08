@@ -3,7 +3,7 @@ extends TileMap
 # Receives a TileCard, Vector2 position
 signal tile_placed
 
-var _stack_tiles: TileCardCollection = TileCardCollection.new() # complete stack for tile info
+var _reference_tiles: TileCardCollection = TileCardCollection.new() # complete stack for tile info
 var _town_tiles: TileCardCollection = TileCardCollection.new() # stack for acually placed tiles
 var _starting_tile_id = 54
 var _current_tile: TileCard = TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
@@ -20,8 +20,8 @@ var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	_stack_tiles.initialize_for_game_start() # Implement Player stack and handover/keeping of tiles
-	_stack_tiles.add_card(_current_tile)
+	_reference_tiles.initialize_for_game_start() # Implement Player stack and handover/keeping of tiles
+	_reference_tiles.add_card(_current_tile)
 	self._placement_mode = 0
 	_town_tiles.add_card(_current_tile)
 	place_starting_tile()
@@ -218,8 +218,8 @@ func walls_between(pos1: Vector2, pos2: Vector2, id1 = -1, id2 = -1) -> int:
 		return 0
 
 	# get corresponding TileCards
-	var card1 = _stack_tiles.get_card_info_by_id(id1)
-	var card2 = _stack_tiles.get_card_info_by_id(id2)
+	var card1 = _reference_tiles.get_card_info_by_id(id1)
+	var card2 = _reference_tiles.get_card_info_by_id(id2)
 
 	# get direction from card1 to card2, only for neighbouring tiles
 	var direction
@@ -275,7 +275,7 @@ func update_overlay(border: Rect2, id_compare: int = _starting_tile_id) -> void:
 # @param y: - TileMap local y coordinate
 # @param card_id: - Card ID, which is usually also the cell ID
 func draw_tile(tile_map: TileMap, x, y, card_id):
-	var tile = _stack_tiles.get_card_info_by_id(card_id)
+	var tile = _reference_tiles.get_card_info_by_id(card_id)
 	var tile_node = tile_card_scene.instance()
 	tile_node._card_info = tile
 
@@ -383,6 +383,94 @@ func get_neighbours(x: int, y: int, include_empty_cells = false):
 	return neighbours
 
 
+func longest_wall() -> int:
+	# Tilemaps that count outgoing walls for each corner
+	var map_right = TileMap.new()
+	var map_left = TileMap.new()
+	var map_up = TileMap.new()
+	var map_down = TileMap.new()
+	
+	# create array of positions with wall tiles
+	var wall_centers = get_used_cells()
+
+	var delta = 1 # arbitrary integer unequal zero
+	for position in wall_centers:
+
+		# get walls for this position
+		var wall_sides = _reference_tiles.get_card_info_by_id(get_cellv(position)).get_enabled_walls()
+		
+		var leftupper = position
+		var leftlower = Vector2(position.x, position.y + 1)
+		var rightupper = Vector2(position.x + 1, position.y)
+		var rightlower = Vector2(position.x + 1, position.y + 1)
+
+		if wall_sides.TOP:
+			increment_tile(map_right, leftupper, delta)
+			increment_tile(map_left, rightupper, delta)
+		if wall_sides.RIGHT:
+			increment_tile(map_down, rightupper, delta)
+			increment_tile(map_up, rightlower, delta)
+		if wall_sides.BOTTOM:
+			increment_tile(map_right, leftlower, delta)
+			increment_tile(map_left, rightlower, delta)
+		if wall_sides.LEFT:
+			increment_tile(map_down, leftupper, delta)
+			increment_tile(map_up, leftlower, delta)
+	
+	# get array of all corners that are connected to a wall, remove multiple entries
+	var corners_with_wall = map_right.get_used_cells() + map_left.get_used_cells() + map_up.get_used_cells() + map_down.get_used_cells()
+	corners_with_wall = array_unique(corners_with_wall)
+	
+	# walls start and end at corners with one or three walls
+	var starting_positions: Array = []
+	for position in corners_with_wall:
+		# plus four is because the addition of walls to e.g. map_right started with INVALID_CELL (= -1)
+		var wall_count = map_right.get_cellv(position) + map_left.get_cellv(position) + map_up.get_cellv(position) + map_down.get_cellv(position) + 4
+		if  wall_count % 2 * delta != 0:
+			starting_positions.append(position)
+	
+	var lengths = []
+	for position in starting_positions:
+		var count = 0
+		var ended = false
+		var current_position = position
+		var direction = -1 # needed to avoid going back and forth on same wall segment
+		
+		while ended == false:
+			count = count + 1
+			if map_right.get_cellv(current_position) == delta - 1 && direction != 1:
+				direction = 0
+				current_position.x = current_position.x + 1
+			elif map_left.get_cellv(current_position) == delta - 1 && direction != 0:
+				current_position.x = current_position.x - 1
+				direction = 1
+			elif map_up.get_cellv(current_position) == delta - 1 && direction != 3:
+				current_position.y = current_position.y - 1
+				direction = 2
+			elif map_down.get_cellv(current_position) == delta - 1 && direction != 2:
+				current_position.y = current_position.y + 1
+				direction = 3
+			else: 
+				ended = true
+				count = count - 1 # if nothing is found count is to high
+
+		lengths.append(count)
+	
+	return int(max(0, lengths.max())) # max(0, ...) is necessary when there are no walls and array is empty
+		
+func increment_tile(map: TileMap, position: Vector2, delta: int):
+	map.set_cellv(position, map.get_cellv(position) + delta)
+	return
+
+# get array with multiples of entries removed
+func array_unique(array: Array) -> Array:
+	var unique: Array = []
+
+	for item in array:
+		if not unique.has(item):
+			unique.append(item)
+	return unique
+
 # debug functions
 func _on_TextureButton_pressed():
 	#DEBUG
@@ -396,3 +484,8 @@ func _on_TextureButton_pressed():
 	self._placement_mode = (_placement_mode + 1) % 3
 	print_debug(_placement_mode)
 	draw_placed_tiles()
+	yield(get_tree().create_timer(0.5), "timeout")
+
+	var nwall = longest_wall()
+	if nwall: OverlayDebugInfo.set_label("Wall Length",  "Wall Length: " + nwall as String)
+
