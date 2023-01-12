@@ -12,6 +12,8 @@ func _ready():
 
 
 	$Market.get_node("TileMarket").connect("tile_card_selected", self, "_on_tile_card_selected")
+	_town.get_node("SpareTiles").connect("tile_card_selected", self, "_on_tile_card_selected")
+	
 
 
 func _on_tile_card_selected(card_node: TileCardDrawable):
