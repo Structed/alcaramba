@@ -2,6 +2,7 @@ extends AbstractCard
 class_name TileCard
 
 enum TileType {BLUE,RED,BROWN,WHITE,GREEN,VIOLET,START}
+enum WallDirection {LEFT, RIGHT, UP, DOWN}
 
 const WALL_SIDE_NONE = 0
 const WALL_SIDE_TOP = 1
