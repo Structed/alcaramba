@@ -1,5 +1,7 @@
 extends VBoxContainer
 
+signal tile_card_selected
+
 var _stack_spare_tiles: TileCardCollection = TileCardCollection.new() # contains tiles placed on spare
 var _displayed_tiles: int = 0
 
@@ -25,3 +27,6 @@ func _display_tiles():
 func _on_TileMap_tile_removed(tile: TileCard):
 	_stack_spare_tiles.add_card(tile)
 	_display_tiles()
+
+func _on_TileCard_pressed(card_node: TileCardDrawable):
+	emit_signal("tile_card_selected", card_node)
