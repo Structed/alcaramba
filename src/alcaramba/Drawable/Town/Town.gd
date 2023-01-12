@@ -11,7 +11,6 @@ var _max_size = [10, 10]
 var _placement_mode : int = 0 setget _placement_mode_set # 0 = no placement, 1 = place tile, 2 = remove tile
 var _max_int = 10000 # very big number needed for distance/connectivity calculations
 
-
 onready var _tilemap_overlay = get_node("%TileMap_valid_overlay")
 onready var _distances = get_node("%TileMap_distances") # grid to check connectivity of valid tiles
 onready var _inverse_distances = get_node("%TileMap_distances") # grid to check connectivity of invalid tiles
@@ -91,6 +90,9 @@ func place_tile(x: int, y: int, tile: TileCard):
 	set_cell(x, y, tile.get_id())
 	_town_tiles.add_card(tile)
 	emit_signal("tile_placed", tile, Vector2(x, y))
+	
+	var nwall = longest_wall()
+	if nwall: OverlayDebugInfo.set_label("Wall Length",  "Wall Length: " + nwall as String)
 
 # remove tile from TileMap and town stack and returns its id
 # @param x: - TileMap local x coordinate
@@ -430,10 +432,12 @@ func longest_wall() -> int:
 		# if wall count is even, wall can not start here
 		if  wall_count % 2 != 0:
 			starting_positions.append(position)
+			
+	
 	
 	# start at each starting position and follow along the wall until end is reached
 	# this implemantation counts every wall twice, but was easier to implement
-	var lengths = [] # array that will store all wall lengths
+	var lengths = [0] # array that will store all wall lengths
 	for position in starting_positions:
 		var count = 0 # count steps for wall length
 		var ended = false # triggers when no further connection can be found
@@ -444,25 +448,29 @@ func longest_wall() -> int:
 			count = count + 1
 			# if node has a connection in a certain direction take that path if you did not come from that direction
 			# and there is no double wall. Second condition is equal to exactly one delta in direction layer (-1 for starting with invalid cell)
-			if map_right.get_cellv(current_position) == delta - 1 && last_direction != 1:
-				last_direction = 0
+			
+			
+			if map_right.get_cellv(current_position) == delta - 1 && last_direction != TileCard.WallDirection.LEFT:
+				last_direction = TileCard.WallDirection.RIGHT
 				current_position.x = current_position.x + 1
-			elif map_left.get_cellv(current_position) == delta - 1 && last_direction != 0:
+			elif map_left.get_cellv(current_position) == delta - 1 && last_direction != TileCard.WallDirection.RIGHT:
 				current_position.x = current_position.x - 1
-				last_direction = 1
-			elif map_up.get_cellv(current_position) == delta - 1 && last_direction != 3:
+				last_direction = TileCard.WallDirection.LEFT
+			elif map_up.get_cellv(current_position) == delta - 1 && last_direction != TileCard.WallDirection.DOWN:
 				current_position.y = current_position.y - 1
-				last_direction = 2
-			elif map_down.get_cellv(current_position) == delta - 1 && last_direction != 2:
+				last_direction = TileCard.WallDirection.UP
+			elif map_down.get_cellv(current_position) == delta - 1 && last_direction != TileCard.WallDirection.UP:
 				current_position.y = current_position.y + 1
-				last_direction = 3
+				last_direction = TileCard.WallDirection.DOWN
 			else: 
 				ended = true
 				count = count - 1 # if nothing is found count is to high
+				
 		# add steps for this starting_position
 		lengths.append(count)
 	
-	return int(max(0, lengths.max())) # max(0, ...) is necessary when there are no walls and array is empty
+	# return length of longest wall
+	return int(lengths.max())
 		
 func increment_tile(map: TileMap, position: Vector2, delta: int):
 	map.set_cellv(position, map.get_cellv(position) + delta)
