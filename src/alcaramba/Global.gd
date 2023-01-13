@@ -7,12 +7,18 @@ var stack_tiles: TileCardCollection = TileCardCollection.new()
 var market_stack_money: MoneyCardCollection = MoneyCardCollection.new()
 var market_stack_tiles: TileCardCollection = TileCardCollection.new()
 
-func _init():
+func _init():	
 	active_player = Player.new(0, "Player 1")
 	players.append(active_player)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	OverlayDebugInfo.layer = 10
+	OverlayDebugInfo.set_horizontal_align_right()
+	OverlayDebugInfo.set_vertical_align_top()
+	
+	OverlayDebugInfo.show()
+	
 	randomize()
 
 	stack_money.initialize_for_game_start()
@@ -27,3 +33,5 @@ func _ready():
 #		card.print_enabled_walls()
 
 
+func _process(_delta):
+	OverlayDebugInfo.set_label("fps", "FPS: %d" % Engine.get_frames_per_second())
