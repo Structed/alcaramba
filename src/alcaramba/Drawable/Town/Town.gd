@@ -81,7 +81,7 @@ func _unhandled_input(event: InputEvent):
 				if cell_to_remove != TileMap.INVALID_CELL && cell_to_remove != _starting_tile_id && _is_tile_removable(x, y):
 					var _removed_tile_id = remove_tile(x, y) # remove tile and return its id
 					# emit signal to send card to spare tiles
-					emit_signal("tile_removed", _stack_tiles.get_card_info_by_id(_removed_tile_id))
+					emit_signal("tile_removed", _reference_tiles.get_card_info_by_id(_removed_tile_id))
 				draw_placed_tiles()
 
 
