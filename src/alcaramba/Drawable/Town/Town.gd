@@ -2,6 +2,7 @@ extends TileMap
 
 # Receives a TileCard, Vector2 position
 signal tile_placed
+signal tile_removed
 
 var _reference_tiles: TileCardCollection = TileCardCollection.new() # complete stack for tile info
 var _town_tiles: TileCardCollection = TileCardCollection.new() # stack for acually placed tiles
@@ -14,6 +15,7 @@ var _max_int = 10000 # very big number needed for distance/connectivity calculat
 onready var _tilemap_overlay = get_node("%TileMap_valid_overlay")
 onready var _distances = get_node("%TileMap_distances") # grid to check connectivity of valid tiles
 onready var _inverse_distances = get_node("%TileMap_distances") # grid to check connectivity of invalid tiles
+onready var _spare_tiles = get_node("%SpareTiles")
 
 var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
@@ -78,7 +80,8 @@ func _unhandled_input(event: InputEvent):
 				var cell_to_remove = get_cell(x, y)
 				if cell_to_remove != TileMap.INVALID_CELL && cell_to_remove != _starting_tile_id && _is_tile_removable(x, y):
 					var _removed_tile_id = remove_tile(x, y) # remove tile and return its id
-					# TODO #19: send _removed_tile_id to spare tiles
+					# emit signal to send card to spare tiles
+					emit_signal("tile_removed", _stack_tiles.get_card_info_by_id(_removed_tile_id))
 				draw_placed_tiles()
 
 
@@ -202,7 +205,6 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 				0: has_connection = true
 				1: return false
 				2: double_wall = true
-
 	if double_wall: return has_connection # placement possible if another connection exists where there are no walls
 	return placement_valid
 
