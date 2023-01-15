@@ -50,10 +50,10 @@ script = ExtResource( 2 )
 
 [node name="ContainerRight" type="VBoxContainer" parent="."]
 material = SubResource( 3 )
-margin_left = 821.0
-margin_top = 224.0
-margin_right = 1176.0
-margin_bottom = 822.0
+margin_left = 695.0
+margin_top = 314.0
+margin_right = 1050.0
+margin_bottom = 912.0
 
 [node name="CurrentTile" type="VBoxContainer" parent="ContainerRight"]
 margin_right = 355.0
@@ -72,5 +72,6 @@ script = ExtResource( 4 )
 unique_name_in_owner = true
 format = 1
 
+[connection signal="tile_placed" from="." to="ContainerRight/SpareTiles" method="_on_TileMap_tile_placed"]
 [connection signal="tile_removed" from="." to="ContainerRight/SpareTiles" method="_on_TileMap_tile_removed"]
 [connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]
