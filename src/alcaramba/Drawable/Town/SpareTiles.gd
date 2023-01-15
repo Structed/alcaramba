@@ -3,7 +3,6 @@ extends VBoxContainer
 signal tile_card_selected
 
 var _stack_spare_tiles: TileCardCollection = TileCardCollection.new() # contains tiles placed on spare
-var _displayed_tiles: int = 0
 
 var tile_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
@@ -33,7 +32,7 @@ func _on_TileMap_tile_removed(tile: TileCard):
 	_stack_spare_tiles.add_card(tile)
 	_display_tiles()
 
-# if placed tile came frome spare remove it from its stack, position is not needed here but emitted for other calls
+# if a tile is placed in town, remove it from its spare stack. If it came from market, it is not in spare stack and nothing happens. 
+# _position is included in signal for other uses but not used here
 func _on_TileMap_tile_placed(tile: TileCard, _position: Vector2):
 	_stack_spare_tiles.remove_card_by_id(tile.get_id())
-	_display_tiles()
