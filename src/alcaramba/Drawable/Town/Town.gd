@@ -205,6 +205,7 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 				0: has_connection = true
 				1: return false
 				2: double_wall = true
+				
 	if double_wall: return has_connection # placement possible if another connection exists where there are no walls
 	return placement_valid
 

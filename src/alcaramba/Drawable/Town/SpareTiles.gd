@@ -6,11 +6,6 @@ var _stack_spare_tiles: TileCardCollection = TileCardCollection.new() # contains
 
 var tile_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass
-
 # paints all tiles from stack_spare_tiles
 func _display_tiles():
 	# delete already displayed tiles

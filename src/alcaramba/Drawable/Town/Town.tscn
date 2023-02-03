@@ -55,16 +55,10 @@ margin_top = 314.0
 margin_right = 1050.0
 margin_bottom = 912.0
 
-[node name="CurrentTile" type="VBoxContainer" parent="ContainerRight"]
-margin_right = 355.0
-margin_bottom = 50.0
-rect_min_size = Vector2( 0, 50 )
-
 [node name="SpareTiles" type="VBoxContainer" parent="ContainerRight"]
 unique_name_in_owner = true
-margin_top = 54.0
 margin_right = 355.0
-margin_bottom = 104.0
+margin_bottom = 50.0
 rect_min_size = Vector2( 50, 50 )
 script = ExtResource( 4 )
 
