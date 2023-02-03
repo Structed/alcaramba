@@ -13,7 +13,7 @@ func _ready():
 	if _error:
 		print_debug("Error while connecting signal ")
 
-    _town.get_node("ContainerRight").get_node("SpareTiles").connect("tile_card_selected", self, "_on_tile_card_selected")
+	_town.get_node("ContainerRight").get_node("SpareTiles").connect("tile_card_selected", self, "_on_tile_card_selected")
 
 
 func _on_tile_card_selected(card_node: TileCardDrawable):
