@@ -205,7 +205,7 @@ func is_placement_valid(x: int, y: int, id: int) -> bool:
 				0: has_connection = true
 				1: return false
 				2: double_wall = true
-				
+
 	if double_wall: return has_connection # placement possible if another connection exists where there are no walls
 	return placement_valid
 
@@ -287,10 +287,10 @@ func draw_tile(tile_map: TileMap, x, y, card_id):
 	var world_position = tile_map.map_to_world(Vector2(x, y))
 	tile_node.set_position(world_position)
 	tile_node.set_scale(Vector2(0.5, 0.5))
-	
+
 	# Do not capture mouse clicks, as the clicks will be handled by the TileMap
 	tile_node.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	
+
 	tile_map.add_child(tile_node)
 
 
