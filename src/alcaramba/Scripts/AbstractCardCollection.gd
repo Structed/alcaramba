@@ -21,6 +21,9 @@ func get_card_info_by_id(id: int):
 			return card
 	return null
 
+func get_card_info_by_index(index: int):
+	return _stack[index]
+
 func add_card(card : AbstractCard):
 	_stack.append(card)
 
@@ -29,5 +32,3 @@ func remove_card_by_id(id: int):
 	for card in _stack:
 		if card._id == id:
 			_stack.erase(card)
-
-

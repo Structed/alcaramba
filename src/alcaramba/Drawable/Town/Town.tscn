@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Drawable/Town/Town.gd" type="Script" id=1]
 [ext_resource path="res://Drawable/Card/TileCardDrawable.gd" type="Script" id=2]
 [ext_resource path="res://assets/fonts/Xolonium-Regular.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://Drawable/Town/SpareTiles.gd" type="Script" id=4]
 [ext_resource path="res://Drawable/Town/TileMap_valid_overlay.gd" type="Script" id=8]
 
 [sub_resource type="TileSet" id=1]
@@ -10,6 +11,8 @@
 [sub_resource type="DynamicFont" id=2]
 size = 40
 font_data = ExtResource( 3 )
+
+[sub_resource type="CanvasItemMaterial" id=3]
 
 [node name="TileMap" type="TileMap"]
 tile_set = SubResource( 1 )
@@ -21,10 +24,12 @@ margin_right = 226.0
 margin_bottom = 57.0
 
 [node name="Label" type="Label" parent="TextureButton"]
-modulate = Color( 0.784314, 0.290196, 0.290196, 1 )
-self_modulate = Color( 0.262745, 0.447059, 0.329412, 1 )
-margin_right = 235.0
-margin_bottom = 62.0
+modulate = Color( 0.133333, 0.839216, 0.239216, 1 )
+show_behind_parent = true
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 255.0
+margin_bottom = 64.0
 custom_fonts/font = SubResource( 2 )
 text = "Change Tile"
 
@@ -43,8 +48,24 @@ margin_right = 185.0
 margin_bottom = 231.0
 script = ExtResource( 2 )
 
+[node name="ContainerRight" type="VBoxContainer" parent="."]
+material = SubResource( 3 )
+margin_left = 695.0
+margin_top = 314.0
+margin_right = 1050.0
+margin_bottom = 912.0
+
+[node name="SpareTiles" type="VBoxContainer" parent="ContainerRight"]
+unique_name_in_owner = true
+margin_right = 355.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+script = ExtResource( 4 )
+
 [node name="TileMap_distances" type="TileMap" parent="."]
 unique_name_in_owner = true
 format = 1
 
+[connection signal="tile_placed" from="." to="ContainerRight/SpareTiles" method="_on_TileMap_tile_placed"]
+[connection signal="tile_removed" from="." to="ContainerRight/SpareTiles" method="_on_TileMap_tile_removed"]
 [connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]
