@@ -1,8 +1,46 @@
 extends Control
+class_name HandDrawable
 
 
 var card_scene = preload("res://Drawable/Card/MoneyCardDrawable.tscn")
 
 
-func add_card_node(card_drawable: TextureButton):
+func _process(_delta):
+	# Watch the global hand cards. If there's a discrepancy, re-draw hand cards
+	if get_child_count() != Global.active_player.money_cards.get_card_count():
+		_redraw()
+
+# Remove all hand cards and re-draw them
+# from the global hand cards of the active player
+# @visibility: private
+func _redraw():
+	for child in get_children():
+		remove_child(child)
+	
+	for card in Global.active_player.money_cards.get_cards():
+		var card_drawable = card_scene.instance()
+		card_drawable.card_info = (card as MoneyCard)
+		_add_card_node(card_drawable)
+
+
+# Add a card node to the hand and enable it to be selectable
+# @visibility: private
+# @param card_drawable: MoneyCardDrawable - The card drawable to add to the Hand
+func _add_card_node(card_drawable: MoneyCardDrawable):
+	card_drawable.enable_selectable()
 	add_child(card_drawable)
+
+
+# Returns all cards which are of a given currency and are selected
+# @visibility: public
+# @param currency: MoneyCard.Currency
+# @returns: Array[MoneyCardDrawable] - The selected cards of given currency
+func get_selected_cards_by_currency(currency: int) -> Array:
+	var selected_cards = []
+	for child in get_children():
+		var money_card := child as MoneyCardDrawable
+		if money_card.is_selected():
+			if money_card.card_info.get_currency() == currency:
+				selected_cards.append(child)
+	
+	return selected_cards

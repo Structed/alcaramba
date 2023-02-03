@@ -24,6 +24,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Colors.gd"
 }, {
+"base": "Control",
+"class": "HandDrawable",
+"language": "GDScript",
+"path": "res://Drawable/HandDrawable.gd"
+}, {
+"base": "Control",
+"class": "Market",
+"language": "GDScript",
+"path": "res://Drawable/Market/Market.gd"
+}, {
 "base": "AbstractCard",
 "class": "MoneyCard",
 "language": "GDScript",
@@ -38,6 +48,11 @@ _global_script_classes=[ {
 "class": "MoneyCardDrawable",
 "language": "GDScript",
 "path": "res://Drawable/Card/MoneyCardDrawable.gd"
+}, {
+"base": "HBoxContainer",
+"class": "MoneyMarket",
+"language": "GDScript",
+"path": "res://Drawable/Market/MoneyMarket.gd"
 }, {
 "base": "Object",
 "class": "Player",
@@ -58,18 +73,27 @@ _global_script_classes=[ {
 "class": "TileCardDrawable",
 "language": "GDScript",
 "path": "res://Drawable/Card/TileCardDrawable.gd"
+}, {
+"base": "TextureRect",
+"class": "TileMarket",
+"language": "GDScript",
+"path": "res://Drawable/Market/TileMarket.gd"
 } ]
 _global_script_class_icons={
 "AbstractCard": "",
 "AbstractCardCollection": "",
 "Colors": "",
+"HandDrawable": "",
+"Market": "",
 "MoneyCard": "",
 "MoneyCardCollection": "",
 "MoneyCardDrawable": "",
+"MoneyMarket": "",
 "Player": "",
 "TileCard": "",
 "TileCardCollection": "",
-"TileCardDrawable": ""
+"TileCardDrawable": "",
+"TileMarket": ""
 }
 
 [application]

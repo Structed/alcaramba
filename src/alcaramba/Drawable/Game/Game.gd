@@ -8,8 +8,11 @@ onready var _market := get_node("%Market")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	# Bind to when a  card was selected in the Tile Market
+	var _error = _market.connect("tile_card_selected", self, "_on_tile_card_selected")
+	if _error:
+		print_debug("Error while connecting signal ")
 
-	_market.get_node("TileMarket").connect("tile_card_selected", self, "_on_tile_card_selected")
 	_town.get_node("ContainerRight").get_node("SpareTiles").connect("tile_card_selected", self, "_on_tile_card_selected")
 
 

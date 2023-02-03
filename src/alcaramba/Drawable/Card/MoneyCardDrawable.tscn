@@ -1,19 +1,46 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Drawable/Card/MoneyCardDrawable.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/CardTemplate.png" type="Texture" id=2]
 [ext_resource path="res://assets/fonts/XoloniumFont.tres" type="DynamicFont" id=3]
 
+[sub_resource type="Animation" id=2]
+resource_name = "Deselect"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1.5, 1.5 ), Vector2( 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=1]
+resource_name = "Select"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1.5, 1.5 ) ]
+}
+
 [node name="MoneyCard" type="TextureButton"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -1302.0
-margin_bottom = -640.0
+margin_right = -1856.0
+margin_bottom = -952.0
 texture_normal = ExtResource( 2 )
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Value" type="Label" parent="."]
 anchor_right = 1.0
@@ -22,6 +49,8 @@ custom_fonts/font = ExtResource( 3 )
 text = "9"
 align = 1
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+anims/Deselect = SubResource( 2 )
+anims/Select = SubResource( 1 )

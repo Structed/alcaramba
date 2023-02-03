@@ -22,6 +22,7 @@ margin_left = -203.0
 margin_top = -144.0
 margin_right = -75.0
 margin_bottom = -16.0
+currency = 1
 
 [node name="Card2" parent="." instance=ExtResource( 2 )]
 unique_name_in_owner = true
@@ -33,6 +34,7 @@ margin_left = 175.0
 margin_top = -145.0
 margin_right = 303.0
 margin_bottom = -17.0
+currency = 2
 
 [node name="Card3" parent="." instance=ExtResource( 2 )]
 unique_name_in_owner = true
@@ -44,6 +46,7 @@ margin_left = 177.0
 margin_top = 17.0
 margin_right = 305.0
 margin_bottom = 145.0
+currency = 3
 
 [node name="Card4" parent="." instance=ExtResource( 2 )]
 unique_name_in_owner = true
@@ -55,3 +58,4 @@ margin_left = -204.0
 margin_top = 17.0
 margin_right = -76.0
 margin_bottom = 145.0
+currency = 0

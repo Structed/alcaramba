@@ -12,10 +12,16 @@ func initialize_for_game_start():
 				card._type = AbstractCard.CardTypes.MONEY
 				card._value = value
 				card._currency = currencyType
-				
+
 				_stack.append(card)
 				id += 1
 	shuffle()
 
 func take_card() -> MoneyCard:
 	return _take_card()
+
+
+# Debug function to print all cards
+func debug_print_cards():
+	for item in _stack:
+		print_debug("Currency: %d - Value: %d" % [(item as MoneyCard)._currency, (item as MoneyCard)._value])
