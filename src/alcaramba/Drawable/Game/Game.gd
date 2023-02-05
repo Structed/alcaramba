@@ -4,6 +4,7 @@ extends Node
 var _selected_tile: TileCardDrawable
 onready var _market := get_node("%Market")
 onready var _town = get_node("%Town")
+onready var _spare_tiles = get_node("%SpareTiles")
 
 
 # Called when the node enters the scene tree for the first time.
@@ -13,7 +14,15 @@ func _ready():
 	if _error:
 		print_debug("Error while connecting signal ")
 
-	_error = _town.get_node("%SpareTiles").connect("tile_card_selected", self, "_on_tile_card_selected")
+	_error = _spare_tiles.connect("tile_card_selected", self, "_on_tile_card_selected")
+	if _error:
+		print_debug("Error while connecting signal ")
+
+	_error = _town.connect("tile_placed", _spare_tiles, "_on_TileMap_tile_placed")
+	if _error:
+		print_debug("Error while connecting signal ")
+
+	_error = _town.connect("tile_removed", _spare_tiles, "_on_TileMap_tile_removed")
 	if _error:
 		print_debug("Error while connecting signal ")
 
