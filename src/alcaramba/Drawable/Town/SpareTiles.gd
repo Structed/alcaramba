@@ -42,7 +42,7 @@ func _on_add_to_spares(tile: TileCard):
 # _position is included in signal for other uses but not used here
 # @visibility: public
 # @param tile: TileCard - The Tile Card to be placed in the yard
-# @param _position: VEctor2 - Unused
+# @param _position: Vector2 - Unused
 # @returns: void
 func _on_TileMap_tile_placed(tile: TileCard, _position: Vector2):
 	_stack_spare_tiles.remove_card_by_id(tile.get_id())
