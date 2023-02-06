@@ -5,6 +5,7 @@ var _selected_tile: TileCardDrawable
 onready var _market := get_node("%Market")
 onready var _town = get_node("%Town")
 onready var _spare_tiles = get_node("%SpareTiles")
+onready var _spare_tile_add_button = get_node("%SpareTileAddButton")
 
 
 # Called when the node enters the scene tree for the first time.
@@ -13,10 +14,8 @@ func _ready():
 	var _error = _market.connect("tile_card_selected", self, "_on_tile_card_selected")
 	_error = _spare_tiles.connect("tile_card_selected", self, "_on_tile_card_selected")
 	_error = _town.connect("tile_placed", _spare_tiles, "_on_TileMap_tile_placed")
-	if _error:
-		print_debug("Error while connecting signal ")
-
-	_error = _town.connect("tile_removed", _spare_tiles, "_on_TileMap_tile_removed")
+	_error = _town.connect("tile_removed", _spare_tiles, "_on_add_to_spares")
+	
 	if _error:
 		print_debug("Error while connecting signal ")
 
@@ -32,6 +31,10 @@ func _on_tile_card_selected(card_node: TileCardDrawable):
 
 	# send selected tile to town for placement overlay
 	_town.receive_tile(_selected_tile)
+	
+	# Make the tile placable to the Spare Yard
+	_spare_tile_add_button.connect("button_up", _spare_tiles, "_on_add_to_spares", [_selected_tile._card_info], CONNECT_ONESHOT)
+	
 	# highlight selected tile
 	_selected_tile.select()
 

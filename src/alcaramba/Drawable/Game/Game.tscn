@@ -57,6 +57,7 @@ size_flags_vertical = 3
 script = ExtResource( 4 )
 
 [node name="SpareTileAddButton" type="TextureButton" parent="Board/MarginContainer/Game/RightContainer/SpareTiles"]
+unique_name_in_owner = true
 margin_right = 128.0
 margin_bottom = 128.0
 texture_normal = ExtResource( 5 )
