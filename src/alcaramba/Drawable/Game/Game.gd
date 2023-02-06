@@ -11,13 +11,7 @@ onready var _spare_tiles = get_node("%SpareTiles")
 func _ready():
 	# Bind to when a  card was selected in the Tile Market
 	var _error = _market.connect("tile_card_selected", self, "_on_tile_card_selected")
-	if _error:
-		print_debug("Error while connecting signal ")
-
 	_error = _spare_tiles.connect("tile_card_selected", self, "_on_tile_card_selected")
-	if _error:
-		print_debug("Error while connecting signal ")
-
 	_error = _town.connect("tile_placed", _spare_tiles, "_on_TileMap_tile_placed")
 	if _error:
 		print_debug("Error while connecting signal ")

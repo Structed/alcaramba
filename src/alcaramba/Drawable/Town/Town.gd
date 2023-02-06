@@ -29,7 +29,7 @@ func _ready():
 
 	OverlayDebugInfo.show()
 	OverlayDebugInfo.set_horizontal_align_right()
-	OverlayDebugInfo.set_vertical_align_top()
+	OverlayDebugInfo.set_vertical_align_bottom()
 
 
 # Called every frame
