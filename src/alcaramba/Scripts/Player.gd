@@ -16,7 +16,6 @@ func _init(player_index : int, player_name : String):
 func add_town_tile(tile: TileCard, position: Vector2):
 	town_tiles[position] = tile._id
 	emit_signal("tile_placed")
-	#_deselect_tile()
 	print_debug(var2str(town_tiles))
 
 func remove_town_tile(position: Vector2):
