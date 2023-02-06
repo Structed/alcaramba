@@ -11,7 +11,7 @@ func _display_tiles():
 	# delete already displayed tiles
 	for n in self.get_children():
 		# Leave other controls there
-		if n is TileCard:
+		if n is TileCardDrawable:
 			n.queue_free()
 
 	# create new TileCardDrawable for each til in stack_spare_tiles

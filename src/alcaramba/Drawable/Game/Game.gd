@@ -33,7 +33,9 @@ func _on_tile_card_selected(card_node: TileCardDrawable):
 	_town.receive_tile(_selected_tile)
 	
 	# Make the tile placable to the Spare Yard
-	_spare_tile_add_button.connect("button_up", _spare_tiles, "_on_add_to_spares", [_selected_tile._card_info], CONNECT_ONESHOT)
+	if _spare_tile_add_button.is_connected("pressed", _spare_tiles, "_on_add_to_spares"):
+		_spare_tile_add_button.disconnect("pressed", _spare_tiles, "_on_add_to_spares")
+	_spare_tile_add_button.connect("pressed", _spare_tiles, "_on_add_to_spares", [_selected_tile._card_info], CONNECT_ONESHOT)
 	
 	# highlight selected tile
 	_selected_tile.select()
