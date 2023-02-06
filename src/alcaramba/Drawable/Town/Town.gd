@@ -1,16 +1,15 @@
 extends TileMap
 
 # Receives a TileCard, Vector2 position
-signal tile_placed
 signal tile_removed
 
 var _reference_tiles: TileCardCollection = TileCardCollection.new() # complete stack for tile info
-var _town_tiles: TileCardCollection = TileCardCollection.new() # stack for acually placed tiles
 var _starting_tile_id = 54
 var _current_tile: TileCard = TileCard.new(_starting_tile_id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
 var _max_size = [10, 10]
 var _placement_mode : int = 0 setget _placement_mode_set # 0 = no placement, 1 = place tile, 2 = remove tile
 var _max_int = 10000 # very big number needed for distance/connectivity calculations
+var _cached_number_of_tiles = 0
 
 onready var _tilemap_overlay = get_node("%TileMap_valid_overlay")
 onready var _distances = get_node("%TileMap_distances") # grid to check connectivity of valid tiles
@@ -24,7 +23,6 @@ func _ready():
 	_reference_tiles.initialize_for_game_start() # Implement Player stack and handover/keeping of tiles
 	_reference_tiles.add_card(_current_tile)
 	self._placement_mode = 0
-	_town_tiles.add_card(_current_tile)
 	place_starting_tile()
 	_update_distancemap(_distances)
 	$TileMap_valid_overlay.hide()
@@ -37,6 +35,10 @@ func _ready():
 
 # Called every frame
 func _process(_delta):
+	
+	if _cached_number_of_tiles != Global.active_player.town_tiles.size():
+		update_town()
+		_cached_number_of_tiles = Global.active_player.town_tiles.size()
 
 	if _placement_mode != 0:
 		# TODO: confine mouse to town?
@@ -84,6 +86,11 @@ func _unhandled_input(event: InputEvent):
 					emit_signal("tile_removed", _reference_tiles.get_card_info_by_id(_removed_tile_id))
 				draw_placed_tiles()
 
+# sync tilemap with players town_tile_stack:
+func update_town() -> void:
+	var player_tiles = Global.active_player.town_tiles
+	for position in player_tiles.keys():
+		set_cell(position.x, position.y, player_tiles[position])
 
 # adds card to TileMap and town stack
 # @param tile: - TileCard received from market/spare tiles
@@ -91,8 +98,7 @@ func _unhandled_input(event: InputEvent):
 # @param y: - TileMap local y coordinate
 func place_tile(x: int, y: int, tile: TileCard):
 	set_cell(x, y, tile.get_id())
-	_town_tiles.add_card(tile)
-	emit_signal("tile_placed", tile, Vector2(x, y))
+	Global.active_player.add_town_tile(tile, Vector2(x, y))
 
 	var nwall = longest_wall()
 	if nwall: OverlayDebugInfo.set_label("Wall Length",  "Wall Length: " + nwall as String)
@@ -102,7 +108,7 @@ func place_tile(x: int, y: int, tile: TileCard):
 # @param y: - TileMap local y coordinate
 func remove_tile(x: int, y: int) -> int:
 	var tile_id = get_cell(x, y)
-	_town_tiles.remove_card_by_id(tile_id)
+	Global.active_player.remove_town_tile(Vector2(x, y))
 	set_cell(x, y, TileMap.INVALID_CELL)
 	print_debug("Removed tile %d at (%d|%d)" % [tile_id, x, y])
 	return tile_id
@@ -496,8 +502,7 @@ func array_unique(array: Array) -> Array:
 func _on_TextureButton_pressed():
 	#DEBUG
 	var id = _starting_tile_id
-	while _town_tiles.get_card_info_by_id(id) != null:
-		id = randi() % 30 +1
+	id = randi() % 30 +1
 	_current_tile = TileCard.new(id, 0, TileCard.TileType.START, TileCard.WALL_SIDE_NONE)
 	OverlayDebugInfo.set_label("Tile ID",  "Tile ID: "+ _current_tile.get_id() as String)
 	_get_border()

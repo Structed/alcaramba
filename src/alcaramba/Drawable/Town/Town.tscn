@@ -66,6 +66,5 @@ script = ExtResource( 4 )
 unique_name_in_owner = true
 format = 1
 
-[connection signal="tile_placed" from="." to="ContainerRight/SpareTiles" method="_on_TileMap_tile_placed"]
 [connection signal="tile_removed" from="." to="ContainerRight/SpareTiles" method="_on_TileMap_tile_removed"]
 [connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]
