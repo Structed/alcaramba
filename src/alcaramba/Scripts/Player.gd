@@ -1,13 +1,16 @@
 extends Object
 class_name Player
 
+# Receives a `TileCard` as parameter
+signal added_tile_to_spare_yard
+signal tile_placed
+
+
 var index: int
 var name: String
 var money_cards : MoneyCardCollection = MoneyCardCollection.new() # player hand money
 var tile_cards_yard: TileCardCollection = TileCardCollection.new()
 var town_tiles = {}
-
-signal tile_placed
 
 func _init(player_index : int, player_name : String):
 	self.index = player_index
@@ -32,14 +35,25 @@ func transfer_tile_spare_to_town(tile: TileCard, position: Vector2) -> int:
 	# Nothing to do if the card does nto exist in the yard
 	if tile_cards_yard.has_card(tile) == false:
 		return 0
-	
+
 	if town_tiles.has(position.x) && town_tiles[position.x].has(position.y):
-		
+
 		var check_tile = town_tiles[position.x][position.y]
 		if check_tile is int:
 			push_error("There is already a tile at position %d|%d" % [position.x, position.y])
 			return -1
-			
+
 	tile_cards_yard.remove_card_by_id(tile.get_id())
 	add_town_tile(tile, position)
 	return 0
+
+# Add a Tile to the Spare Yard
+#
+# @param tile: TileCard - The TileCard to add to the Spare Yard
+# @return: void
+func add_tile_to_spare_yard(tile: TileCard):
+	if tile == null:
+		push_error("Tile passed to spare yard cannot be null!")
+
+	tile_cards_yard.add_card(tile)
+	emit_signal("added_tile_to_spare_yard", tile)

@@ -3,9 +3,6 @@ extends VBoxContainer
 # Receives a `TileCardDrawable` as parameter
 signal tile_card_selected
 
-# Receives a `TileCard` as parameter
-signal tile_card_added
-
 var tile_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
 # paints all tiles from stack_spare_tiles
@@ -37,11 +34,8 @@ func _on_TileCard_pressed(tile_node: TileCardDrawable):
 # @param tile: TileCard - The Tile Card to be placed in the yard
 # @returns: void
 func _on_add_to_spares(tile: TileCard):
-	if tile == null:
-		push_error("Tile passed to spare yard cannot be null!")
-	Global.active_player.tile_cards_yard.add_card(tile)
+	Global.active_player.add_tile_to_spare_yard(tile)
 	_display_tiles()
-	emit_signal("tile_card_added", tile)
 
 
 # If a tile is placed in town, remove it from its spare stack.
