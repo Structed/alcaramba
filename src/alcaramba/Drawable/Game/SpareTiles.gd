@@ -10,9 +10,7 @@ var tile_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 func _display_tiles():
 	# delete already displayed tiles
 	for n in self.get_children():
-		# Leave other controls there
-		if n is TileCardDrawable:
-			n.queue_free()
+		n.queue_free()
 
 	# create new TileCardDrawable for each til in stack_spare_tiles
 	for _i in range(_stack_spare_tiles.get_card_count()):

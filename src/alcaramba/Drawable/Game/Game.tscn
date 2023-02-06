@@ -47,20 +47,21 @@ margin_left = 1792.0
 margin_right = 1920.0
 margin_bottom = 1080.0
 
+[node name="SpareTileAddButton" type="TextureButton" parent="Board/MarginContainer/Game/RightContainer"]
+unique_name_in_owner = true
+margin_right = 128.0
+margin_bottom = 128.0
+texture_normal = ExtResource( 5 )
+
 [node name="SpareTiles" type="VBoxContainer" parent="Board/MarginContainer/Game/RightContainer"]
 unique_name_in_owner = true
+margin_top = 132.0
 margin_right = 128.0
 margin_bottom = 1080.0
 rect_min_size = Vector2( 128, 128 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 4 )
-
-[node name="SpareTileAddButton" type="TextureButton" parent="Board/MarginContainer/Game/RightContainer/SpareTiles"]
-unique_name_in_owner = true
-margin_right = 128.0
-margin_bottom = 128.0
-texture_normal = ExtResource( 5 )
 
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 2
