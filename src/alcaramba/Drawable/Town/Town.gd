@@ -331,6 +331,12 @@ func receive_tile(tile: TileCardDrawable):
 	update_overlay(_get_border(), _current_tile._id)
 	self._placement_mode = 1
 
+
+func stop_placement_mode():
+	_current_tile = null
+	self._placement_mode = 0
+
+
 # get rectangle spanned by already placed tiles
 func _get_border():
 	return get_used_rect()

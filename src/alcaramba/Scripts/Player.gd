@@ -11,6 +11,7 @@ var name: String
 var money_cards : MoneyCardCollection = MoneyCardCollection.new() # player hand money
 var tile_cards_yard: TileCardCollection = TileCardCollection.new()
 var town_tiles = {}
+var purchase_info : PurchaseInfo
 
 func _init(player_index : int, player_name : String):
 	self.index = player_index
@@ -35,7 +36,10 @@ func remove_tile_from_spare_yard(tile: TileCard):
 	if tile_cards_yard.has_card(tile) == false:
 		return
 
-	tile_cards_yard.remove_card_by_id(tile.get_id())
+	var removed = tile_cards_yard.remove_card_by_id(tile.get_id())
+	
+	if removed != 1:
+		push_error("Exactly 1 card of it %d should have been removed from spare yard!" % [tile.get_id() as int])
 
 
 # Add a Tile to the Spare Yard
@@ -48,3 +52,17 @@ func add_tile_to_spare_yard(tile: TileCard):
 
 	tile_cards_yard.add_card(tile)
 	emit_signal("added_tile_to_spare_yard", tile)
+
+# Purchase a tile using the PurchaseInfo on the Player
+func purchase_tile():
+	if purchase_info == null:
+		return
+		
+	for money in purchase_info.selected_money_cards.get_cards():
+		var id = money.get_id()
+		var removed_count = money_cards.remove_card_by_id(id)
+		if removed_count != 1:
+			push_error("Only one card with ID %d should have been removed, but %d were removed!" % [id, removed_count])
+	
+	# Reset after purchasing, so it doesn't get re-purchased
+	purchase_info = null

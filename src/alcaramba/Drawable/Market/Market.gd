@@ -47,20 +47,15 @@ func _on_TileCard_pressed(card_node: TileCardDrawable):
 	# Get all selected money cards in Hand which match the selected Tile's currency
 	var selected = hand.get_selected_cards_by_currency(currency)
 	
-	# Count the selected car's total value
-	var amount_selected := 0
-	for card in selected:
-		amount_selected += (card.card_info as MoneyCard).get_value()
+	var purchase_info = PurchaseInfo.new()
+	purchase_info.selected_money_cards = selected
+	purchase_info.tile = card_node._card_info
 
 	# If there are enough cards selected to fulfil the required amount,
-	# remove all the the selected hand cards (of the same currency) from
-	# the player's hand
-	if amount_selected >= amount:
-		for card in selected:
-			Global.active_player.money_cards.remove_card_by_id((card.card_info as MoneyCard).get_id())
-
+	# Allow proceeding (place tile in town or spare yard)
+	if selected.sum_amount() >= amount:
+		Global.active_player.purchase_info = purchase_info
 		emit_signal("tile_card_selected", card_node)
-
 
 func _on_EndTurnButton_pressed():
 	tile_market.refill()

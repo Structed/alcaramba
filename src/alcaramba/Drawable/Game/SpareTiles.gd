@@ -56,3 +56,9 @@ func _on_add_to_spares(tile: TileCard):
 # @returns: void
 func _on_TileMap_tile_placed(tile: TileCard):
 	var _err = Global.active_player.remove_tile_from_spare_yard(tile)
+
+
+# Cancel the Placement of the Spare
+func _on_place_tile_canceled(tile_node: TileCardDrawable):
+	tile_node.deselect()
+	
