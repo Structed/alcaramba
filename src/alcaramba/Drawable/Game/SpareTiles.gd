@@ -52,4 +52,4 @@ func _on_add_to_spares(tile: TileCard):
 # @param position: Vector2 - The position of the Tile in Town
 # @returns: void
 func _on_TileMap_tile_placed(tile: TileCard, position: Vector2):
-	Global.active_player.transfer_tile_spare_to_town(tile, position)
+	var _err = Global.active_player.transfer_tile_spare_to_town(tile, position)

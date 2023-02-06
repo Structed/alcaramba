@@ -29,10 +29,17 @@ func remove_town_tile(position: Vector2):
 # @param position: Vector2 - The Town position of the tile
 # @param int: Returns `-1` in case of an error. `0` otherwise.
 func transfer_tile_spare_to_town(tile: TileCard, position: Vector2) -> int:
-	if town_tiles[position.x][position.y] == null:
-		tile_cards_yard.remove_card_by_id(tile.get_id())
-		town_tiles[position.x][position.y] = tile
+	# Nothing to do if the card does nto exist in the yard
+	if tile_cards_yard.has_card(tile) == false:
 		return 0
-	else:
-		push_error("There is already a tile at position %d|%d" % [position.x, position.y])
-		return -1
+	
+	if town_tiles.has(position.x) && town_tiles[position.x].has(position.y):
+		
+		var check_tile = town_tiles[position.x][position.y]
+		if check_tile is int:
+			push_error("There is already a tile at position %d|%d" % [position.x, position.y])
+			return -1
+			
+	tile_cards_yard.remove_card_by_id(tile.get_id())
+	add_town_tile(tile, position)
+	return 0
