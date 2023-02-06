@@ -24,6 +24,7 @@ func _on_tile_card_selected(card_node: TileCardDrawable):
 	# reset previously selected and assign new selected tile
 	_deselect_tile()
 	_selected_tile = card_node
+	
 	# connect signal to listen if tile has been placed
 	if Global.active_player.is_connected("tile_placed", self, "_on_tile_placed"):
 		Global.active_player.disconnect("tile_placed", self, "_on_tile_placed")
