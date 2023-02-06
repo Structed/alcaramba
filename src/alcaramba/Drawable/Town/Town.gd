@@ -9,7 +9,7 @@ var _current_tile: TileCard = TileCard.new(_starting_tile_id, 0, TileCard.TileTy
 var _max_size = [10, 10]
 var _placement_mode : int = 0 setget _placement_mode_set # 0 = no placement, 1 = place tile, 2 = remove tile
 var _max_int = 10000 # very big number needed for distance/connectivity calculations
-var _number_of_tiles = 0
+var _cached_number_of_tiles = 0
 
 onready var _tilemap_overlay = get_node("%TileMap_valid_overlay")
 onready var _distances = get_node("%TileMap_distances") # grid to check connectivity of valid tiles
@@ -36,8 +36,9 @@ func _ready():
 # Called every frame
 func _process(_delta):
 	
-	if _number_of_tiles != Global.active_player.town_tiles.size():
+	if _cached_number_of_tiles != Global.active_player.town_tiles.size():
 		update_town()
+		_cached_number_of_tiles = Global.active_player.town_tiles.size()
 
 	if _placement_mode != 0:
 		# TODO: confine mouse to town?
