@@ -3,7 +3,7 @@
 [ext_resource path="res://Drawable/Game/Game.gd" type="Script" id=1]
 [ext_resource path="res://Drawable/Market/Market.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Drawable/Town/Town.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Drawable/Town/SpareTiles.gd" type="Script" id=4]
+[ext_resource path="res://Drawable/Game/SpareTiles.gd" type="Script" id=4]
 [ext_resource path="res://assets/art/card_target.png" type="Texture" id=5]
 
 [sub_resource type="CanvasItemMaterial" id=1]
