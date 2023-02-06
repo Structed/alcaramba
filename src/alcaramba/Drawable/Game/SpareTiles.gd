@@ -44,7 +44,8 @@ func _on_add_to_spares(tile: TileCard):
 	emit_signal("tile_card_added", tile)
 
 
-# If a tile is placed in town, remove it from its spare stack. If it came from market, it is not in spare stack and nothing happens.
+# If a tile is placed in town, remove it from its spare stack.
+# If it came from market, it is not in spare stack and nothing happens.
 # _position is included in signal for other uses but not used here
 #
 # @visibility: public
