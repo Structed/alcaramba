@@ -18,7 +18,7 @@ func _init(player_index : int, player_name : String):
 
 func add_town_tile(tile: TileCard, position: Vector2):
 	town_tiles[position] = tile._id
-	emit_signal("tile_placed")
+	emit_signal("tile_placed", tile)
 	print_debug(var2str(town_tiles))
 
 func remove_town_tile(position: Vector2):
@@ -29,23 +29,14 @@ func remove_town_tile(position: Vector2):
 #
 # @visibility: public
 # @param tile: TileCard - The Tile to move
-# @param position: Vector2 - The Town position of the tile
-# @param int: Returns `-1` in case of an error. `0` otherwise.
-func transfer_tile_spare_to_town(tile: TileCard, position: Vector2) -> int:
-	# Nothing to do if the card does nto exist in the yard
+# @return: void
+func remove_tile_from_spare_yard(tile: TileCard):
+	# Nothing to do if the card does not exist in the yard
 	if tile_cards_yard.has_card(tile) == false:
-		return 0
-
-	if town_tiles.has(position.x) && town_tiles[position.x].has(position.y):
-
-		var check_tile = town_tiles[position.x][position.y]
-		if check_tile is int:
-			push_error("There is already a tile at position %d|%d" % [position.x, position.y])
-			return -1
+		return
 
 	tile_cards_yard.remove_card_by_id(tile.get_id())
-	add_town_tile(tile, position)
-	return 0
+
 
 # Add a Tile to the Spare Yard
 #

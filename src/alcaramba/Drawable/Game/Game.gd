@@ -13,7 +13,7 @@ func _ready():
 	# Bind to when a  card was selected in the Tile Market
 	var _error = _market.connect("tile_card_selected", self, "_on_tile_card_selected")
 	_error = _spare_tiles.connect("tile_card_selected", self, "_on_tile_card_selected")
-	_error = _town.connect("tile_placed", _spare_tiles, "_on_TileMap_tile_placed")
+	_error = Global.active_player.connect("tile_placed", _spare_tiles, "_on_TileMap_tile_placed")
 	_error = _town.connect("tile_removed", _spare_tiles, "_on_add_to_spares")
 	_error = Global.active_player.connect("added_tile_to_spare_yard", self, "_on_spare_added_to_player")
 
@@ -43,15 +43,15 @@ func _on_tile_card_selected(card_node: TileCardDrawable):
 	_selected_tile.select()
 
 # if tile is placed add it to town stack and remove selection
-func _on_tile_placed():
+func _on_tile_placed(_tile: TileCard):
 	_selected_tile.clear()
 
-func _on_spare_added_to_player(tile: TileCard):
+func _on_spare_added_to_player(_tile: TileCard):
 	_deselect_tile()
 	_town._placement_mode_set(0)
 
 # get to state with no selected tile, remove highlight if there was a previously selected tile
 func _deselect_tile():
 	if _selected_tile != null:
-			_selected_tile.reset()
+		_selected_tile.reset()
 	_selected_tile = null

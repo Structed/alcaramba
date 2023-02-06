@@ -46,5 +46,5 @@ func _on_add_to_spares(tile: TileCard):
 # @param tile: TileCard - The Tile Card to be placed in the yard
 # @param position: Vector2 - The position of the Tile in Town
 # @returns: void
-func _on_TileMap_tile_placed(tile: TileCard, position: Vector2):
-	var _err = Global.active_player.transfer_tile_spare_to_town(tile, position)
+func _on_TileMap_tile_placed(tile: TileCard):
+	var _err = Global.active_player.remove_tile_from_spare_yard(tile)
