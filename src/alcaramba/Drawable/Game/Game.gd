@@ -31,7 +31,7 @@ func _on_tile_card_selected(card_node: TileCardDrawable):
 	_selected_tile.select()
 
 # if tile is placed add it to town stack and remove selection
-func _on_tile_placed(tile: TileCard, position: Vector2):
+func _on_tile_placed():
 	_selected_tile.clear()
 
 # get to state with no selected tile, remove highlight if there was a previously selected tile
