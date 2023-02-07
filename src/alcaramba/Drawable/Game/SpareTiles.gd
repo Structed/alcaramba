@@ -17,9 +17,9 @@ func _process(_delta):
 			n.queue_free()
 
 		# create new TileCardDrawable for each til in stack_spare_tiles
-		for _i in range(Global.active_player.tile_cards_yard.get_card_count()):
+		for tile in Global.active_player.tile_cards_yard.get_cards():
 			var tile_node = tile_scene.instance()
-			tile_node._card_info = Global.active_player.tile_cards_yard.get_card_info_by_index(_i)
+			tile_node._card_info = tile
 			add_child(tile_node)
 			tile_node.connect("pressed", self, "_on_TileCard_pressed", [tile_node])
 
