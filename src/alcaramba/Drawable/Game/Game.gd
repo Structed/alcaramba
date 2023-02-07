@@ -53,5 +53,9 @@ func _on_spare_added_to_player(_tile: TileCard):
 # get to state with no selected tile, remove highlight if there was a previously selected tile
 func _deselect_tile():
 	if _selected_tile != null:
-		_selected_tile.reset()
+		var weak = weakref(_selected_tile)
+		if (!weak.is_queued_for_deletion()):
+			var reference = weak.get_ref()
+			if reference != null:
+				reference.reset()
 	_selected_tile = null
