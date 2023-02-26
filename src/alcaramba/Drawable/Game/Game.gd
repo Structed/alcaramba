@@ -12,7 +12,7 @@ onready var _spare_tile_add_button = get_node("%SpareTileAddButton")
 func _ready():
 	# Bind to when a  card was selected in the Tile Market
 	var _error = _market.connect("tile_card_selected", self, "_on_tile_card_selected")
-	_error = _spare_tiles.connect("tile_card_selected", self, "_on_tile_card_selected")
+	_error = _spare_tiles.connect("tile_card_selected", self, "_on_spare_selected")
 	_error = Global.active_player.connect("tile_placed", _spare_tiles, "_on_TileMap_tile_placed")
 	_error = _town.connect("tile_removed", _spare_tiles, "_on_add_to_spares")
 	_error = Global.active_player.connect("added_tile_to_spare_yard", self, "_on_spare_added_to_player")
@@ -42,9 +42,17 @@ func _on_tile_card_selected(card_node: TileCardDrawable):
 	# highlight selected tile
 	_selected_tile.select()
 
+func _on_spare_selected(card_node: TileCardDrawable):
+	# send selected tile to town for placement overlay
+	_town.receive_tile(card_node)
+
 # if tile is placed add it to town stack and remove selection
-func _on_tile_placed(_tile: TileCard):
-	_selected_tile.clear()
+func _on_tile_placed(tile: TileCard):
+	if _selected_tile != null:
+		_selected_tile.clear()
+	else:
+		# Must be spare
+		_spare_tiles.remove_spare(tile)
 
 func _on_spare_added_to_player(_tile: TileCard):
 	_deselect_tile()
@@ -53,9 +61,5 @@ func _on_spare_added_to_player(_tile: TileCard):
 # get to state with no selected tile, remove highlight if there was a previously selected tile
 func _deselect_tile():
 	if _selected_tile != null:
-		var weak = weakref(_selected_tile)
-		if (!weak.is_queued_for_deletion()):
-			var reference = weak.get_ref()
-			if reference != null:
-				reference.reset()
+		_selected_tile.reset()
 	_selected_tile = null

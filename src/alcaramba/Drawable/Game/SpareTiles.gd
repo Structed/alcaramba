@@ -9,36 +9,24 @@ var _cached_number_of_tiles = 0
 
 # paints all tiles from stack_spare_tiles
 func _process(_delta):
-	var yard_card_cound = Global.active_player.tile_cards_yard.get_card_count()
-	var child_cound = self.get_child_count()
-	
-	if _cached_number_of_tiles != yard_card_cound || yard_card_cound != child_cound:
+	if _cached_number_of_tiles != Global.active_player.tile_cards_yard.get_card_count():
+		_cached_number_of_tiles = Global.active_player.tile_cards_yard.get_card_count()
 		
-		_cached_number_of_tiles = yard_card_cound
-		
-		var to_be_freed = []
-
+		# delete already displayed tiles
 		for n in self.get_children():
-			if n._card_info == null || Global.active_player.tile_cards_yard.has_card(n._card_info) == false:
-				to_be_freed.append(n)
-				self.remove_child(n)
+			n.queue_free()
 
-		# create new TileCardDrawable for each Tile in in Stack Yard
+		# create new TileCardDrawable for each til in stack_spare_tiles
 		for tile in Global.active_player.tile_cards_yard.get_cards():
-			var instance_found = false
-			for child in self.get_children():
-				if child._card_info.get_id() == tile.get_id():
-					instance_found = true
-		
-			if !instance_found:
-				var tile_node = tile_scene.instance()
-				tile_node._card_info = tile
-				add_child(tile_node)
-				tile_node.connect("pressed", self, "_on_TileCard_pressed", [tile_node])
-			
-		for node in to_be_freed:
-			node.queue_free()
+			var tile_node = tile_scene.instance()
+			tile_node._card_info = tile
+			add_child(tile_node)
+			tile_node.connect("pressed", self, "_on_TileCard_pressed", [tile_node])
 
+func remove_spare(tile: TileCard):
+	for child in self.get_children():
+		if child._card_info.get_id() == tile.get_id():
+			child.queue_free()
 
 # Event handler for when a TileCard in the Spare Yard is pressed.
 #
