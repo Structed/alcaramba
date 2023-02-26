@@ -55,7 +55,7 @@ func _on_tile_placed(tile: TileCard):
 		_spare_tiles.remove_spare(tile)
 
 func _on_spare_added_to_player(_tile: TileCard):
-	_deselect_tile()
+	_selected_tile.clear()
 	_town._placement_mode_set(0)
 
 # get to state with no selected tile, remove highlight if there was a previously selected tile
