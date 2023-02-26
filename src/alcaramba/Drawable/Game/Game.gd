@@ -48,6 +48,10 @@ func _on_spare_selected(card_node: TileCardDrawable):
 
 # if tile is placed add it to town stack and remove selection
 func _on_tile_placed(tile: TileCard):
+	# Disconnect button so tile cannot be added to spares after placing them
+	if _spare_tile_add_button.is_connected("pressed", _spare_tiles, "_on_add_to_spares"):
+		_spare_tile_add_button.disconnect("pressed", _spare_tiles, "_on_add_to_spares")
+	
 	if _selected_tile != null:
 		_selected_tile.clear()
 	else:
