@@ -14,7 +14,6 @@ var _cached_number_of_tiles = 0
 onready var _tilemap_overlay = get_node("%TileMap_valid_overlay")
 onready var _distances = get_node("%TileMap_distances") # grid to check connectivity of valid tiles
 onready var _inverse_distances = get_node("%TileMap_distances") # grid to check connectivity of invalid tiles
-onready var _spare_tiles = get_node("%SpareTiles")
 
 var tile_card_scene = preload("res://Drawable/Card/TileCardDrawable.tscn")
 
@@ -30,7 +29,7 @@ func _ready():
 
 	OverlayDebugInfo.show()
 	OverlayDebugInfo.set_horizontal_align_right()
-	OverlayDebugInfo.set_vertical_align_top()
+	OverlayDebugInfo.set_vertical_align_bottom()
 
 
 # Called every frame
