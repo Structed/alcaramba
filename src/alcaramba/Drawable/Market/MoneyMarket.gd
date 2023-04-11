@@ -22,10 +22,3 @@ func refill():
 		var card_node = card_scene.instance()
 		card_node.card_info = card
 		add_child(card_node)
-		card_node.connect("pressed", self, "_on_MoneyCard_pressed", [card_node])
-
-
-func _on_MoneyCard_pressed(card_node: MoneyCardDrawable):
-	card_node.disconnect("pressed", self, "_on_MoneyCard_pressed")
-	Global.active_player.money_cards.add_card(card_node.card_info)
-	remove_child(card_node)
