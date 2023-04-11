@@ -37,7 +37,7 @@ func remove_tile_from_spare_yard(tile: TileCard):
 		return
 
 	var removed = tile_cards_yard.remove_card_by_id(tile.get_id())
-	
+
 	if removed != 1:
 		push_error("Exactly 1 card of it %d should have been removed from spare yard!" % [tile.get_id() as int])
 
@@ -57,12 +57,12 @@ func add_tile_to_spare_yard(tile: TileCard):
 func purchase_tile():
 	if purchase_info == null:
 		return
-		
+
 	for money in purchase_info.selected_money_cards.get_cards():
 		var id = money.get_id()
 		var removed_count = money_cards.remove_card_by_id(id)
 		if removed_count != 1:
 			push_error("Only one card with ID %d should have been removed, but %d were removed!" % [id, removed_count])
-	
+
 	# Reset after purchasing, so it doesn't get re-purchased
 	purchase_info = null

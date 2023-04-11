@@ -34,7 +34,7 @@ func enable_selectable():
 # @returns: void
 func toggle_select():
 	_selected = !_selected
-		
+
 	if _selected:
 		_anim_player.play("Select")
 	else:

@@ -27,7 +27,7 @@ func _on_tile_card_selected(card_node: TileCardDrawable):
 	# reset previously selected and assign new selected tile
 	_deselect_tile()
 	_selected_tile = card_node
-	
+
 	# Enable cancel button
 	_cancel_place_tile_button.disabled = false
 
@@ -53,7 +53,7 @@ func _on_spare_selected(card_node: TileCardDrawable):
 	# send selected tile to town for placement overlay
 	_town.receive_tile(card_node)
 	_cancel_place_tile_button.disabled = false
-	
+
 	if _cancel_place_tile_button.is_connected("pressed", _spare_tiles, "_on_place_tile_canceled"):
 		_cancel_place_tile_button.disconnect("pressed", _spare_tiles, "_on_place_tile_canceled")
 	_cancel_place_tile_button.connect("pressed", _spare_tiles, "_on_place_tile_canceled", [card_node], CONNECT_ONESHOT)
@@ -62,11 +62,11 @@ func _on_spare_selected(card_node: TileCardDrawable):
 # if tile is placed add it to town stack and remove selection
 func _on_tile_placed(tile: TileCard):
 	_cancel_place_tile_button.disabled = true
-	
+
 	# Disconnect button so tile cannot be added to spares after placing them
 	if _spare_tile_add_button.is_connected("pressed", _spare_tiles, "_on_add_to_spares"):
 		_spare_tile_add_button.disconnect("pressed", _spare_tiles, "_on_add_to_spares")
-	
+
 	if _selected_tile != null:
 		_selected_tile.clear()
 		# Coming from Market, so must be paid for!
@@ -74,7 +74,7 @@ func _on_tile_placed(tile: TileCard):
 	else:
 		# Must be spare
 		_spare_tiles.remove_spare(tile)
-		
+
 
 func _on_spare_added_to_player(_tile: TileCard):
 	_cancel_place_tile_button.disabled = true

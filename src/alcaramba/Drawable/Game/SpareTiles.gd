@@ -11,7 +11,7 @@ var _cached_number_of_tiles = 0
 func _process(_delta):
 	if _cached_number_of_tiles != Global.active_player.tile_cards_yard.get_card_count():
 		_cached_number_of_tiles = Global.active_player.tile_cards_yard.get_card_count()
-		
+
 		# delete already displayed tiles
 		for n in self.get_children():
 			n.queue_free()
@@ -61,4 +61,4 @@ func _on_TileMap_tile_placed(tile: TileCard):
 # Cancel the Placement of the Spare
 func _on_place_tile_canceled(tile_node: TileCardDrawable):
 	tile_node.deselect()
-	
+

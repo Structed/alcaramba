@@ -34,7 +34,7 @@ func _ready():
 
 # Called every frame
 func _process(_delta):
-	
+
 	if _cached_number_of_tiles != Global.active_player.town_tiles.size():
 		update_town()
 		_cached_number_of_tiles = Global.active_player.town_tiles.size()
