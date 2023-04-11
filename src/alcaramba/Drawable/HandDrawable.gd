@@ -32,15 +32,23 @@ func _add_card_node(card_drawable: MoneyCardDrawable):
 
 
 # Returns all cards which are of a given currency and are selected
+#
 # @visibility: public
 # @param currency: MoneyCard.Currency
-# @returns: Array[MoneyCardDrawable] - The selected cards of given currency
+# @returns: MoneyCardCollection - The selected cards of given currency
 func get_selected_cards_by_currency(currency: int) -> Array:
-	var selected_cards = []
+	var selected = MoneyCardCollection.new()
 	for child in get_children():
 		var money_card := child as MoneyCardDrawable
 		if money_card.is_selected():
-			if money_card.card_info.get_currency() == currency:
-				selected_cards.append(child)
-	
-	return selected_cards
+			var card_info := money_card.card_info
+			if card_info.get_currency() == currency:
+				selected.add_card(card_info)
+
+	return selected
+
+
+# Deselect all cards
+func deselect_all():
+	for card in get_children():
+		(card as MoneyCardDrawable).deselect()

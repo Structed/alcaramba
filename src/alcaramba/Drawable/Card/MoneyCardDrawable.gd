@@ -46,3 +46,9 @@ func toggle_select():
 # @returns: bool - Whether the card is selected
 func is_selected() -> bool:
 	return _selected
+
+
+# Deselect a card, only if it is selected
+func deselect():
+	if is_selected():
+		toggle_select()

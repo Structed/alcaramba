@@ -21,6 +21,14 @@ func take_card() -> MoneyCard:
 	return _take_card()
 
 
+func sum_amount() -> int:
+	var amount = 0
+	for card in self.get_cards():
+		amount += (card as MoneyCard).get_value()
+		
+	return amount
+
+
 # Debug function to print all cards
 func debug_print_cards():
 	for item in _stack:
