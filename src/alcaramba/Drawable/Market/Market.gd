@@ -59,4 +59,3 @@ func _on_TileCard_pressed(card_node: TileCardDrawable):
 
 func _on_EndTurnButton_pressed():
 	tile_market.refill()
-	money_market.refill()

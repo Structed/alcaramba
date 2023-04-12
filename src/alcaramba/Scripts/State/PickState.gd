@@ -9,7 +9,11 @@ onready var money_market: MoneyMarket = get_node(market_path).money_market
 
 var amount_picked := 0
 
+
 # Override get_class
+#
+# @visibility: public
+# @return: String
 func get_class() -> String:
 	return "PickState"
 
@@ -23,9 +27,14 @@ func get_class() -> String:
 func enter(_msg := {}) -> void:
 	amount_picked = 0
 	_bind_pressed_events()
+	if _msg.size() > 0:
+		pick_card(_msg["card_node"])
 
 
 # Exit State
+#
+# @visibility: public
+# @return: void
 func exit():
 	for card_node in money_market.get_children():
 		card_node.disconnect("pressed", self, "pick_card")
@@ -59,7 +68,7 @@ func pick_card(card_node: MoneyCardDrawable) -> void:
 	money_market.remove_child(card_node)
 
 	if !could_pick_more():
-		state_machine.transition_to("BuyState")
+		state_machine.transition_to("EndState")
 
 
 # Check whether one can pick the money card

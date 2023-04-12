@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Drawable/Game/Game.gd" type="Script" id=1]
 [ext_resource path="res://Drawable/Market/Market.tscn" type="PackedScene" id=2]
@@ -10,6 +10,8 @@
 [ext_resource path="res://assets/art/card_remove_disabled.png" type="Texture" id=8]
 [ext_resource path="res://Scripts/State/StateMachine.gd" type="Script" id=9]
 [ext_resource path="res://Scripts/State/BuyState.gd" type="Script" id=10]
+[ext_resource path="res://Scripts/State/EndState.gd" type="Script" id=11]
+[ext_resource path="res://Scripts/State/StartState.gd" type="Script" id=12]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 
@@ -83,7 +85,11 @@ layer = 2
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource( 9 )
-initial_state = NodePath("PickState")
+initial_state = NodePath("StartState")
+
+[node name="StartState" type="Node" parent="StateMachine"]
+script = ExtResource( 12 )
+market_path = NodePath("../../Board/MarginContainer/Game/Market")
 
 [node name="PickState" type="Node" parent="StateMachine"]
 script = ExtResource( 7 )
@@ -91,3 +97,6 @@ market_path = NodePath("../../Board/MarginContainer/Game/Market")
 
 [node name="BuyState" type="Node" parent="StateMachine"]
 script = ExtResource( 10 )
+
+[node name="EndState" type="Node" parent="StateMachine"]
+script = ExtResource( 11 )
