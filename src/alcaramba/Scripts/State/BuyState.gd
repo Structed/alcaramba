@@ -2,6 +2,9 @@ extends AbstractState
 class_name BuyState
 
 # Override get_class
+#
+# @visibility: public
+# @return: String
 func get_class() -> String:
 	return "BuyState"
 
@@ -17,5 +20,8 @@ func enter(_msg := {}) -> void:
 
 
 # Exit State
+#
+# @visibility: public
+# @return: void
 func exit():
 	pass
