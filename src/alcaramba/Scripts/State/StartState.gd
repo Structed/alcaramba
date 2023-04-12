@@ -37,7 +37,7 @@ func exit() -> void:
 	_unbind_pressed_events()
 
 
-# Binds thre "pressed" event on all money cards on the money market
+# Binds the "pressed" event on all money cards on the money market
 #
 # @visibility: private
 # @return: void
