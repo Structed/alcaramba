@@ -16,7 +16,9 @@ func get_class() -> String:
 # @param _msg: Dictionary - parameters (ignored)
 # @return: void
 func enter(_msg := {}) -> void:
-	pass
+	if _msg.size() > 0:
+		print_debug(_msg["card_node"])
+#		pick_card(_msg["card_node"])
 
 
 # Exit State

@@ -5,15 +5,11 @@ class_name HandDrawable
 var card_scene = preload("res://Drawable/Card/MoneyCardDrawable.tscn")
 
 
-func _process(_delta):
-	# Watch the global hand cards. If there's a discrepancy, re-draw hand cards
-	if get_child_count() != Global.active_player.money_cards.get_card_count():
-		_redraw()
 
 # Remove all hand cards and re-draw them
 # from the global hand cards of the active player
 # @visibility: private
-func _redraw():
+func redraw():
 	for child in get_children():
 		remove_child(child)
 	
@@ -27,7 +23,7 @@ func _redraw():
 # @visibility: private
 # @param card_drawable: MoneyCardDrawable - The card drawable to add to the Hand
 func _add_card_node(card_drawable: MoneyCardDrawable):
-	card_drawable.enable_selectable()
+#	card_drawable.enable_selectable()
 	add_child(card_drawable)
 
 

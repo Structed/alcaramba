@@ -6,6 +6,7 @@ const SUBSEQUENT_PICK_MAX_VALUE := 5
 export var market_path: NodePath
 onready var market : Market = get_node(market_path)
 onready var money_market: MoneyMarket = get_node(market_path).money_market
+onready var hand: HandDrawable =  get_node(market_path).hand
 
 var amount_picked := 0
 
@@ -26,6 +27,7 @@ func get_class() -> String:
 # @return: void
 func enter(_msg := {}) -> void:
 	amount_picked = 0
+	hand.redraw()
 	_bind_pressed_events()
 	if _msg.size() > 0:
 		pick_card(_msg["card_node"])
@@ -66,6 +68,7 @@ func pick_card(card_node: MoneyCardDrawable) -> void:
 	Global.active_player.money_cards.add_card(card_info)
 	Global.market_stack_money.remove_card_by_id(card_info.get_id())
 	money_market.remove_child(card_node)
+	hand.redraw()
 
 	if !could_pick_more():
 		state_machine.transition_to("EndState")
