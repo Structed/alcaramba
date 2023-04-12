@@ -16,7 +16,7 @@ func get_class() -> String:
 # @param _msg: Dictionary - parameters (ignored)
 # @return: void
 func enter(_msg := {}) -> void:
-	pass
+	state_machine.transition_to("StartState")
 
 
 # Exit State
