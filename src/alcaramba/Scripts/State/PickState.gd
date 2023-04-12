@@ -1,7 +1,7 @@
 extends AbstractState
 class_name PickState
 
-const PICK_MAX_VALUE := 5
+const SUBSEQUENT_PICK_MAX_VALUE := 5
 
 export var market_path: NodePath
 onready var market : Market = get_node(market_path)
@@ -51,12 +51,13 @@ func pick_card(card_node: MoneyCardDrawable) -> void:
 	var card_info: MoneyCard = card_node.card_info
 	if !can_pick(card_info):
 		return
-		
+
 	amount_picked += card_info._value
 	card_node.disconnect("pressed", self, "pick_card")
 	Global.active_player.money_cards.add_card(card_info)
+	Global.market_stack_money.remove_card_by_id(card_info.get_id())
 	money_market.remove_child(card_node)
-	
+
 	if !could_pick_more():
 		state_machine.transition_to("BuyState")
 
@@ -70,11 +71,11 @@ func can_pick(card: MoneyCard) -> bool:
 	# Can pick any card if there was none picked yet
 	if amount_picked == 0:
 		return true
-		
-	# Subsequent picks need to amount to not more than PICK_MAX_VALUE:
-	if amount_picked + card._value > PICK_MAX_VALUE:
+
+	# Subsequent picks need to amount to no more than SUBSEQUENT_PICK_MAX_VALUE:
+	if amount_picked + card._value > SUBSEQUENT_PICK_MAX_VALUE:
 		return false
-		
+
 	return true
 
 
@@ -87,5 +88,5 @@ func could_pick_more() -> bool:
 	for market_card in Global.market_stack_money._stack:
 		if can_pick(market_card):
 			return true
-	
+
 	return false
