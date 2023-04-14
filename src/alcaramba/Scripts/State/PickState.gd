@@ -6,7 +6,7 @@ const SUBSEQUENT_PICK_MAX_VALUE := 5
 export var market_path: NodePath
 onready var market : Market = get_node(market_path)
 onready var money_market: MoneyMarket = get_node(market_path).money_market
-onready var hand: HandDrawable =  get_node(market_path).hand
+onready var hand: HandDrawable = get_node(market_path).hand
 
 var amount_picked := 0
 

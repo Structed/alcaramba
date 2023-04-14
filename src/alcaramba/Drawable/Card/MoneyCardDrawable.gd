@@ -20,18 +20,19 @@ func _ready():
 
 
 # Enable the card to be selectable with a mouse click
-# Necessary, when the "pressed" signal was previously used for other purposes
+#
 # @visibility: public
-# @returns: void
-func enable_selectable():
+# @return: void
+func enable_selectable() -> void:
 	var _error = self.connect("pressed", self, "toggle_select")
 	if _error:
 		print_debug("Error while connecting signal ")
 
 
 # Toggle the selected state an play animation based on state
+#
 # @visibility: public
-# @returns: void
+# @return: void
 func toggle_select():
 	_selected = !_selected
 
@@ -42,13 +43,17 @@ func toggle_select():
 
 
 # Check whether the card is selected
+#
 # @visibility: public
-# @returns: bool - Whether the card is selected
+# @return: bool - Whether the card is selected
 func is_selected() -> bool:
 	return _selected
 
 
 # Deselect a card, only if it is selected
+#
+# @visibility: public
+# @return: void
 func deselect():
 	if is_selected():
 		toggle_select()
