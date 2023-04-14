@@ -54,17 +54,3 @@ func add_tile_to_spare_yard(tile: TileCard):
 
 	tile_cards_yard.add_card(tile)
 	emit_signal("added_tile_to_spare_yard", tile)
-
-# Purchase a tile using the PurchaseInfo on the Player
-func purchase_tile():
-	if purchase_info == null:
-		return
-
-	for money in purchase_info.selected_money_cards.get_cards():
-		var id = money.get_id()
-		var removed_count = money_cards.remove_card_by_id(id)
-		if removed_count != 1:
-			push_error("Only one card with ID %d should have been removed, but %d were removed!" % [id, removed_count])
-
-	# Reset after purchasing, so it doesn't get re-purchased
-	purchase_info = null
