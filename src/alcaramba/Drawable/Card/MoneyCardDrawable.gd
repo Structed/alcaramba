@@ -29,6 +29,16 @@ func enable_selectable() -> void:
 		print_debug("Error while connecting signal ")
 
 
+# Disable the card to be selectable with a mouse click
+#
+# @visibility: public
+# @return: void
+func disable_selectable() -> void:
+	var _error = self.disconnect("pressed", self, "toggle_select")
+	if _error:
+		print_debug("Error while disconnecting signal ")
+
+
 # Toggle the selected state an play animation based on state
 #
 # @visibility: public

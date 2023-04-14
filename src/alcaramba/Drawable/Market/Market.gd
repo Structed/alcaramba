@@ -17,20 +17,13 @@ onready var hand := get_node("%Hand") as HandDrawable
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_on_EndTurnButton_pressed()
+	end_turn_button.disabled = true
 
 	var _ignore
 	_ignore = tile_market.card1.connect("pressed", self, "_on_TileCard_pressed", [tile_market.card1])
 	_ignore = tile_market.card2.connect("pressed", self, "_on_TileCard_pressed", [tile_market.card2])
 	_ignore = tile_market.card3.connect("pressed", self, "_on_TileCard_pressed", [tile_market.card3])
 	_ignore = tile_market.card4.connect("pressed", self, "_on_TileCard_pressed", [tile_market.card4])
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	var can_refill = _check_can_refill_cards()
-	if (can_refill):
-		end_turn_button.disabled = false
-	else:
-		end_turn_button.disabled = true
 
 
 func _check_can_refill_cards() -> bool:

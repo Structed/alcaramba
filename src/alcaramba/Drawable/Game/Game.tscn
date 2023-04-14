@@ -97,6 +97,7 @@ market_path = NodePath("../../Board/MarginContainer/Game/Market")
 
 [node name="BuyState" type="Node" parent="StateMachine"]
 script = ExtResource( 10 )
+market_path = NodePath("../../Board/MarginContainer/Game/Market")
 
 [node name="EndState" type="Node" parent="StateMachine"]
 script = ExtResource( 11 )

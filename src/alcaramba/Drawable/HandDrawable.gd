@@ -23,7 +23,6 @@ func redraw():
 # @visibility: private
 # @param card_drawable: MoneyCardDrawable - The card drawable to add to the Hand
 func _add_card_node(card_drawable: MoneyCardDrawable):
-#	card_drawable.enable_selectable()
 	add_child(card_drawable)
 
 
