@@ -82,7 +82,7 @@ func _on_tile_pressed(card_node: TileCardDrawable) -> void:
 
 	if selected.sum_amount() == amount:
 		# Can buy again!
-		state_machine.transition_to("BuyState")
+		state_machine.transition_to("StartState", {StartState.MSG_KEY_NO_RESTOCK: true})
 	else:
 		# TODO: Transition to PlaceState instead, once implemented!
 		state_machine.transition_to("EndState")

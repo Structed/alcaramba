@@ -1,6 +1,8 @@
 extends AbstractState
 class_name StartState
 
+const MSG_KEY_NO_RESTOCK = "no_restock"
+
 export var market_path: NodePath
 onready var market : Market = get_node(market_path)
 onready var money_market: MoneyMarket = get_node(market_path).money_market
@@ -27,8 +29,11 @@ func get_class() -> String:
 # @param _msg: Dictionary - parameters (ignored)
 # @return: void
 func enter(_msg := {}) -> void:
-	_refill()
-	hand.redraw()
+	# Do not restock if the player continues their turn
+	if !_msg.has("no_restock"):
+		_refill()
+		hand.redraw()
+	
 	_bind_pressed_events()
 
 
