@@ -34,9 +34,7 @@ func enable_selectable() -> void:
 # @visibility: public
 # @return: void
 func disable_selectable() -> void:
-	var _error = self.disconnect("pressed", self, "toggle_select")
-	if _error:
-		print_debug("Error while disconnecting signal ")
+	self.disconnect("pressed", self, "toggle_select")
 
 
 # Toggle the selected state an play animation based on state
