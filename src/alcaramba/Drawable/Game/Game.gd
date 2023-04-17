@@ -12,7 +12,7 @@ onready var _spare_tile_add_button = get_node("%SpareTileAddButton")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# Bind to when a  card was selected in the Tile Market
-	var _error = _market.connect("tile_card_selected", self, "_on_tile_card_selected")
+	var _error
 	_error = _spare_tiles.connect("tile_card_selected", self, "_on_spare_selected")
 	_error = Global.active_player.connect("tile_placed", _spare_tiles, "_on_TileMap_tile_placed")
 	_error = _town.connect("tile_removed", _spare_tiles, "_on_add_to_spares")
